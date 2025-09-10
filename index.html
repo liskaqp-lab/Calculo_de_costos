@@ -79,18 +79,76 @@
         <div class="grid lg:grid-cols-3 gap-8">
             <!-- Left Column: Expense Categories -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- Regional Settings -->
+                <!-- Tax Management Panel -->
                 <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">🌍</span>Región Fiscal
+                        <span class="mr-3">🌍</span>Configuración Fiscal
                     </h3>
-                    <select id="region" onchange="updateRegion()" 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                        <option value="guatemala">🇬🇹 Guatemala</option>
-                        <option value="usa">🇺🇸 Estados Unidos</option>
-                        <option value="eu">🇪🇺 Unión Europea</option>
-                    </select>
-                    <div id="tax-info" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-600"></div>
+                    
+                    <!-- Region Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Región Fiscal</label>
+                        <select id="region" onchange="updateRegion()" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                            <option value="guatemala">🇬🇹 Guatemala</option>
+                            <option value="usa">🇺🇸 Estados Unidos</option>
+                            <option value="eu">🇪🇺 Unión Europea</option>
+                        </select>
+                        
+                        <!-- Warning message for US and EU -->
+                        <div id="region-warning" class="hidden mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                            <p class="text-orange-700 text-sm">
+                                ⚠️ ¡Atención! Los costos para 🇺🇸 Estados Unidos y 🇪🇺 Unión Europea son solo estimaciones. Te recomendamos que verifiques los impuestos específicos de la región para obtener un precio final preciso.
+                            </p>
+                        </div>
+                        
+                        <div id="tax-info" class="mt-3 p-3 bg-gray-50 rounded-lg text-sm text-gray-600"></div>
+                    </div>
+                    
+                    <!-- Custom Tax Toggle -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-2">⚙️</span>Impuestos Personalizados
+                            </h4>
+                            <button onclick="toggleCustomTaxPanel()" 
+                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
+                                <span id="customTaxToggleText">Personalizar</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Custom Tax Management Panel -->
+                        <div id="customTaxPanel" class="hidden">
+                            <!-- Add Tax Form -->
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <input type="text" id="customTaxName" placeholder="Nombre del impuesto (ej. IVA España)" 
+                                       class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <input type="number" id="customTaxRate" placeholder="Porcentaje (%)" min="0" max="100" step="0.1"
+                                       class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            
+                            <div class="text-center mb-4">
+                                <button onclick="addCustomTax()" 
+                                        class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                                    Añadir Impuesto
+                                </button>
+                            </div>
+                            
+                            <!-- Custom Taxes List -->
+                            <div id="customTaxesList">
+                                <h5 class="font-semibold text-gray-800 mb-3">Impuestos Añadidos:</h5>
+                                <div id="customTaxesContainer" class="space-y-2 mb-4">
+                                    <!-- Custom taxes will be added here -->
+                                </div>
+                                <div class="pt-3 border-t border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold text-gray-800">Total de impuestos:</span>
+                                        <span id="totalCustomTaxRate" class="font-bold text-blue-600">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Product/Service Name -->
@@ -390,13 +448,8 @@
         <div id="invoiceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <div class="p-8">
-                    <div class="flex justify-between items-center mb-6 no-print">
-                        <h2 class="text-2xl font-bold text-gray-800">Vista Previa de Cotización</h2>
-                        <button onclick="closeInvoice()" class="text-gray-500 hover:text-gray-700">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
+                    <div class="mb-6 no-print">
+                        <h2 class="text-2xl font-bold text-gray-800 text-center">Vista Previa de Cotización</h2>
                     </div>
 
                     <!-- Invoice Content -->
@@ -472,6 +525,10 @@
                                 ⚠️ No es posible imprimir por lo que es recomendable que tomes captura de pantalla de la cotización.
                             </p>
                         </div>
+                        <button onclick="closeInvoice()" 
+                                class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-colors">
+                            Cerrar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -489,6 +546,7 @@
         };
 
         let customCategories = {}; // Store custom categories
+        let customTaxes = []; // Store custom taxes
         let selectedPriceType = 'minimum';
         let currentCurrency = 'GTQ';
         let currentTaxRate = 0.17;
@@ -519,6 +577,12 @@
 
         function updateRegion() {
             const region = document.getElementById('region').value;
+            const warningDiv = document.getElementById('region-warning');
+            const taxInfoDiv = document.getElementById('tax-info');
+            
+            // Hide warning first
+            warningDiv.classList.add('hidden');
+            
             const taxInfo = taxRates[region];
             
             currentTaxRate = taxInfo.rate;
@@ -526,6 +590,140 @@
             
             document.getElementById('taxRate').textContent = Math.round(taxInfo.rate * 100) + '%';
             document.getElementById('tax-info').innerHTML = taxInfo.details;
+            
+            // Show warning for US and EU
+            if (region === 'usa' || region === 'eu') {
+                warningDiv.classList.remove('hidden');
+            }
+            
+            // Update all category displays with new currency
+            Object.keys(expenses).forEach(category => {
+                updateCategoryDisplay(category);
+            });
+            
+            updateAllTotals();
+        }
+
+        function toggleCustomTaxPanel() {
+            const panel = document.getElementById('customTaxPanel');
+            const toggleText = document.getElementById('customTaxToggleText');
+            
+            panel.classList.toggle('hidden');
+            
+            // Update button text
+            if (panel.classList.contains('hidden')) {
+                toggleText.textContent = 'Personalizar';
+            } else {
+                toggleText.textContent = 'Ocultar';
+                // Clear the form when opening
+                document.getElementById('customTaxName').value = '';
+                document.getElementById('customTaxRate').value = '';
+            }
+        }
+
+        function addCustomTax() {
+            const name = document.getElementById('customTaxName').value.trim();
+            const rate = parseFloat(document.getElementById('customTaxRate').value);
+            
+            if (!name) {
+                alert('Por favor ingresa un nombre para el impuesto');
+                return;
+            }
+            
+            if (isNaN(rate) || rate < 0 || rate > 100) {
+                alert('Por favor ingresa un porcentaje válido entre 0 y 100');
+                return;
+            }
+            
+            // Check if tax with same name already exists
+            if (customTaxes.some(tax => tax.name.toLowerCase() === name.toLowerCase())) {
+                alert('Ya existe un impuesto con ese nombre');
+                return;
+            }
+            
+            // Add the custom tax
+            const newTax = {
+                id: Date.now(), // Simple ID generation
+                name: name,
+                rate: rate
+            };
+            
+            customTaxes.push(newTax);
+            
+            // Clear the form
+            document.getElementById('customTaxName').value = '';
+            document.getElementById('customTaxRate').value = '';
+            
+            // Update the display
+            updateCustomTaxesDisplay();
+            applyCustomTaxes();
+        }
+
+        function removeCustomTax(taxId) {
+            customTaxes = customTaxes.filter(tax => tax.id !== taxId);
+            updateCustomTaxesDisplay();
+            applyCustomTaxes();
+        }
+
+        function updateCustomTaxesDisplay() {
+            const container = document.getElementById('customTaxesContainer');
+            const totalElement = document.getElementById('totalCustomTaxRate');
+            
+            container.innerHTML = '';
+            
+            if (customTaxes.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm italic">No hay impuestos personalizados añadidos</p>';
+                totalElement.textContent = '0%';
+                return;
+            }
+            
+            let totalRate = 0;
+            
+            customTaxes.forEach(tax => {
+                totalRate += tax.rate;
+                
+                const taxItem = document.createElement('div');
+                taxItem.className = 'flex justify-between items-center py-2 px-3 bg-blue-50 rounded border border-blue-200';
+                taxItem.innerHTML = `
+                    <div class="flex-1">
+                        <span class="font-medium text-gray-800">${tax.name}</span>
+                        <span class="text-blue-600 ml-2">${tax.rate}%</span>
+                    </div>
+                    <button onclick="removeCustomTax(${tax.id})" 
+                            class="text-red-500 hover:text-red-700 p-1 ml-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                `;
+                container.appendChild(taxItem);
+            });
+            
+            totalElement.textContent = totalRate.toFixed(1) + '%';
+        }
+
+        function applyCustomTaxes() {
+            if (customTaxes.length === 0) {
+                // If no custom taxes, use the selected region's tax rate
+                updateRegion();
+                return;
+            }
+            
+            // Calculate total custom tax rate
+            const totalCustomRate = customTaxes.reduce((sum, tax) => sum + tax.rate, 0);
+            
+            currentTaxRate = totalCustomRate / 100;
+            currentCurrency = 'USD'; // Default currency for custom taxes
+            
+            document.getElementById('taxRate').textContent = totalCustomRate.toFixed(1) + '%';
+            
+            // Update tax info
+            const taxNames = customTaxes.map(tax => `${tax.name}: ${tax.rate}%`).join('<br>');
+            document.getElementById('tax-info').innerHTML = `
+                <strong>Impuestos personalizados aplicados:</strong><br>
+                ${taxNames}<br>
+                <strong>Total: ${totalCustomRate.toFixed(1)}%</strong>
+            `;
             
             // Update all category displays with new currency
             Object.keys(expenses).forEach(category => {
@@ -766,25 +964,39 @@
             document.getElementById('deliveryDate').value = deliveryDate;
             
             // Tax breakdown
-            const region = document.getElementById('region').value;
-            const taxInfo = taxRates[region];
-            document.getElementById('taxBreakdown').innerHTML = `
-                <div class="mb-2">
-                    <p class="font-semibold text-gray-800 mb-2">Información fiscal aplicada:</p>
-                    <p class="text-sm">${taxInfo.breakdown}</p>
-                </div>
-                <div class="text-xs text-gray-500 mt-2 border-t border-gray-200 pt-2">
-                    <p><strong>Detalles:</strong></p>
-                    <div class="mt-1">${taxInfo.details}</div>
-                </div>
-            `;
+            let taxBreakdownHTML = '';
+            
+            if (customTaxes.length > 0) {
+                // Show custom taxes
+                const taxList = customTaxes.map(tax => `${tax.name}: ${tax.rate}%`).join('<br>');
+                const totalRate = customTaxes.reduce((sum, tax) => sum + tax.rate, 0);
+                
+                taxBreakdownHTML = `
+                    <div class="mb-2">
+                        <p class="font-semibold text-gray-800 mb-2">Impuestos personalizados aplicados:</p>
+                        <div class="text-sm">${taxList}</div>
+                        <div class="text-sm font-medium mt-2">Total: ${totalRate.toFixed(1)}%</div>
+                    </div>
+                `;
+            } else {
+                // Show regional taxes
+                const region = document.getElementById('region').value;
+                const taxInfo = taxRates[region];
+                taxBreakdownHTML = `
+                    <div class="mb-2">
+                        <p class="font-semibold text-gray-800 mb-2">Información fiscal aplicada:</p>
+                        <p class="text-sm">${taxInfo.breakdown}</p>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-2 border-t border-gray-200 pt-2">
+                        <p><strong>Detalles:</strong></p>
+                        <div class="mt-1">${taxInfo.details}</div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('taxBreakdown').innerHTML = taxBreakdownHTML;
             
             document.getElementById('invoiceModal').classList.remove('hidden');
-            
-            // Automatically print after a short delay to ensure modal is fully rendered
-            setTimeout(() => {
-                window.print();
-            }, 500);
         }
 
         function closeInvoice() {
@@ -955,6 +1167,7 @@
         updateRegion();
         calculateHourlyRate();
         selectPrice('minimum');
+        updateCustomTaxesDisplay();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cd825d155b67c9',t:'MTc1NzQ5MjQ1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97d1f24697d3c82c',t:'MTc1NzUzODk4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
