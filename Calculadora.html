@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de costos freelance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        terracota: '#D2691E',
+                        beige: '#F5F5DC',
+                        azulsuave: '#87CEEB'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .category-card { transition: all 0.3s ease; }
+        .category-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .price-option { transition: all 0.3s ease; }
+        .price-option.selected { transform: scale(1.05); }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; }
+            .bg-gradient-to-br { background: white !important; }
+            #invoiceModal { 
+                position: static !important; 
+                background: white !important; 
+                box-shadow: none !important; 
+                max-width: none !important; 
+                width: 100% !important; 
+                max-height: none !important; 
+                overflow: visible !important; 
+            }
+            #invoiceModal > div { 
+                box-shadow: none !important; 
+                border-radius: 0 !important; 
+                max-width: none !important; 
+                width: 100% !important; 
+                max-height: none !important; 
+                overflow: visible !important; 
+            }
+            #invoiceContent { 
+                border: none !important; 
+                border-radius: 0 !important; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+            }
+            .container { display: none !important; }
+            input { 
+                border: none !important; 
+                background: transparent !important; 
+                font-weight: 600 !important; 
+                color: #1f2937 !important; 
+            }
+            input::placeholder { color: transparent !important; }
+            .text-terracota { color: #D2691E !important; }
+            .border-terracota { border-color: #D2691E !important; }
+            .bg-orange-50 { background-color: #fff7ed !important; }
+        }
+        .print-only { display: none; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-beige to-white min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Calculadora de precios</h1>
+            <p class="text-lg text-gray-600">Para calcular precios de emprendedores o pequeñas empresas guatemaltecas en Guatemala, Estados Unidos y Europa</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Left Column: Expense Categories -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Regional Settings -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">🌍</span>Región Fiscal
+                    </h3>
+                    <select id="region" onchange="updateRegion()" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        <option value="guatemala">🇬🇹 Guatemala</option>
+                        <option value="usa">🇺🇸 Estados Unidos</option>
+                        <option value="eu">🇪🇺 Unión Europea</option>
+                    </select>
+                    <div id="tax-info" class="mt-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-600"></div>
+                </div>
+
+                <!-- Product/Service Name -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">📦</span>Producto o Servicio
+                    </h3>
+                    <input type="text" id="productName" placeholder="Nombre del producto o servicio" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                </div>
+
+                <!-- Add Expense Form -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">💰</span>Añadir Gasto
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <input type="text" id="expenseName" placeholder="Nombre del gasto" 
+                               class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        <input type="number" id="expenseAmount" placeholder="Monto mensual" 
+                               class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        <select id="expenseCategory" 
+                                class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                            <option value="">Seleccionar categoría</option>
+                            <option value="servicios">Servicios Básicos</option>
+                            <option value="equipo">Equipo y Tecnología</option>
+                            <option value="software">Software y Herramientas</option>
+                            <option value="educacion">Educación y Desarrollo</option>
+                            <option value="salud">Salud y Bienestar</option>
+                            <option value="otros" selected>Otros</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-4 mt-4 justify-center">
+                        <button onclick="addExpense()" 
+                                class="bg-terracota text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                            Añadir Gasto
+                        </button>
+                        <button onclick="showAddCategoryForm()" 
+                                class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            Agregar categoría
+                        </button>
+                    </div>
+                    
+                    <!-- Add Category Form (Hidden by default) -->
+                    <div id="addCategoryForm" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Nueva Categoría</h4>
+                        <div class="space-y-3">
+                            <div class="flex gap-3">
+                                <input type="text" id="newCategoryEmoji" placeholder="😊" maxlength="2" 
+                                       class="w-16 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg"
+                                       onclick="openEmojiPicker()" readonly>
+                                <input type="text" id="newCategoryName" placeholder="Nombre de la categoría" 
+                                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div class="flex gap-3 justify-center">
+                                <button onclick="createCategory()" 
+                                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                                    Crear
+                                </button>
+                                <button onclick="hideAddCategoryForm()" 
+                                        class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors font-medium">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expense Categories -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-3">🏠</span>Servicios Básicos
+                            </h3>
+                        </div>
+                        <div id="servicios-list" class="space-y-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <span class="font-medium text-terracota">Total: <span id="servicios-total">$0</span></span>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="deleteCategory('servicios')" 
+                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Eliminar categoría
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-3">💻</span>Equipo y Tecnología
+                            </h3>
+                        </div>
+                        <div id="equipo-list" class="space-y-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <span class="font-medium text-terracota">Total: <span id="equipo-total">$0</span></span>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="deleteCategory('equipo')" 
+                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Eliminar categoría
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-3">🛠️</span>Software y Herramientas
+                            </h3>
+                        </div>
+                        <div id="software-list" class="space-y-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <span class="font-medium text-terracota">Total: <span id="software-total">$0</span></span>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="deleteCategory('software')" 
+                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Eliminar categoría
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-3">📚</span>Educación y Desarrollo
+                            </h3>
+                        </div>
+                        <div id="educacion-list" class="space-y-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <span class="font-medium text-terracota">Total: <span id="educacion-total">$0</span></span>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="deleteCategory('educacion')" 
+                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Eliminar categoría
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-3">🏥</span>Salud y Bienestar
+                            </h3>
+                        </div>
+                        <div id="salud-list" class="space-y-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <span class="font-medium text-terracota">Total: <span id="salud-total">$0</span></span>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="deleteCategory('salud')" 
+                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Eliminar categoría
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                                <span class="mr-3">📦</span>Otros
+                            </h3>
+                        </div>
+                        <div id="otros-list" class="space-y-2"></div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <span class="font-medium text-terracota">Total: <span id="otros-total">$0</span></span>
+                        </div>
+                        <!-- No delete button for "Otros" category -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Calculator -->
+            <div class="space-y-6">
+                <!-- Work Hours -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">⏰</span>Horas Laborales
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas por día</label>
+                            <input type="number" id="hoursPerDay" value="8" onchange="calculateHourlyRate()"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Días por mes</label>
+                            <input type="number" id="daysPerMonth" value="22" onchange="calculateHourlyRate()"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas estimadas del proyecto</label>
+                            <input type="number" id="projectHours" value="40" onchange="calculateProjectPrices()"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        </div>
+                        <div class="pt-4 border-t border-gray-200">
+                            <span class="text-lg font-semibold text-terracota">
+                                Horas mensuales: <span id="monthlyHours">176</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cost Summary -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">📊</span>Resumen de Costos
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Gastos mensuales:</span>
+                            <span id="totalExpenses" class="font-semibold">$0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Impuestos (<span id="taxRate">17%</span>):</span>
+                            <span id="totalTaxes" class="font-semibold">$0</span>
+                        </div>
+                        <div class="flex justify-between border-t border-gray-200 pt-3">
+                            <span class="font-semibold">Total mensual:</span>
+                            <span id="totalMonthly" class="font-bold text-terracota">$0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Costo por hora:</span>
+                            <span id="hourlyRate" class="font-bold text-lg text-terracota">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Pricing -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-3">💼</span>Cotización de Proyecto
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer" onclick="selectPrice('minimum')">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">Mínimo no negociable</span>
+                                <span id="minimumPrice" class="font-bold text-red-600">$0</span>
+                            </div>
+                        </div>
+                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer" onclick="selectPrice('regular')">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">Precio regular (+30%)</span>
+                                <span id="regularPrice" class="font-bold text-blue-600">$0</span>
+                            </div>
+                        </div>
+                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer" onclick="selectPrice('ideal')">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">Precio ideal (+130%)</span>
+                                <span id="idealPrice" class="font-bold text-green-600">$0</span>
+                            </div>
+                        </div>
+                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Precio personalizado</label>
+                            <input type="number" id="customPrice" onchange="selectPrice('custom')"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div id="priceWarning" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <p class="text-red-700 text-sm">⚠️ El precio seleccionado está por debajo del mínimo no negociable</p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-semibold">Precio seleccionado:</span>
+                            <span id="selectedPrice" class="font-bold text-xl text-terracota">$0</span>
+                        </div>
+                        <button onclick="generateInvoice()" 
+                                class="w-full bg-terracota text-white py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                            Generar Cotización
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Modal -->
+        <div id="invoiceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6 no-print">
+                        <h2 class="text-2xl font-bold text-gray-800">Vista Previa de Cotización</h2>
+                        <button onclick="closeInvoice()" class="text-gray-500 hover:text-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Invoice Content -->
+                    <div id="invoiceContent" class="border border-gray-200 rounded-lg p-8">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-gray-800 mb-2">Cotización</h1>
+                            <p class="text-gray-600">Servicios de Diseño y Desarrollo</p>
+                            <div class="print-only mt-4">
+                                <p class="text-sm text-gray-500">Fecha de emisión: <span id="issueDate"></span></p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h3 class="font-semibold text-gray-800 mb-3">Información del Cliente</h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">Cliente:</label>
+                                        <input type="text" id="clientName" placeholder="Nombre del cliente" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">Servicio:</label>
+                                        <input type="text" id="serviceType" placeholder="Tipo de servicio" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-600 mb-1">Fecha de entrega:</label>
+                                        <input type="date" id="deliveryDate" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 mb-3">Detalles del Proyecto</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="flex justify-between border-b border-gray-100 pb-2">
+                                        <span class="font-medium">Horas estimadas:</span>
+                                        <span id="invoiceHours" class="font-semibold"></span>
+                                    </div>
+                                    <div class="flex justify-between border-b border-gray-100 pb-2">
+                                        <span class="font-medium">Tarifa por hora:</span>
+                                        <span id="invoiceHourlyRate" class="font-semibold"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="font-medium">Subtotal:</span>
+                                        <span id="invoiceSubtotal" class="font-semibold"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t-2 border-gray-300 pt-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-xl font-semibold">Total del Proyecto:</span>
+                                <span id="invoiceTotal" class="text-3xl font-bold text-terracota"></span>
+                            </div>
+                            
+                            <div id="taxBreakdown" class="text-sm text-gray-600 space-y-1 bg-gray-50 p-4 rounded"></div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
+                            <p>Esta cotización es válida por 30 días a partir de la fecha de emisión.</p>
+                            <div class="print-only mt-4">
+                                <p class="font-medium">Gracias por confiar en nuestros servicios profesionales</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 no-print">
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-yellow-800 text-sm text-center">
+                                ⚠️ No es posible imprimir por lo que es recomendable que tomes captura de pantalla de la cotización.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let expenses = {
+            servicios: [],
+            equipo: [],
+            software: [],
+            educacion: [],
+            salud: [],
+            otros: []
+        };
+
+        let customCategories = {}; // Store custom categories
+        let selectedPriceType = 'minimum';
+        let currentCurrency = 'GTQ';
+        let currentTaxRate = 0.17;
+
+        const taxRates = {
+            guatemala: {
+                rate: 0.17,
+                currency: 'GTQ',
+                symbol: 'Q',
+                breakdown: 'ISR: 5% + IVA: 12%',
+                details: 'ISR sobre ingresos brutos: 5%<br>IVA: 12%<br>Bonificación incentivo: Q250/mes'
+            },
+            usa: {
+                rate: 0.275,
+                currency: 'USD',
+                symbol: '$',
+                breakdown: 'Impuestos federales y estatales: 27.5%',
+                details: 'Self-employment tax: 15.3%<br>Federal income tax: 10-22%<br>State income tax: 5-8%'
+            },
+            eu: {
+                rate: 0.375,
+                currency: 'EUR',
+                symbol: '€',
+                breakdown: 'Impuestos y seguridad social: 37.5%',
+                details: 'Impuesto sobre la renta: 14-45%<br>Seguridad social: 21-28%<br>IVA: 19-23%'
+            }
+        };
+
+        function updateRegion() {
+            const region = document.getElementById('region').value;
+            const taxInfo = taxRates[region];
+            
+            currentTaxRate = taxInfo.rate;
+            currentCurrency = taxInfo.currency;
+            
+            document.getElementById('taxRate').textContent = Math.round(taxInfo.rate * 100) + '%';
+            document.getElementById('tax-info').innerHTML = taxInfo.details;
+            
+            // Update all category displays with new currency
+            Object.keys(expenses).forEach(category => {
+                updateCategoryDisplay(category);
+            });
+            
+            updateAllTotals();
+        }
+
+        function addExpense() {
+            const name = document.getElementById('expenseName').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            const category = document.getElementById('expenseCategory').value;
+
+            if (!name || !amount || !category) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            expenses[category].push({ name, amount });
+            
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+            document.getElementById('expenseCategory').value = '';
+            
+            updateCategoryDisplay(category);
+            updateAllTotals();
+        }
+
+        function removeExpense(category, index) {
+            expenses[category].splice(index, 1);
+            updateCategoryDisplay(category);
+            updateAllTotals();
+        }
+
+
+
+        function deleteCategory(category) {
+            // Prevent deletion of "Otros" category
+            if (category === 'otros') {
+                alert('La categoría "Otros" no puede ser eliminada.');
+                return;
+            }
+
+            // Find and remove the category card from DOM
+            const categoryList = document.getElementById(`${category}-list`);
+            if (categoryList) {
+                const categoryCard = categoryList.closest('.category-card');
+                if (categoryCard) {
+                    categoryCard.parentNode.removeChild(categoryCard);
+                }
+            }
+            
+            // Clear the category expenses
+            if (expenses[category]) {
+                delete expenses[category];
+            }
+            
+            // Remove from custom categories if it's a custom one
+            if (customCategories[category]) {
+                delete customCategories[category];
+            }
+            
+            // Remove the category from the dropdown
+            const dropdown = document.getElementById('expenseCategory');
+            const optionToRemove = dropdown.querySelector(`option[value="${category}"]`);
+            if (optionToRemove) {
+                optionToRemove.parentNode.removeChild(optionToRemove);
+            }
+            
+            // Update totals
+            updateAllTotals();
+        }
+
+        function updateCategoryDisplay(category) {
+            const list = document.getElementById(category + '-list');
+            const total = document.getElementById(category + '-total');
+            
+            list.innerHTML = '';
+            let categoryTotal = 0;
+            
+            expenses[category].forEach((expense, index) => {
+                categoryTotal += expense.amount;
+                const item = document.createElement('div');
+                item.className = 'flex justify-between items-center py-2 px-3 bg-gray-50 rounded';
+                item.innerHTML = `
+                    <span class="text-sm">${expense.name}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-medium">${formatCurrency(expense.amount)}</span>
+                        <button onclick="removeExpense('${category}', ${index})" 
+                                class="text-red-500 hover:text-red-700 text-xs">✕</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+            
+            total.textContent = formatCurrency(categoryTotal);
+        }
+
+        function updateAllTotals() {
+            let totalExpenses = 0;
+            Object.values(expenses).forEach(category => {
+                category.forEach(expense => {
+                    totalExpenses += expense.amount;
+                });
+            });
+
+            const taxes = totalExpenses * currentTaxRate;
+            const totalMonthly = totalExpenses + taxes;
+
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('totalTaxes').textContent = formatCurrency(taxes);
+            document.getElementById('totalMonthly').textContent = formatCurrency(totalMonthly);
+
+            calculateHourlyRate();
+        }
+
+        function calculateHourlyRate() {
+            const hoursPerDay = parseFloat(document.getElementById('hoursPerDay').value) || 8;
+            const daysPerMonth = parseFloat(document.getElementById('daysPerMonth').value) || 22;
+            const monthlyHours = hoursPerDay * daysPerMonth;
+            
+            document.getElementById('monthlyHours').textContent = monthlyHours;
+
+            let totalExpenses = 0;
+            Object.values(expenses).forEach(category => {
+                category.forEach(expense => {
+                    totalExpenses += expense.amount;
+                });
+            });
+
+            const taxes = totalExpenses * currentTaxRate;
+            const totalMonthly = totalExpenses + taxes;
+            const hourlyRate = totalMonthly / monthlyHours;
+
+            document.getElementById('hourlyRate').textContent = formatCurrency(hourlyRate);
+            
+            calculateProjectPrices();
+        }
+
+        function calculateProjectPrices() {
+            const projectHours = parseFloat(document.getElementById('projectHours').value) || 40;
+            const hourlyRateText = document.getElementById('hourlyRate').textContent;
+            const hourlyRate = parseFloat(hourlyRateText.replace(/[^\d.-]/g, '')) || 0;
+
+            const minimum = hourlyRate * projectHours;
+            const regular = minimum * 1.3;
+            const ideal = minimum * 2.3;
+
+            document.getElementById('minimumPrice').textContent = formatCurrency(minimum);
+            document.getElementById('regularPrice').textContent = formatCurrency(regular);
+            document.getElementById('idealPrice').textContent = formatCurrency(ideal);
+
+            // Update selected price if it's one of the calculated ones
+            if (selectedPriceType !== 'custom') {
+                selectPrice(selectedPriceType);
+            }
+        }
+
+        function selectPrice(type) {
+            selectedPriceType = type;
+            
+            // Remove previous selections
+            document.querySelectorAll('.price-option').forEach(option => {
+                option.classList.remove('selected', 'border-terracota', 'bg-orange-50');
+                option.classList.add('border-gray-200');
+            });
+
+            let selectedAmount = 0;
+            let selectedElement;
+
+            switch(type) {
+                case 'minimum':
+                    selectedAmount = parseFloat(document.getElementById('minimumPrice').textContent.replace(/[^\d.-]/g, ''));
+                    selectedElement = document.querySelectorAll('.price-option')[0];
+                    break;
+                case 'regular':
+                    selectedAmount = parseFloat(document.getElementById('regularPrice').textContent.replace(/[^\d.-]/g, ''));
+                    selectedElement = document.querySelectorAll('.price-option')[1];
+                    break;
+                case 'ideal':
+                    selectedAmount = parseFloat(document.getElementById('idealPrice').textContent.replace(/[^\d.-]/g, ''));
+                    selectedElement = document.querySelectorAll('.price-option')[2];
+                    break;
+                case 'custom':
+                    selectedAmount = parseFloat(document.getElementById('customPrice').value) || 0;
+                    selectedElement = document.querySelectorAll('.price-option')[3];
+                    break;
+            }
+
+            if (selectedElement) {
+                selectedElement.classList.add('selected', 'border-terracota', 'bg-orange-50');
+                selectedElement.classList.remove('border-gray-200');
+            }
+
+            document.getElementById('selectedPrice').textContent = formatCurrency(selectedAmount);
+
+            // Check if price is below minimum
+            const minimumAmount = parseFloat(document.getElementById('minimumPrice').textContent.replace(/[^\d.-]/g, ''));
+            const warning = document.getElementById('priceWarning');
+            
+            if (selectedAmount < minimumAmount && selectedAmount > 0) {
+                warning.classList.remove('hidden');
+            } else {
+                warning.classList.add('hidden');
+            }
+        }
+
+        function generateInvoice() {
+            const clientName = document.getElementById('clientName').value || 'Cliente';
+            const serviceType = document.getElementById('serviceType').value || 'Servicio de diseño';
+            const deliveryDate = document.getElementById('deliveryDate').value || new Date().toISOString().split('T')[0];
+            
+            const projectHours = document.getElementById('projectHours').value;
+            const hourlyRate = document.getElementById('hourlyRate').textContent;
+            const selectedPrice = document.getElementById('selectedPrice').textContent;
+            
+            // Calculate subtotal (before any markups)
+            const hourlyRateNum = parseFloat(hourlyRate.replace(/[^\d.-]/g, '')) || 0;
+            const subtotal = hourlyRateNum * parseFloat(projectHours);
+            
+            document.getElementById('invoiceHours').textContent = projectHours + ' horas';
+            document.getElementById('invoiceHourlyRate').textContent = hourlyRate;
+            document.getElementById('invoiceSubtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('invoiceTotal').textContent = selectedPrice;
+            
+            // Set current date
+            const today = new Date().toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('issueDate').textContent = today;
+            
+            // Set form values
+            document.getElementById('clientName').value = clientName;
+            document.getElementById('serviceType').value = serviceType;
+            document.getElementById('deliveryDate').value = deliveryDate;
+            
+            // Tax breakdown
+            const region = document.getElementById('region').value;
+            const taxInfo = taxRates[region];
+            document.getElementById('taxBreakdown').innerHTML = `
+                <div class="mb-2">
+                    <p class="font-semibold text-gray-800 mb-2">Información fiscal aplicada:</p>
+                    <p class="text-sm">${taxInfo.breakdown}</p>
+                </div>
+                <div class="text-xs text-gray-500 mt-2 border-t border-gray-200 pt-2">
+                    <p><strong>Detalles:</strong></p>
+                    <div class="mt-1">${taxInfo.details}</div>
+                </div>
+            `;
+            
+            document.getElementById('invoiceModal').classList.remove('hidden');
+            
+            // Automatically print after a short delay to ensure modal is fully rendered
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function closeInvoice() {
+            document.getElementById('invoiceModal').classList.add('hidden');
+        }
+
+        function printInvoice() {
+            window.print();
+        }
+
+        function openEmojiPicker() {
+            // Create a simple emoji picker modal
+            const emojiModal = document.createElement('div');
+            emojiModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            emojiModal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Seleccionar Emoticón</h3>
+                        <button onclick="closeEmojiPicker()" class="text-gray-500 hover:text-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto">
+                        ${getCommonEmojis().map(emoji => 
+                            `<button onclick="selectEmoji('${emoji}')" class="text-2xl p-2 hover:bg-gray-100 rounded transition-colors">${emoji}</button>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+            emojiModal.id = 'emojiModal';
+            document.body.appendChild(emojiModal);
+        }
+
+        function getCommonEmojis() {
+            return [
+                '😊', '😎', '🤔', '😍', '🥳', '😂', '🙂', '😉',
+                '💼', '💰', '📊', '📈', '💻', '🖥️', '📱', '⌚',
+                '🏠', '🏢', '🏪', '🏭', '🏦', '🏥', '🏫', '🏨',
+                '🚗', '✈️', '🚀', '⚡', '🔥', '💡', '🎯', '🎨',
+                '📚', '📝', '📋', '📌', '📍', '🔍', '🔧', '⚙️',
+                '🎵', '🎮', '🏆', '🎪', '🎭', '🎨', '🎬', '📷',
+                '🍕', '☕', '🍔', '🥗', '🍰', '🍎', '🥑', '🌮',
+                '⭐', '🌟', '💫', '✨', '🌈', '🔮', '💎', '👑'
+            ];
+        }
+
+        function selectEmoji(emoji) {
+            document.getElementById('newCategoryEmoji').value = emoji;
+            closeEmojiPicker();
+        }
+
+        function closeEmojiPicker() {
+            const modal = document.getElementById('emojiModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function captureAndPrint() {
+            // Since we can't actually take a screenshot in a web environment,
+            // we'll use the existing print functionality but with a message
+            alert('Preparando para imprimir la cotización...');
+            window.print();
+        }
+
+        function showAddCategoryForm() {
+            document.getElementById('addCategoryForm').classList.remove('hidden');
+            document.getElementById('newCategoryName').focus();
+        }
+
+        function hideAddCategoryForm() {
+            document.getElementById('addCategoryForm').classList.add('hidden');
+            document.getElementById('newCategoryName').value = '';
+            document.getElementById('newCategoryEmoji').value = '';
+        }
+
+        function createCategory() {
+            const categoryName = document.getElementById('newCategoryName').value.trim();
+            const categoryEmoji = document.getElementById('newCategoryEmoji').value.trim() || '📁';
+            
+            if (!categoryName) {
+                alert('Por favor ingresa un nombre para la categoría');
+                return;
+            }
+
+            // Generate a unique key for the category
+            const categoryKey = categoryName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+            
+            // Check if category already exists
+            if (expenses[categoryKey] !== undefined || customCategories[categoryKey] !== undefined) {
+                alert('Ya existe una categoría con ese nombre');
+                return;
+            }
+
+            // Add to custom categories
+            customCategories[categoryKey] = {
+                name: categoryName,
+                emoji: categoryEmoji
+            };
+
+            // Initialize expenses array for this category
+            expenses[categoryKey] = [];
+
+            // Add to dropdown
+            const dropdown = document.getElementById('expenseCategory');
+            const option = document.createElement('option');
+            option.value = categoryKey;
+            option.textContent = `${categoryEmoji} ${categoryName}`;
+            
+            // Insert before "Otros" option (which should be last)
+            const otrosOption = dropdown.querySelector('option[value="otros"]');
+            dropdown.insertBefore(option, otrosOption);
+
+            // Create the category card
+            createCategoryCard(categoryKey, categoryName, categoryEmoji);
+
+            // Hide the form and clear input
+            hideAddCategoryForm();
+            
+            alert(`Categoría "${categoryEmoji} ${categoryName}" creada exitosamente`);
+        }
+
+        function createCategoryCard(categoryKey, categoryName, categoryEmoji = '📁') {
+            const categoriesContainer = document.querySelector('.grid.md\\:grid-cols-2.gap-6');
+            
+            const categoryCard = document.createElement('div');
+            categoryCard.className = 'category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100';
+            categoryCard.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <span class="mr-3">${categoryEmoji}</span>${categoryName}
+                    </h3>
+                </div>
+                <div id="${categoryKey}-list" class="space-y-2"></div>
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <span class="font-medium text-terracota">Total: <span id="${categoryKey}-total">$0</span></span>
+                </div>
+                <div class="mt-4 text-center">
+                    <button onclick="deleteCategory('${categoryKey}')" 
+                            class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Eliminar categoría
+                    </button>
+                </div>
+            `;
+            
+            // Insert before the "Otros" category card (which should be last)
+            const otrosCard = categoriesContainer.lastElementChild;
+            categoriesContainer.insertBefore(categoryCard, otrosCard);
+            
+            // Initialize the display
+            updateCategoryDisplay(categoryKey);
+        }
+
+
+
+        function formatCurrency(amount) {
+            const region = document.getElementById('region').value;
+            const taxInfo = taxRates[region];
+            return taxInfo.symbol + amount.toFixed(2);
+        }
+
+        // Initialize
+        updateRegion();
+        calculateHourlyRate();
+        selectPrice('minimum');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cd825d155b67c9',t:'MTc1NzQ5MjQ1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
