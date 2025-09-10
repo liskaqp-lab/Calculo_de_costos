@@ -377,8 +377,25 @@
                             <span class="font-semibold">Precio seleccionado:</span>
                             <span id="selectedPrice" class="font-bold text-xl text-terracota">$0</span>
                         </div>
-                        <button onclick="" 
+                        <button onclick="generateInvoice()" 
                                 class="w-full bg-terracota text-white py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                            <script>
+  function generateInvoice() {
+    // Aquí va todo el código de tu calculadora para generar la cotización.
+    // Por ejemplo:
+    let total = calcularTotal();
+    console.log("El total de la cotización es:", total);
+
+    // No incluyas la línea "window.print();" aquí.
+    // Elimínala de esta función para que no abra el diálogo de impresión.
+  }
+
+  // Si tienes otras funciones o código JavaScript, agrégalo aquí también.
+  function calcularTotal() {
+    // ... tu lógica de cálculo ...
+    return 100; // Valor de ejemplo
+  }
+</script>
                             Generar Cotización
                         </button>
                     </div>
