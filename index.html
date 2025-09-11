@@ -456,7 +456,7 @@
                     <div id="invoiceContent" class="border border-gray-200 rounded-lg p-8">
                         <div class="text-center mb-8">
                             <h1 class="text-3xl font-bold text-gray-800 mb-2">Cotización</h1>
-                            <p class="text-gray-600">Servicios de Diseño y Desarrollo</p>
+                            <h2 id="invoiceProductName" class="text-xl font-semibold text-terracota mb-2">Producto o Servicio</h2>
                             <div class="print-only mt-4">
                                 <p class="text-sm text-gray-500">Fecha de emisión: <span id="issueDate"></span></p>
                             </div>
@@ -936,6 +936,7 @@
             const clientName = document.getElementById('clientName').value || 'Cliente';
             const serviceType = document.getElementById('serviceType').value || 'Servicio de diseño';
             const deliveryDate = document.getElementById('deliveryDate').value || new Date().toISOString().split('T')[0];
+            const productName = document.getElementById('productName').value || 'Producto o Servicio';
             
             const projectHours = document.getElementById('projectHours').value;
             const hourlyRate = document.getElementById('hourlyRate').textContent;
@@ -962,6 +963,9 @@
             document.getElementById('clientName').value = clientName;
             document.getElementById('serviceType').value = serviceType;
             document.getElementById('deliveryDate').value = deliveryDate;
+            
+            // Set product name in invoice header
+            document.getElementById('invoiceProductName').textContent = productName;
             
             // Tax breakdown
             let taxBreakdownHTML = '';
@@ -1169,5 +1173,5 @@
         selectPrice('minimum');
         updateCustomTaxesDisplay();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97d1f24697d3c82c',t:'MTc1NzUzODk4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97d3c30b92173371',t:'MTc1NzU1ODAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
