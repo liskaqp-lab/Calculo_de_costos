@@ -1,6 +1,5 @@
-// Función para guardar los datos
+// Funciones para guardar y cargar el estado
 function saveState() {
-    // Los datos complejos como objetos y arrays deben convertirse a JSON string
     const dataToSave = {
         expenses: expenses,
         customCategories: customCategories,
@@ -17,13 +16,11 @@ function saveState() {
     console.log('Datos guardados en localStorage.');
 }
 
-// Función para cargar los datos
 function loadState() {
     const savedData = localStorage.getItem('freelanceCalculatorData');
     if (savedData) {
         const data = JSON.parse(savedData);
         
-        // Asignar los valores guardados a las variables y elementos de la página
         expenses = data.expenses || {};
         customCategories = data.customCategories || {};
         customTaxes = data.customTaxes || [];
@@ -35,11 +32,9 @@ function loadState() {
         document.getElementById('daysPerMonth').value = data.daysPerMonth || '22';
         document.getElementById('projectHours').value = data.projectHours || '40';
 
-        // Recrear las categorías personalizadas en la interfaz
         for (const key in customCategories) {
             if (customCategories.hasOwnProperty(key)) {
                 createCategoryCard(key, customCategories[key].name, customCategories[key].emoji);
-                // También agregarlas al dropdown
                 const dropdown = document.getElementById('expenseCategory');
                 const option = document.createElement('option');
                 option.value = key;
@@ -49,7 +44,6 @@ function loadState() {
             }
         }
         
-        // Actualizar todos los elementos de la interfaz con los datos cargados
         updateRegion();
         updateCustomTaxesDisplay();
         Object.keys(expenses).forEach(category => {
@@ -60,28 +54,19 @@ function loadState() {
         selectPrice(selectedPriceType);
 
         console.log('Datos cargados desde localStorage.');
-        // ... (tu código actual de storage.js)
     }
 }
 
 function resetPage() {
-    // 1. Preguntar al usuario si está seguro
     if (confirm("¿Estás seguro de que quieres restablecer la calculadora? Se perderán todos los datos guardados.")) {
-        
-        // 2. Borrar todos los datos de localStorage
         localStorage.removeItem('freelanceCalculatorData');
-        
-        // 3. Recargar la página para que se cargue con los valores por defecto
         window.location.reload();
     }
 }
 
+// Funciones para la cotización y la impresión
 function generateInvoice() {
-    // ... (tu código existente para generar la cotización) ...
-    
-    // Al generar la cotización, agrega la clase `print-mode` al cuerpo de la página
     document.body.classList.add('print-mode');
-    
     document.getElementById('invoiceModal').classList.remove('hidden');
 }
 
@@ -91,16 +76,9 @@ function printInvoice() {
 
 function closeInvoice() {
     document.getElementById('invoiceModal').classList.add('hidden');
-    // Al cerrar el modal, elimina la clase `print-mode` para que la página vuelva a la normalidad
     document.body.classList.remove('print-mode');
 }
 
-// ... (resto de tu código de storage.js)
-function printInvoice() {
-    window.print();
-}
-// Eventos para guardar los datos automáticamente al salir o cambiar
+// Eventos
 window.addEventListener('beforeunload', saveState);
-
-// Evento para cargar los datos al iniciar la página
 document.addEventListener('DOMContentLoaded', loadState);
