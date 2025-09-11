@@ -1,75 +1,68 @@
-// Funciones para guardar y cargar el estado
-// ... (your existing saveState, loadState, resetPage functions) ...
+// Utilidad para escribir texto de forma segura
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
 
-// Funciones para la cotización y la impresión
 function generateInvoice() {
-    // Fill the invoice content here
-    const clientName = document.getElementById('clientName').value || 'Cliente';
-    const serviceType = document.getElementById('serviceType').value || 'Servicio de diseño';
-    const deliveryDate = document.getElementById('deliveryDate').value || new Date().toISOString().split('T')[0];
-    const productName = document.getElementById('productName').value || 'Producto o Servicio';
-    const projectHours = document.getElementById('projectHours').value;
-    const hourlyRate = document.getElementById('hourlyRate').textContent;
-    const selectedPrice = document.getElementById('selectedPrice').textContent;
+  // Lee valores de los inputs (con fallback)
+  const clientName   = (document.getElementById('clientName')?.value || 'Cliente').trim();
+  const serviceType  = (document.getElementById('serviceType')?.value || 'Servicio de diseño').trim();
+  const deliveryDate = (document.getElementById('deliveryDate')?.value || new Date().toISOString().split('T')[0]).trim();
+  const productName  = (document.getElementById('productName')?.value || 'Producto o Servicio').trim();
 
-    const hourlyRateNum = parseFloat(hourlyRate.replace(/[^\d.-]/g, '')) || 0;
-    const subtotal = hourlyRateNum * parseFloat(projectHours);
+  const projectHours    = parseFloat(document.getElementById('projectHours')?.value || 0) || 0;
+  const hourlyRateText  = document.getElementById('hourlyRate')?.textContent || '$0';
+  const hourlyRateNum   = parseFloat(hourlyRateText.replace(/[^\d.\-]/g, '')) || 0;
+  const selectedPrice   = document.getElementById('selectedPrice')?.textContent || '$0';
 
-    document.getElementById('invoiceHours').textContent = projectHours + ' horas';
-    document.getElementById('invoiceHourlyRate').textContent = hourlyRate;
-    document.getElementById('invoiceSubtotal').textContent = formatCurrency(subtotal);
-    document.getElementById('invoiceTotal').textContent = selectedPrice;
+  const subtotal = projectHours * hourlyRateNum;
 
-    const today = new Date().toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-    document.getElementById('issueDate').textContent = today;
-    document.getElementById('clientName').value = clientName;
-    document.getElementById('serviceType').value = serviceType;
-    document.getElementById('deliveryDate').value = deliveryDate;
-    document.getElementById('invoiceProductName').textContent = productName;
+  // Llena la vista previa (NO los inputs)
+  setText('invoiceProductName',   productName);
+  setText('issueDate',            new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }));
+  setText('invoiceClientName',    clientName);
+  setText('invoiceServiceType',   serviceType);
+  setText('invoiceDeliveryDate',  deliveryDate);
+  setText('invoiceHours',         `${projectHours} horas`);
+  setText('invoiceHourlyRate',    hourlyRateText);
+  setText('invoiceSubtotal',      formatCurrency(subtotal));
+  setText('invoiceTotal',         selectedPrice);
 
-    let taxBreakdownHTML = '';
-    if (customTaxes.length > 0) {
-        const taxList = customTaxes.map(tax => `${tax.name}: ${tax.rate}%`).join('<br>');
-        const totalRate = customTaxes.reduce((sum, tax) => sum + tax.rate, 0);
-        taxBreakdownHTML = `
-            <div class="mb-2">
-                <p class="font-semibold text-gray-800 mb-2">Impuestos personalizados aplicados:</p>
-                <div class="text-sm">${taxList}</div>
-                <div class="text-sm font-medium mt-2">Total: ${totalRate.toFixed(1)}%</div>
-            </div>
-        `;
-    } else {
-        const region = document.getElementById('region').value;
-        const taxInfo = taxRates[region];
-        taxBreakdownHTML = `
-            <div class="mb-2">
-                <p class="font-semibold text-gray-800 mb-2">Información fiscal aplicada:</p>
-                <p class="text-sm">${taxInfo.breakdown}</p>
-            </div>
-            <div class="text-xs text-gray-500 mt-2 border-t border-gray-200 pt-2">
-                <p><strong>Detalles:</strong></p>
-                <div class="mt-1">${taxInfo.details}</div>
-            </div>
-        `;
-    }
-    document.getElementById('taxBreakdown').innerHTML = taxBreakdownHTML;
+  // Impuestos
+  let taxBreakdownHTML = '';
+  if (customTaxes.length > 0) {
+    const taxList  = customTaxes.map(tax => `${tax.name}: ${tax.rate}%`).join('\n');
+    const totalRate = customTaxes.reduce((sum, tax) => sum + tax.rate, 0);
+    taxBreakdownHTML = `
+      <strong>Impuestos personalizados aplicados:</strong><br/>
+      ${taxList.replaceAll('\n','<br/>')}<br/>
+      <em>Total: ${totalRate.toFixed(1)}%</em>
+    `;
+  } else {
+    const region  = document.getElementById('region')?.value;
+    const taxInfo = taxRates[region];
+    taxBreakdownHTML = `
+      <strong>Información fiscal aplicada:</strong><br/>
+      ${taxInfo.breakdown}<br/>
+      <em>Detalles:</em><br/>
+      ${taxInfo.details}
+    `;
+  }
+  const taxDiv = document.getElementById('taxBreakdown');
+  if (taxDiv) taxDiv.innerHTML = taxBreakdownHTML;
 
-    // Remove hidden class from the modal to make it visible
-    document.getElementById('invoiceModal').classList.remove('hidden');
+  // Muestra el modal
+  document.getElementById('invoiceModal')?.classList.remove('hidden');
 }
+document.addEventListener('DOMContentLoaded', () => {
+  // Guardado/carga de estado (ya los tienes)
+  // window.addEventListener('beforeunload', saveState);
+  // loadState();
 
-function printInvoice() {
-    window.print();
-}
-
-function closeInvoice() {
-    document.getElementById('invoiceModal').classList.add('hidden');
-}
-
-// Eventos
-window.addEventListener('beforeunload', saveState);
-document.addEventListener('DOMContentLoaded', loadState);
+  // Botones del modal (se registran UNA sola vez)
+  document.getElementById('btnPrint')?.addEventListener('click', () => window.print());
+  document.getElementById('btnClose')?.addEventListener('click', () => {
+    document.getElementById('invoiceModal')?.classList.add('hidden');
+  });
+});
