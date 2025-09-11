@@ -28,7 +28,7 @@
         .price-option.selected { transform: scale(1.05); }
 @media print {
     /* Oculta la calculadora principal */
-    .main-container {
+    .container { 
         display: none !important; 
     }
     
@@ -59,10 +59,10 @@
 </head>
 <body class="bg-gradient-to-br from-beige to-white min-h-screen">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-800 mb-4">Calculadora de precios</h1>
-            <p class="text-lg text-gray-600">...</p>
-        </div>
+            <p class="text-lg text-gray-600">Para calcular precios de emprendedores o pequeñas empresas guatemaltecas en Guatemala, Estados Unidos y Europa</p>
         </div>
         <div class="grid lg:grid-cols-3 gap-8">
             <!-- Left Column: Expense Categories -->
@@ -445,8 +445,7 @@
                     <div class="mb-6 no-print">
                         <h2 class="text-2xl font-bold text-gray-800 text-center">Vista Previa de Cotización</h2>
                     </div>
-<body class="bg-gradient-to-br from-beige to-white min-h-screen">
-    <div class="main-container mx-auto px-4 py-8 max-w-6xl">
+
                     <!-- Invoice Content -->
                     <div id="invoiceContent" class="border border-gray-200 rounded-lg p-8">
                         <div class="text-center mb-8">
@@ -513,8 +512,7 @@
                             </div>
                         </div>
                     </div>
-        </div>
-    </body>
+
 <button onclick="printInvoice()" 
         class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium mb-2">
     Imprimir
