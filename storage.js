@@ -76,6 +76,25 @@ function resetPage() {
     }
 }
 
+function generateInvoice() {
+    // ... (tu código existente para generar la cotización) ...
+    
+    // Al generar la cotización, agrega la clase `print-mode` al cuerpo de la página
+    document.body.classList.add('print-mode');
+    
+    document.getElementById('invoiceModal').classList.remove('hidden');
+}
+
+function printInvoice() {
+    window.print();
+}
+
+function closeInvoice() {
+    document.getElementById('invoiceModal').classList.add('hidden');
+    // Al cerrar el modal, elimina la clase `print-mode` para que la página vuelva a la normalidad
+    document.body.classList.remove('print-mode');
+}
+
 // ... (resto de tu código de storage.js)
 function printInvoice() {
     window.print();
