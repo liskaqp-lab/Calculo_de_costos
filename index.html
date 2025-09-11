@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de costos freelance</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <script src="storage.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -27,31 +29,30 @@
         .price-option { transition: all 0.3s ease; }
         .price-option.selected { transform: scale(1.05); }
 
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    body { font-family: 'Inter', sans-serif; }
-    .category-card { transition: all 0.3s ease; }
-    .category-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-    .price-option { transition: all 0.3s ease; }
-    .price-option.selected { transform: scale(1.05); }
-
-    .print-mode .container,
-    .print-mode .no-print {
-        display: none !important;
-    }
-    
-    .print-mode #invoiceModal {
-        position: static !important;
-        visibility: visible !important;
-        display: block !important;
-        opacity: 1 !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        max-height: none !important;
-        overflow: visible !important;
-        box-shadow: none !important;
-        background: white !important;
-    }
-        
+        /* Estilos para impresión */
+        @media print {
+            body > *:not(#invoiceModal) {
+                display: none !important;
+            }
+            #invoiceModal {
+                position: static !important;
+                visibility: visible !important;
+                display: block !important;
+                opacity: 1 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                max-height: none !important;
+                overflow: visible !important;
+                box-shadow: none !important;
+                background: white !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-beige to-white min-h-screen">
