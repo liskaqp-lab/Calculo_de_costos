@@ -60,6 +60,21 @@ function loadState() {
         selectPrice(selectedPriceType);
 
         console.log('Datos cargados desde localStorage.');
+        // ... (tu código actual de storage.js)
+
+function resetPage() {
+    // 1. Preguntar al usuario si está seguro
+    if (confirm("¿Estás seguro de que quieres restablecer la calculadora? Se perderán todos los datos guardados.")) {
+        
+        // 2. Borrar todos los datos de localStorage
+        localStorage.removeItem('freelanceCalculatorData');
+        
+        // 3. Recargar la página para que se cargue con los valores por defecto
+        window.location.reload();
+    }
+}
+
+// ... (resto de tu código de storage.js)
     }
 }
 
