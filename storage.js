@@ -77,7 +77,9 @@ function resetPage() {
 }
 
 // ... (resto de tu código de storage.js)
-
+function printInvoice() {
+    window.print();
+}
 // Eventos para guardar los datos automáticamente al salir o cambiar
 window.addEventListener('beforeunload', saveState);
 
