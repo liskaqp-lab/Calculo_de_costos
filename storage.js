@@ -61,6 +61,8 @@ function loadState() {
 
         console.log('Datos cargados desde localStorage.');
         // ... (tu código actual de storage.js)
+    }
+}
 
 function resetPage() {
     // 1. Preguntar al usuario si está seguro
@@ -75,8 +77,6 @@ function resetPage() {
 }
 
 // ... (resto de tu código de storage.js)
-    }
-}
 
 // Eventos para guardar los datos automáticamente al salir o cambiar
 window.addEventListener('beforeunload', saveState);
