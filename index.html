@@ -3,1149 +3,1339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de costos freelance</title>
-    data:image/svg+xml,<svg xmlns=<text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='80'>💰</text></svg>" type="image/svg+xml">
+    <title>Calculadora de Precios</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="storage.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        terracota: '#D2691E',
-                        beige: '#F5F5DC',
-                        azulsuave: '#87CEEB'
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .category-card { transition: all 0.3s ease; }
-        .category-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .price-option { transition: all 0.3s ease; }
-        .price-option.selected { transform: scale(1.05); }
-
-        /* Estilos para impresión */
-
-@media print {
-  body * { visibility: hidden; }
-  #invoiceModal, #invoiceModal * { visibility: visible; }
-  #invoiceModal { position: absolute; inset: 0; width: 100%; }
-  .no-print { display: none !important; }
-}
-
+        .card-shadow { box-shadow: 0 4px 20px rgba(139, 69, 19, 0.1); }
+        .gradient-bg { background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%); }
+        .chocolate-gradient { background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%); }
+        .lavender-accent { background: linear-gradient(135deg, #e6e6fa 0%, #dda0dd 100%); }
+        
+        .estrategia-activa {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .estrategia-btn:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-beige to-white min-h-screen">
+<body class="gradient-bg min-h-screen">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Calculadora de precios</h1>
-            <p class="text-lg text-gray-600">Para calcular precios de emprendedores o pequeñas empresas guatemaltecas en Guatemala, Estados Unidos y Europa</p>
+            <h1 class="text-4xl font-bold text-amber-900 mb-4">💼 Calculadora de Precios Universal</h1>
+            <p class="text-xl text-amber-700">Para cualquier producto o servicio</p>
+            <p class="text-amber-600 mt-2">Calcula costos, precios y punto de equilibrio de tu negocio</p>
+            
+            <!-- Selector de Moneda -->
+            <div class="mt-6 flex justify-center">
+                <div class="bg-white rounded-xl p-4 card-shadow">
+                    <label class="block text-sm font-medium text-amber-700 mb-2">💱 Moneda de trabajo</label>
+                    <select id="monedaSelector" class="p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 text-center font-semibold" onchange="cambiarMoneda()">
+                        <option value="Q">🇬🇹 Quetzales (Q)</option>
+                        <option value="$">🇺🇸 Dólares ($)</option>
+                        <option value="€">🇪🇺 Euros (€)</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="grid lg:grid-cols-3 gap-8">
-            <!-- Left Column: Expense Categories -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Tax Management Panel -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">🌍</span>Configuración Fiscal
-                    </h3>
+
+        <!-- Contenedor de Costos por Producto -->
+        <div id="costosProductosContainer" class="space-y-12">
+            <!-- Título de sección para Producto 1 -->
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-amber-900 mb-2">📦 Costos del Producto 1</h2>
+                <p class="text-amber-600">Inversión inicial y costos mensuales específicos para este producto</p>
+            </div>
+            
+            <!-- Costos para Producto 1 (inicial) -->
+            <div class="costos-producto-item grid grid-cols-1 lg:grid-cols-2 gap-8" data-producto="1">
+                <!-- Tarjeta 1: Inversión Inicial -->
+                <div class="bg-white rounded-2xl p-8 card-shadow">
+                    <div class="flex items-center mb-6">
+                        <span class="text-3xl mr-3">💰</span>
+                        <div>
+                            <h2 class="text-2xl font-bold text-amber-900">Inversión Inicial</h2>
+                            <p class="text-amber-600">Gastos necesarios para arrancar el negocio</p>
+                        </div>
+                    </div>
                     
-                    <!-- Region Selection -->
+                    <div class="inversion-items space-y-4 mb-6">
+                        <div class="flex gap-3 items-center">
+                            <input type="text" placeholder="Concepto" value="Equipo principal" class="flex-1 p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent">
+                            <div class="relative w-32">
+                                <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">Q</span>
+                                <input type="number" placeholder="0" value="15000" class="w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent" onchange="calcularInversion()">
+                            </div>
+                            <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700 p-2">🗑️</button>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <input type="text" placeholder="Concepto" value="Mobiliario y decoración" class="flex-1 p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent">
+                            <div class="relative w-32">
+                                <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">Q</span>
+                                <input type="number" placeholder="0" value="8000" class="w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent" onchange="calcularInversion()">
+                            </div>
+                            <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700 p-2">🗑️</button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="agregarInversion(this)" class="w-full p-3 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200 transition-colors mb-4 font-medium">
+                        + Agregar costo inicial
+                    </button>
+                    
+                    <div class="chocolate-gradient text-white p-4 rounded-lg text-center">
+                        <p class="text-lg font-semibold">Total Inversión Inicial</p>
+                        <p class="total-inversion text-3xl font-bold"><span class="moneda">Q</span> 23,000</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Costos Mensuales -->
+                <div class="bg-white rounded-2xl p-8 card-shadow">
+                    <div class="flex items-center mb-6">
+                        <span class="text-3xl mr-3">📊</span>
+                        <div>
+                            <h2 class="text-2xl font-bold text-amber-900">Costos Mensuales</h2>
+                            <p class="text-amber-600">Costos fijos y variables del negocio</p>
+                        </div>
+                    </div>
+
+                    <!-- Costos Fijos -->
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Región Fiscal</label>
-                        <select id="region" onchange="updateRegion()" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                            <option value="guatemala">🇬🇹 Guatemala</option>
-                            <option value="usa">🇺🇸 Estados Unidos</option>
-                            <option value="eu">🇪🇺 Unión Europea</option>
-                        </select>
-                        
-                        <!-- Warning message for US and EU -->
-                        <div id="region-warning" class="hidden mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                            <p class="text-orange-700 text-sm">
-                                ⚠️ ¡Atención! Los costos para 🇺🇸 Estados Unidos y 🇪🇺 Unión Europea son solo estimaciones. Te recomendamos que verifiques los impuestos específicos de la región para obtener un precio final preciso.
-                            </p>
+                        <h3 class="text-lg font-semibold text-amber-800 mb-3">Costos Fijos</h3>
+                        <div class="costos-fijos space-y-3 mb-4">
+                            <div class="flex gap-3 items-center">
+                                <input type="text" placeholder="Concepto" value="Alquiler/Renta" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                                <div class="relative w-24">
+                                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">Q</span>
+                                    <input type="number" placeholder="0" value="3000" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                                </div>
+                                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+                            </div>
+                            <div class="flex gap-3 items-center">
+                                <input type="text" placeholder="Concepto" value="Servicios básicos" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                                <div class="relative w-24">
+                                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">Q</span>
+                                    <input type="number" placeholder="0" value="800" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                                </div>
+                                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+                            </div>
                         </div>
-                        
-                        <div id="tax-info" class="mt-3 p-3 bg-gray-50 rounded-lg text-sm text-gray-600"></div>
+                        <button onclick="agregarCostoFijo(this)" class="w-full p-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors text-sm">+ Agregar costo fijo</button>
+                        <div class="mt-3 p-3 bg-blue-50 rounded-lg">
+                            <p class="font-semibold text-blue-800">Total Fijos: <span class="total-fijos"><span class="moneda">Q</span> 3,800</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Costos Variables -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-amber-800 mb-3">Costos Variables</h3>
+                        <div class="costos-variables space-y-3 mb-4">
+                            <div class="flex gap-3 items-center">
+                                <input type="text" placeholder="Concepto" value="Materiales por unidad" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                                <div class="relative w-24">
+                                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">Q</span>
+                                    <input type="number" placeholder="0" value="200" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                                </div>
+                                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+                            </div>
+                        </div>
+                        <button onclick="agregarCostoVariable(this)" class="w-full p-2 bg-purple-100 text-purple-800 rounded-lg hover:bg-purple-200 transition-colors text-sm">+ Agregar costo variable</button>
+                        <div class="mt-3 p-3 bg-purple-50 rounded-lg">
+                            <p class="font-semibold text-purple-800">Total Variables: <span class="total-variables"><span class="moneda">Q</span> 200</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3: Calculadora de Productos -->
+        <div class="mt-16 bg-white rounded-2xl p-8 card-shadow lg:col-span-2">
+                <div class="flex items-center mb-6">
+                    <span class="text-3xl mr-3">🍫</span>
+                    <div>
+                        <h2 class="text-2xl font-bold text-amber-900">Cálculo de Precio por Producto</h2>
+                        <p class="text-amber-600">Calcula impuestos, ganancias y márgenes de tus productos</p>
+                    </div>
+                </div>
+
+                <!-- Configuración de Impuestos -->
+                <div class="mb-8 p-6 bg-amber-50 rounded-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-amber-800">⚙️ Configuración de Impuestos</h3>
+                        <button id="toggleFormularioImpuestos" onclick="toggleFormularioImpuestos()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
+                            + Agregar Impuesto
+                        </button>
                     </div>
                     
-                    <!-- Custom Tax Toggle -->
-                    <div class="border-t border-gray-200 pt-6">
+                    <!-- Formulario para agregar impuesto (colapsable) -->
+                    <div id="formularioImpuestos" class="hidden bg-white p-4 rounded-lg border border-amber-200 mb-4">
+                        <p class="text-sm text-amber-600 mb-4">Agrega impuestos específicos de tu país o región (ej: IVA España 21%, GST Canadá 5%, etc.)</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Nombre del impuesto</label>
+                                <input type="text" id="nombreImpuestoPersonalizado" placeholder="Ej: IVA España, GST Canadá" class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Porcentaje (%)</label>
+                                <div class="relative">
+                                    <input type="number" id="porcentajeImpuestoPersonalizado" placeholder="0.0" step="0.1" min="0" class="w-full pl-3 pr-8 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                                    <span class="absolute right-3 top-3 text-amber-600 font-semibold">%</span>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="agregarImpuestoPersonalizado()" class="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+                                    + Confirmar Impuesto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de impuestos (visible solo si hay impuestos) -->
+                    <div id="listaImpuestosPersonalizados" class="space-y-2 mb-4 hidden">
+                        <!-- Los impuestos se agregarán aquí dinámicamente -->
+                    </div>
+
+                    <!-- Resumen de impuestos totales (siempre visible) -->
+                    <div id="resumenImpuestosPersonalizados" class="p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-purple-800">📊 Total de Impuestos:</span>
+                            <span id="totalImpuestosPersonalizados" class="text-xl font-bold text-purple-900">0.0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Productos -->
+                <div id="productosContainer" class="space-y-6 mb-6">
+                    <div class="border border-amber-200 rounded-xl p-6 producto-item">
                         <div class="flex justify-between items-center mb-4">
-                            <h4 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-2">⚙️</span>Impuestos Personalizados
-                            </h4>
-                            <button onclick="toggleCustomTaxPanel()" 
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
-                                <span id="customTaxToggleText">Personalizar</span>
-                            </button>
+                            <h3 class="text-lg font-semibold text-amber-800">📦 Producto 1</h3>
+                            <button onclick="eliminarProducto(this)" class="text-red-500 hover:text-red-700 p-2">🗑️</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Nombre del producto</label>
+                                <input type="text" placeholder="Ej: Chocolate Premium" value="Producto ejemplo" class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Costo de producción</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">Q</span>
+                                    <input type="number" placeholder="0" value="500" class="costo-produccion w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 bg-gray-100" readonly>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Precio de venta deseado</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">Q</span>
+                                    <input type="number" placeholder="0" value="1000" class="precio-venta w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularProductos()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Unidades producidas/mes</label>
+                                <input type="number" placeholder="0" value="10" min="1" class="unidades-mensuales w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularProductos()">
+                            </div>
                         </div>
                         
-                        <!-- Custom Tax Management Panel -->
-                        <div id="customTaxPanel" class="hidden">
-                            <!-- Add Tax Form -->
-                            <div class="grid md:grid-cols-2 gap-4 mb-4">
-                                <input type="text" id="customTaxName" placeholder="Nombre del impuesto (ej. IVA España)" 
-                                       class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <input type="number" id="customTaxRate" placeholder="Porcentaje (%)" min="0" max="100" step="0.1"
-                                       class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <!-- Resultados del producto -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <p class="text-sm text-blue-700">Costo total (con fijos)</p>
+                                <p class="costo-total text-lg font-bold text-blue-800"><span class="moneda">Q</span> 538</p>
                             </div>
-                            
-                            <div class="text-center mb-4">
-                                <button onclick="addCustomTax()" 
-                                        class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium">
-                                    Añadir Impuesto
-                                </button>
+                            <div class="bg-red-50 p-3 rounded-lg">
+                                <p class="text-sm text-red-700">Total impuestos</p>
+                                <p class="total-impuestos text-lg font-bold text-red-800"><span class="moneda">Q</span> 220</p>
                             </div>
-                            
-                            <!-- Custom Taxes List -->
-                            <div id="customTaxesList">
-                                <h5 class="font-semibold text-gray-800 mb-3">Impuestos Añadidos:</h5>
-                                <div id="customTaxesContainer" class="space-y-2 mb-4">
-                                    <!-- Custom taxes will be added here -->
-                                </div>
-                                <div class="pt-3 border-t border-gray-200">
-                                    <div class="flex justify-between items-center">
-                                        <span class="font-semibold text-gray-800">Total de impuestos:</span>
-                                        <span id="totalCustomTaxRate" class="font-bold text-blue-600">0%</span>
-                                    </div>
-                                </div>
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <p class="text-sm text-green-700">Ganancia neta</p>
+                                <p class="ganancia-neta text-lg font-bold text-green-800"><span class="moneda">Q</span> 242</p>
+                            </div>
+                            <div class="lavender-accent p-3 rounded-lg">
+                                <p class="text-sm text-purple-700">Margen (%)</p>
+                                <p class="margen-porcentaje text-lg font-bold text-purple-800">24.2%</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product/Service Name -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">📦</span>Producto o Servicio
-                    </h3>
-                    <input type="text" id="productName" placeholder="Nombre del producto o servicio" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                </div>
+                <button onclick="agregarProducto()" class="w-full p-3 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200 transition-colors mb-6 font-medium">
+                    + Agregar producto
+                </button>
 
-                <!-- Add Expense Form -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">💰</span>Añadir Gasto
-                    </h2>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <input type="text" id="expenseName" placeholder="Nombre del gasto" 
-                               class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                        <input type="number" id="expenseAmount" placeholder="Monto mensual" 
-                               class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                        <select id="expenseCategory" 
-                                class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                            <option value="">Seleccionar categoría</option>
-                            <option value="servicios">Servicios Básicos</option>
-                            <option value="equipo">Equipo y Tecnología</option>
-                            <option value="software">Software y Herramientas</option>
-                            <option value="educacion">Educación y Desarrollo</option>
-                            <option value="salud">Salud y Bienestar</option>
-                            <option value="otros" selected>Otros</option>
-                        </select>
-                    </div>
-                    <div class="flex gap-4 mt-4 justify-center">
-                        <button onclick="addExpense()" 
-                                class="bg-terracota text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium">
-                            Añadir Gasto
-                        </button>
-                        <button onclick="showAddCategoryForm()" 
-                                class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                            Agregar categoría
-                        </button>
-                    </div>
-                    
-                    <!-- Add Category Form (Hidden by default) -->
-                    <div id="addCategoryForm" class="hidden mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Nueva Categoría</h4>
-                        <div class="space-y-3">
-                            <div class="flex gap-3">
-                                <input type="text" id="newCategoryEmoji" placeholder="😊" maxlength="2" 
-                                       class="w-16 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg"
-                                       onclick="openEmojiPicker()" readonly>
-                                <input type="text" id="newCategoryName" placeholder="Nombre de la categoría" 
-                                       class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            </div>
-                            <div class="flex gap-3 justify-center">
-                                <button onclick="createCategory()" 
-                                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium">
-                                    Crear
-                                </button>
-                                <button onclick="hideAddCategoryForm()" 
-                                        class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors font-medium">
-                                    Cancelar
-                                </button>
-                            </div>
+                <!-- Resumen Total -->
+                <div class="chocolate-gradient text-white p-6 rounded-xl text-center">
+                    <h3 class="text-2xl font-bold mb-4">📊 Resumen Total</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <p class="text-sm opacity-90">Ingresos totales</p>
+                            <p id="ingresosTotales" class="text-2xl font-bold"><span class="moneda">Q</span> 1,000</p>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Expense Categories -->
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-3">🏠</span>Servicios Básicos
-                            </h3>
+                        <div>
+                            <p class="text-sm opacity-90">Costos totales</p>
+                            <p id="costosTotales" class="text-2xl font-bold"><span class="moneda">Q</span> 758</p>
                         </div>
-                        <div id="servicios-list" class="space-y-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <span class="font-medium text-terracota">Total: <span id="servicios-total">$0</span></span>
+                        <div>
+                            <p class="text-sm opacity-90">Ganancia total</p>
+                            <p id="gananciaTotalGeneral" class="text-2xl font-bold"><span class="moneda">Q</span> 242</p>
                         </div>
-                        <div class="mt-4 text-center">
-                            <button onclick="deleteCategory('servicios')" 
-                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Eliminar categoría
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-3">💻</span>Equipo y Tecnología
-                            </h3>
-                        </div>
-                        <div id="equipo-list" class="space-y-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <span class="font-medium text-terracota">Total: <span id="equipo-total">$0</span></span>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <button onclick="deleteCategory('equipo')" 
-                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Eliminar categoría
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-3">🛠️</span>Software y Herramientas
-                            </h3>
-                        </div>
-                        <div id="software-list" class="space-y-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <span class="font-medium text-terracota">Total: <span id="software-total">$0</span></span>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <button onclick="deleteCategory('software')" 
-                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Eliminar categoría
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-3">📚</span>Educación y Desarrollo
-                            </h3>
-                        </div>
-                        <div id="educacion-list" class="space-y-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <span class="font-medium text-terracota">Total: <span id="educacion-total">$0</span></span>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <button onclick="deleteCategory('educacion')" 
-                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Eliminar categoría
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-3">🏥</span>Salud y Bienestar
-                            </h3>
-                        </div>
-                        <div id="salud-list" class="space-y-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <span class="font-medium text-terracota">Total: <span id="salud-total">$0</span></span>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <button onclick="deleteCategory('salud')" 
-                                    class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Eliminar categoría
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                        <div class="mb-4">
-                            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                <span class="mr-3">📦</span>Otros
-                            </h3>
-                        </div>
-                        <div id="otros-list" class="space-y-2"></div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <span class="font-medium text-terracota">Total: <span id="otros-total">$0</span></span>
-                        </div>
-                        <!-- No delete button for "Otros" category -->
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Calculator -->
-            <div class="space-y-6">
-                <!-- Work Hours -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">⏰</span>Horas Laborales
-                    </h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas por día</label>
-                            <input type="number" id="hoursPerDay" value="8" onchange="calculateHourlyRate()"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
+        <!-- Tarjeta 4: Punto de Equilibrio -->
+        <div class="mt-16 bg-white rounded-2xl p-8 card-shadow lg:col-span-2">
+                <div class="flex items-center mb-6">
+                    <span class="text-3xl mr-3">⚖️</span>
+                    <div>
+                        <h2 class="text-2xl font-bold text-amber-900">Punto de Equilibrio</h2>
+                        <p class="text-amber-600">Análisis automático basado en tus costos y productos</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-amber-800 mb-4">📊 Datos Calculados Automáticamente</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Costos fijos mensuales</label>
+                                <div class="w-full p-3 bg-gray-100 border border-amber-200 rounded-lg text-amber-800 font-semibold">
+                                    <span class="moneda">Q</span> <span id="costosFijosEquilibrioDisplay">3,800</span>
+                                </div>
+                                <p class="text-xs text-amber-600 mt-1">Calculado desde tus costos fijos + amortización</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Precio promedio por producto/servicio</label>
+                                <div class="w-full p-3 bg-gray-100 border border-amber-200 rounded-lg text-amber-800 font-semibold">
+                                    <span class="moneda">Q</span> <span id="precioPromedioServicioDisplay">1,000</span>
+                                </div>
+                                <p class="text-xs text-amber-600 mt-1">Promedio ponderado de tus productos</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-amber-700 mb-2">Costo variable promedio por unidad</label>
+                                <div class="w-full p-3 bg-gray-100 border border-amber-200 rounded-lg text-amber-800 font-semibold">
+                                    <span class="moneda">Q</span> <span id="costoVariableServicioDisplay">200</span>
+                                </div>
+                                <p class="text-xs text-amber-600 mt-1">Promedio de costos variables por unidad</p>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Días por mes</label>
-                            <input type="number" id="daysPerMonth" value="22" onchange="calculateHourlyRate()"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas estimadas del proyecto</label>
-                            <input type="number" id="projectHours" value="40" onchange="calculateProjectPrices()"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                        </div>
-                        <div class="pt-4 border-t border-gray-200">
-                            <span class="text-lg font-semibold text-terracota">
-                                Horas mensuales: <span id="monthlyHours">176</span>
-                            </span>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-amber-800 mb-4">📈 Resultados del Análisis</h3>
+                        <div class="space-y-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p class="text-sm text-blue-700">Margen de contribución promedio</p>
+                                <p id="margenContribucion" class="text-2xl font-bold text-blue-800"><span class="moneda">Q</span> 800</p>
+                                <p class="text-xs text-blue-600 mt-1">Precio - Costo Variable</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <p class="text-sm text-green-700">Unidades necesarias para equilibrio</p>
+                                <p id="serviciosEquilibrio" class="text-2xl font-bold text-green-800">5 unidades/mes</p>
+                                <p class="text-xs text-green-600 mt-1">Para cubrir todos los costos fijos</p>
+                            </div>
+                            <div class="chocolate-gradient text-white p-4 rounded-lg">
+                                <p class="text-sm opacity-90">Ingresos mínimos mensuales</p>
+                                <p id="ingresosMinimos" class="text-2xl font-bold"><span class="moneda">Q</span> 4,750</p>
+                                <p class="text-xs opacity-75 mt-1">Ventas mínimas para no perder dinero</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cost Summary -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">📊</span>Resumen de Costos
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between">
-                            <span>Gastos mensuales:</span>
-                            <span id="totalExpenses" class="font-semibold">$0</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Impuestos (<span id="taxRate">17%</span>):</span>
-                            <span id="totalTaxes" class="font-semibold">$0</span>
-                        </div>
-                        <div class="flex justify-between border-t border-gray-200 pt-3">
-                            <span class="font-semibold">Total mensual:</span>
-                            <span id="totalMonthly" class="font-bold text-terracota">$0</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="font-semibold">Costo por hora:</span>
-                            <span id="hourlyRate" class="font-bold text-lg text-terracota">$0</span>
-                        </div>
+                <!-- Análisis por Producto (si hay múltiples productos) -->
+                <div id="analisisProductos" class="mt-8 hidden">
+                    <h3 class="text-lg font-semibold text-amber-800 mb-4">🔍 Análisis por Producto</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-white">
+                            <thead>
+                                <tr class="bg-amber-50">
+                                    <th class="border border-amber-200 p-3 text-left text-amber-800 font-semibold">Producto</th>
+                                    <th class="border border-amber-200 p-3 text-center text-amber-800 font-semibold">Precio</th>
+                                    <th class="border border-amber-200 p-3 text-center text-amber-800 font-semibold">Margen</th>
+                                    <th class="border border-amber-200 p-3 text-center text-amber-800 font-semibold">Unidades/Equilibrio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaAnalisisProductos">
+                                <!-- Se llenará dinámicamente -->
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-
-                <!-- Project Pricing -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-3">💼</span>Cotización de Proyecto
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer" onclick="selectPrice('minimum')">
-                            <div class="flex justify-between items-center">
-                                <span class="font-medium">Mínimo no negociable</span>
-                                <span id="minimumPrice" class="font-bold text-red-600">$0</span>
-                            </div>
-                        </div>
-                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer" onclick="selectPrice('regular')">
-                            <div class="flex justify-between items-center">
-                                <span class="font-medium">Precio regular (+30%)</span>
-                                <span id="regularPrice" class="font-bold text-blue-600">$0</span>
-                            </div>
-                        </div>
-                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg cursor-pointer" onclick="selectPrice('ideal')">
-                            <div class="flex justify-between items-center">
-                                <span class="font-medium">Precio ideal (+130%)</span>
-                                <span id="idealPrice" class="font-bold text-green-600">$0</span>
-                            </div>
-                        </div>
-                        <div class="price-option p-4 border-2 border-gray-200 rounded-lg">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Precio personalizado</label>
-                            <input type="number" id="customPrice" onchange="selectPrice('custom')"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-terracota focus:border-transparent">
-                        </div>
-                    </div>
-
-                    <div id="priceWarning" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-red-700 text-sm">⚠️ El precio seleccionado está por debajo del mínimo no negociable</p>
-                    </div>
-
-<div class="mt-6 pt-4 border-t border-gray-200">
-    <div class="flex justify-between items-center mb-4">
-        <span class="font-semibold">Precio seleccionado:</span>
-        <span id="selectedPrice" class="font-bold text-xl text-terracota">$0</span>
-    </div>
-
-<button onclick="generateInvoice()" 
-        class="w-full bg-terracota text-white py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium">
-    Generar Cotización
-</button>
-
-    <button onclick="resetPage()" 
-            class="w-full bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium mt-[10px] mb-[10px]">
-        Reiniciar tarjetas de categoría
-    </button>
-</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Invoice Modal -->
-        <div id="invoiceModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <div class="p-8">
-                    <div class="mb-6 no-print">
-                        <h2 class="text-2xl font-bold text-gray-800 text-center">Vista Previa de Cotización</h2>
-                    </div>
-
-                    <!-- Invoice Content -->
-                    <div id="invoiceContent" class="border border-gray-200 rounded-lg p-8">
-                        <div class="text-center mb-8">
-                            <h1 class="text-3xl font-bold text-gray-800 mb-2">Cotización</h1>
-                            <h2 id="invoiceProductName" class="text-xl font-semibold text-terracota mb-2">Producto o Servicio</h2>
-                            <div class="print-only mt-4">
-                                <p class="text-sm text-gray-500">Fecha de emisión: <span id="issueDate"></span></p>
-                            </div>
-                        </div>
-
-                        <div class="grid md:grid-cols-2 gap-8 mb-8">
-                            <div>
-                                <h3 class="font-semibold text-gray-800 mb-3">Información del Cliente</h3>
-                                <div class="space-y-3">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-600 mb-1">Cliente:</label>
-                                        <input type="text" id="clientName" placeholder="Nombre del cliente" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-600 mb-1">Servicio:</label>
-                                        <input type="text" id="serviceType" placeholder="Tipo de servicio" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-600 mb-1">Fecha de entrega:</label>
-                                        <input type="date" id="deliveryDate" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded">
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-800 mb-3">Detalles del Proyecto</h3>
-                                <div class="space-y-3 text-sm">
-                                    <div class="flex justify-between border-b border-gray-100 pb-2">
-                                        <span class="font-medium">Horas estimadas:</span>
-                                        <span id="invoiceHours" class="font-semibold"></span>
-                                    </div>
-                                    <div class="flex justify-between border-b border-gray-100 pb-2">
-                                        <span class="font-medium">Tarifa por hora:</span>
-                                        <span id="invoiceHourlyRate" class="font-semibold"></span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="font-medium">Subtotal:</span>
-                                        <span id="invoiceSubtotal" class="font-semibold"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-t-2 border-gray-300 pt-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-xl font-semibold">Total del Proyecto:</span>
-                                <span id="invoiceTotal" class="text-3xl font-bold text-terracota"></span>
-                            </div>
-                            
-                            <div id="taxBreakdown" class="text-sm text-gray-600 space-y-1 bg-gray-50 p-4 rounded"></div>
-                        </div>
-
-                        <div class="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
-                            <p>Esta cotización es válida por 30 días a partir de la fecha de emisión.</p>
-                            <div class="print-only mt-4">
-                                <p class="font-medium">Gracias por confiar en nuestros servicios profesionales</p>
-                            </div>
+        <!-- Tarjeta 5: Cotización -->
+        <div class="mt-16 bg-white rounded-2xl p-8 card-shadow lg:col-span-2">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <span class="text-3xl mr-3">📋</span>
+                        <div>
+                            <h2 class="text-2xl font-bold text-amber-900">Cotización</h2>
+                            <p class="text-amber-600">Formato de factura para presentar a clientes</p>
                         </div>
                     </div>
+                    <button onclick="imprimirCotizacion()" class="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-medium flex items-center gap-2">
+                        🖨️ Imprimir Cotización
+                    </button>
+                </div>
 
-<button onclick="printInvoice()" 
-        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium mb-2">
-    Imprimir
-</button>
-<button onclick="closeInvoice()" 
-        class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-colors">
-    Cerrar
-</button>
+                <!-- Estrategias de Precio -->
+                <div class="mb-6 no-print">
+                    <h3 class="text-lg font-semibold text-amber-800 mb-4">💰 Estrategia de Precio</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button id="btnMinimo" onclick="seleccionarEstrategia('minimo', 10)" class="estrategia-btn p-4 border-2 border-gray-300 rounded-xl text-center transition-all duration-300 hover:shadow-lg">
+                            <div class="text-2xl mb-2">💚</div>
+                            <h4 class="font-semibold text-gray-700 mb-1">Mínimo no negociable</h4>
+                            <p class="text-sm text-gray-600">+10% sobre costo base</p>
+                            <p class="text-xs text-gray-500 mt-2">Precio de supervivencia</p>
+                        </button>
+                        <button id="btnRegular" onclick="seleccionarEstrategia('regular', 30)" class="estrategia-btn p-4 border-2 border-blue-300 bg-blue-50 rounded-xl text-center transition-all duration-300 hover:shadow-lg estrategia-activa">
+                            <div class="text-2xl mb-2">💙</div>
+                            <h4 class="font-semibold text-blue-700 mb-1">Precio regular</h4>
+                            <p class="text-sm text-blue-600">+30% sobre costo base</p>
+                            <p class="text-xs text-blue-500 mt-2">Precio competitivo</p>
+                        </button>
+                        <button id="btnIdeal" onclick="seleccionarEstrategia('ideal', 130)" class="estrategia-btn p-4 border-2 border-purple-300 rounded-xl text-center transition-all duration-300 hover:shadow-lg">
+                            <div class="text-2xl mb-2">💜</div>
+                            <h4 class="font-semibold text-gray-700 mb-1">Precio ideal</h4>
+                            <p class="text-sm text-gray-600">+130% sobre costo base</p>
+                            <p class="text-xs text-gray-500 mt-2">Precio premium</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Configuración de Fechas -->
+                <div class="mb-6 no-print">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-amber-700 mb-2">📅 Fecha de Emisión</label>
+                            <input type="date" id="fechaEmisionInput" class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="actualizarCotizacion()">
+                            <p class="text-xs text-amber-600 mt-1">Fecha en que se genera la cotización</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-amber-700 mb-2">⏰ Días de Validez (opcional)</label>
+                            <input type="number" id="diasValidez" placeholder="30" min="1" class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="actualizarCotizacion()">
+                            <p class="text-xs text-amber-600 mt-1">Días que la cotización permanece válida</p>
+                        </div>
+                    </div>
+                    <div id="fechaVencimiento" class="hidden p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                        <p class="text-sm text-orange-700">
+                            <span class="font-semibold">⚠️ Válida hasta:</span> 
+                            <span id="fechaVencimientoTexto" class="font-bold"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Campo de Beneficios Clave -->
+                <div class="mb-6 no-print">
+                    <label class="block text-sm font-medium text-amber-700 mb-2">💡 Beneficios Clave (opcional)</label>
+                    <textarea id="beneficiosClave" placeholder="Describe los beneficios principales de tus productos o servicios..." 
+                              class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 resize-none" 
+                              rows="3" onchange="actualizarCotizacion()"></textarea>
+                    <p class="text-xs text-amber-600 mt-1">Este texto aparecerá en la cotización impresa</p>
+                </div>
+
+                <div id="cotizacionCompleta" class="space-y-6">
+                    <!-- Encabezado de Cotización -->
+                    <div class="text-center border-b-2 border-amber-200 pb-6">
+                        <h1 class="text-3xl font-bold text-amber-900 mb-2 print-title">COTIZACIÓN</h1>
+                        <p class="text-amber-600">Fecha de emisión: <span id="fechaEmision"></span></p>
+                        <p id="validezCotizacion" class="text-amber-600 hidden">Válida hasta: <span id="fechaValidez" class="font-semibold"></span></p>
+                    </div>
+
+                    <!-- Beneficios Clave (solo visible al imprimir si hay contenido) -->
+                    <div id="beneficiosImpresos" class="hidden print-show bg-amber-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-amber-800 mb-2">💡 Beneficios Clave:</h3>
+                        <p id="textoBeneficios" class="text-amber-700"></p>
+                    </div>
+
+                    <!-- Lista de Productos/Servicios -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-amber-800 mb-4">📦 Productos y Servicios</h3>
+                        
+                        <!-- Tabla de productos -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-amber-50">
+                                        <th class="border border-amber-200 p-3 text-left text-amber-800 font-semibold">Producto/Servicio</th>
+                                        <th class="border border-amber-200 p-3 text-center text-amber-800 font-semibold">Cantidad</th>
+                                        <th class="border border-amber-200 p-3 text-right text-amber-800 font-semibold">Precio Unitario</th>
+                                        <th class="border border-amber-200 p-3 text-right text-amber-800 font-semibold">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaProductosCotizacion">
+                                    <!-- Se llenará dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Totales -->
+                        <div class="mt-6 flex justify-end">
+                            <div class="w-full max-w-md">
+                                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                                    <div class="flex justify-between items-center py-2 border-b border-amber-200">
+                                        <span class="font-semibold text-amber-800">TOTAL GENERAL:</span>
+                                        <span id="totalGeneralCotizacion" class="text-2xl font-bold text-amber-900"><span class="moneda">Q</span> 0</span>
+                                    </div>
+                                    <p class="text-sm text-amber-600 mt-2 italic">* Impuestos incluidos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información adicional (solo visible en pantalla) -->
+                    <div class="no-print border-t border-amber-200 pt-6">
+                        <h3 class="text-lg font-semibold text-amber-800 mb-3">📊 Información Adicional</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg text-center">
+                                <p class="text-sm text-green-700">Ganancia Neta Total</p>
+                                <p id="gananciaNetaCotizacion" class="text-xl font-bold text-green-800"><span class="moneda">Q</span> 0</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg text-center">
+                                <p class="text-sm text-blue-700">Margen Promedio</p>
+                                <p id="margenPromedioCotizacion" class="text-xl font-bold text-blue-800">0%</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg text-center">
+                                <p class="text-sm text-purple-700">Total Impuestos</p>
+                                <p id="totalImpuestosCotizacion" class="text-xl font-bold text-purple-800"><span class="moneda">Q</span> 0</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Estilos para impresión -->
+    <style media="print">
+        body * { visibility: hidden; }
+        #cotizacionCompleta, #cotizacionCompleta * { visibility: visible; }
+        #cotizacionCompleta { 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            background: white;
+            padding: 20px;
+        }
+        .no-print { display: none !important; }
+        .print-show { display: block !important; }
+        .print-title { font-size: 2rem !important; margin-bottom: 1rem !important; }
+        @page { margin: 1in; }
+        
+        /* Estilos específicos para tabla en impresión */
+        table { border-collapse: collapse !important; width: 100% !important; }
+        th, td { border: 1px solid #d97706 !important; padding: 8px !important; }
+        th { background-color: #fef3c7 !important; }
+    </style>
 
     <script>
-        let expenses = {
-            servicios: [],
-            equipo: [],
-            software: [],
-            educacion: [],
-            salud: [],
-            otros: []
-        };
+        let monedaActual = 'Q';
+        let contadorProductos = 1;
+        let impuestosPersonalizados = [];
+        let estrategiaActual = 'regular';
+        let porcentajeEstrategia = 30;
 
-        let customCategories = {}; // Store custom categories
-        let customTaxes = []; // Store custom taxes
-        let selectedPriceType = 'minimum';
-        let currentCurrency = 'GTQ';
-        let currentTaxRate = 0.17;
-
-        const taxRates = {
-            guatemala: {
-                rate: 0.17,
-                currency: 'GTQ',
-                symbol: 'Q',
-                breakdown: 'ISR: 5% + IVA: 12%',
-                details: 'ISR sobre ingresos brutos: 5%<br>IVA: 12%<br>Bonificación incentivo: Q250/mes'
-            },
-            usa: {
-                rate: 0.275,
-                currency: 'USD',
-                symbol: '$',
-                breakdown: 'Impuestos federales y estatales: 27.5%',
-                details: 'Self-employment tax: 15.3%<br>Federal income tax: 10-22%<br>State income tax: 5-8%'
-            },
-            eu: {
-                rate: 0.375,
-                currency: 'EUR',
-                symbol: '€',
-                breakdown: 'Impuestos y seguridad social: 37.5%',
-                details: 'Impuesto sobre la renta: 14-45%<br>Seguridad social: 21-28%<br>IVA: 19-23%'
-            }
-        };
-
-        function updateRegion() {
-            const region = document.getElementById('region').value;
-            const warningDiv = document.getElementById('region-warning');
-            const taxInfoDiv = document.getElementById('tax-info');
-            
-            // Hide warning first
-            warningDiv.classList.add('hidden');
-            
-            const taxInfo = taxRates[region];
-            
-            currentTaxRate = taxInfo.rate;
-            currentCurrency = taxInfo.currency;
-            
-            document.getElementById('taxRate').textContent = Math.round(taxInfo.rate * 100) + '%';
-            document.getElementById('tax-info').innerHTML = taxInfo.details;
-            
-            // Show warning for US and EU
-            if (region === 'usa' || region === 'eu') {
-                warningDiv.classList.remove('hidden');
-            }
-            
-            // Update all category displays with new currency
-            Object.keys(expenses).forEach(category => {
-                updateCategoryDisplay(category);
+        function cambiarMoneda() {
+            monedaActual = document.getElementById('monedaSelector').value;
+            const elementos = document.querySelectorAll('.moneda');
+            elementos.forEach(elemento => {
+                elemento.textContent = monedaActual;
             });
-            
-            updateAllTotals();
         }
 
-        function toggleCustomTaxPanel() {
-            const panel = document.getElementById('customTaxPanel');
-            const toggleText = document.getElementById('customTaxToggleText');
+        function seleccionarEstrategia(tipo, porcentaje) {
+            // Remover clase activa de todos los botones
+            document.querySelectorAll('.estrategia-btn').forEach(btn => {
+                btn.classList.remove('estrategia-activa');
+                btn.classList.remove('bg-green-50', 'bg-blue-50', 'bg-purple-50');
+                btn.classList.remove('border-green-300', 'border-blue-300', 'border-purple-300');
+                btn.classList.add('border-gray-300');
+                
+                // Resetear colores de texto
+                const h4 = btn.querySelector('h4');
+                const p = btn.querySelector('p');
+                const small = btn.querySelector('.text-xs');
+                h4.classList.remove('text-green-700', 'text-blue-700', 'text-purple-700');
+                p.classList.remove('text-green-600', 'text-blue-600', 'text-purple-600');
+                small.classList.remove('text-green-500', 'text-blue-500', 'text-purple-500');
+                h4.classList.add('text-gray-700');
+                p.classList.add('text-gray-600');
+                small.classList.add('text-gray-500');
+            });
+
+            // Activar el botón seleccionado
+            const btnSeleccionado = document.getElementById(`btn${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
+            btnSeleccionado.classList.add('estrategia-activa');
+            btnSeleccionado.classList.remove('border-gray-300');
             
-            panel.classList.toggle('hidden');
+            // Aplicar estilos específicos según el tipo
+            const h4 = btnSeleccionado.querySelector('h4');
+            const p = btnSeleccionado.querySelector('p');
+            const small = btnSeleccionado.querySelector('.text-xs');
             
-            // Update button text
-            if (panel.classList.contains('hidden')) {
-                toggleText.textContent = 'Personalizar';
+            h4.classList.remove('text-gray-700');
+            p.classList.remove('text-gray-600');
+            small.classList.remove('text-gray-500');
+            
+            if (tipo === 'minimo') {
+                btnSeleccionado.classList.add('bg-green-50', 'border-green-300');
+                h4.classList.add('text-green-700');
+                p.classList.add('text-green-600');
+                small.classList.add('text-green-500');
+            } else if (tipo === 'regular') {
+                btnSeleccionado.classList.add('bg-blue-50', 'border-blue-300');
+                h4.classList.add('text-blue-700');
+                p.classList.add('text-blue-600');
+                small.classList.add('text-blue-500');
+            } else if (tipo === 'ideal') {
+                btnSeleccionado.classList.add('bg-purple-50', 'border-purple-300');
+                h4.classList.add('text-purple-700');
+                p.classList.add('text-purple-600');
+                small.classList.add('text-purple-500');
+            }
+
+            // Actualizar variables globales
+            estrategiaActual = tipo;
+            porcentajeEstrategia = porcentaje;
+
+            // Recalcular precios
+            calcularProductos();
+        }
+
+        function toggleFormularioImpuestos() {
+            const formulario = document.getElementById('formularioImpuestos');
+            const boton = document.getElementById('toggleFormularioImpuestos');
+            
+            if (formulario.classList.contains('hidden')) {
+                formulario.classList.remove('hidden');
+                boton.innerHTML = 'X Cancelar';
+                boton.classList.remove('bg-green-600', 'hover:bg-green-700');
+                boton.classList.add('bg-red-600', 'hover:bg-red-700');
             } else {
-                toggleText.textContent = 'Ocultar';
-                // Clear the form when opening
-                document.getElementById('customTaxName').value = '';
-                document.getElementById('customTaxRate').value = '';
+                formulario.classList.add('hidden');
+                boton.innerHTML = '+ Agregar Impuesto';
+                boton.classList.remove('bg-red-600', 'hover:bg-red-700');
+                boton.classList.add('bg-green-600', 'hover:bg-green-700');
+                // Limpiar campos al cerrar
+                document.getElementById('nombreImpuestoPersonalizado').value = '';
+                document.getElementById('porcentajeImpuestoPersonalizado').value = '';
             }
         }
 
-        function addCustomTax() {
-            const name = document.getElementById('customTaxName').value.trim();
-            const rate = parseFloat(document.getElementById('customTaxRate').value);
-            
-            if (!name) {
-                alert('Por favor ingresa un nombre para el impuesto');
+
+
+        function agregarImpuestoPersonalizado() {
+            const nombre = document.getElementById('nombreImpuestoPersonalizado').value.trim();
+            const porcentaje = parseFloat(document.getElementById('porcentajeImpuestoPersonalizado').value);
+
+            if (!nombre || isNaN(porcentaje) || porcentaje < 0) {
+                alert('Por favor, ingresa un nombre válido y un porcentaje mayor o igual a 0');
                 return;
             }
-            
-            if (isNaN(rate) || rate < 0 || rate > 100) {
-                alert('Por favor ingresa un porcentaje válido entre 0 y 100');
-                return;
-            }
-            
-            // Check if tax with same name already exists
-            if (customTaxes.some(tax => tax.name.toLowerCase() === name.toLowerCase())) {
+
+            // Verificar si ya existe un impuesto con el mismo nombre
+            if (impuestosPersonalizados.some(imp => imp.nombre.toLowerCase() === nombre.toLowerCase())) {
                 alert('Ya existe un impuesto con ese nombre');
                 return;
             }
-            
-            // Add the custom tax
-            const newTax = {
-                id: Date.now(), // Simple ID generation
-                name: name,
-                rate: rate
+
+            // Agregar el impuesto al array
+            const nuevoImpuesto = {
+                id: Date.now(),
+                nombre: nombre,
+                porcentaje: porcentaje
             };
-            
-            customTaxes.push(newTax);
-            
-            // Clear the form
-            document.getElementById('customTaxName').value = '';
-            document.getElementById('customTaxRate').value = '';
-            
-            // Update the display
-            updateCustomTaxesDisplay();
-            applyCustomTaxes();
+            impuestosPersonalizados.push(nuevoImpuesto);
+
+            // Actualizar la interfaz
+            actualizarListaImpuestosPersonalizados();
+            actualizarTotalImpuestosPersonalizados();
+
+            // Limpiar campos y cerrar formulario
+            document.getElementById('nombreImpuestoPersonalizado').value = '';
+            document.getElementById('porcentajeImpuestoPersonalizado').value = '';
+            toggleFormularioImpuestos();
+
+            // Recalcular productos
+            calcularProductos();
         }
 
-        function removeCustomTax(taxId) {
-            customTaxes = customTaxes.filter(tax => tax.id !== taxId);
-            updateCustomTaxesDisplay();
-            applyCustomTaxes();
+        function eliminarImpuestoPersonalizado(id) {
+            impuestosPersonalizados = impuestosPersonalizados.filter(imp => imp.id !== id);
+            actualizarListaImpuestosPersonalizados();
+            actualizarTotalImpuestosPersonalizados();
+            calcularProductos();
         }
 
-        function updateCustomTaxesDisplay() {
-            const container = document.getElementById('customTaxesContainer');
-            const totalElement = document.getElementById('totalCustomTaxRate');
+        function actualizarListaImpuestosPersonalizados() {
+            const lista = document.getElementById('listaImpuestosPersonalizados');
             
-            container.innerHTML = '';
-            
-            if (customTaxes.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-sm italic">No hay impuestos personalizados añadidos</p>';
-                totalElement.textContent = '0%';
+            if (impuestosPersonalizados.length === 0) {
+                lista.classList.add('hidden');
                 return;
             }
-            
-            let totalRate = 0;
-            
-            customTaxes.forEach(tax => {
-                totalRate += tax.rate;
-                
-                const taxItem = document.createElement('div');
-                taxItem.className = 'flex justify-between items-center py-2 px-3 bg-blue-50 rounded border border-blue-200';
-                taxItem.innerHTML = `
-                    <div class="flex-1">
-                        <span class="font-medium text-gray-800">${tax.name}</span>
-                        <span class="text-blue-600 ml-2">${tax.rate}%</span>
+
+            lista.classList.remove('hidden');
+
+            lista.innerHTML = impuestosPersonalizados.map(impuesto => `
+                <div class="flex justify-between items-center bg-white p-3 rounded-lg border border-amber-200">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">🏷️</span>
+                        <div>
+                            <p class="font-semibold text-amber-800">${impuesto.nombre}</p>
+                            <p class="text-sm text-amber-600">${impuesto.porcentaje}%</p>
+                        </div>
                     </div>
-                    <button onclick="removeCustomTax(${tax.id})" 
-                            class="text-red-500 hover:text-red-700 p-1 ml-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+                    <button onclick="eliminarImpuestoPersonalizado(${impuesto.id})" class="text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors">
+                        🗑️
                     </button>
-                `;
-                container.appendChild(taxItem);
-            });
-            
-            totalElement.textContent = totalRate.toFixed(1) + '%';
+                </div>
+            `).join('');
         }
 
-        function applyCustomTaxes() {
-            if (customTaxes.length === 0) {
-                // If no custom taxes, use the selected region's tax rate
-                updateRegion();
-                return;
-            }
+        function actualizarTotalImpuestosPersonalizados() {
+            const total = impuestosPersonalizados.reduce((sum, imp) => sum + imp.porcentaje, 0);
+            document.getElementById('totalImpuestosPersonalizados').textContent = `${total.toFixed(1)}%`;
+        }
+
+        function calcularTotalImpuestosPersonalizados() {
+            return impuestosPersonalizados.reduce((sum, imp) => sum + imp.porcentaje, 0);
+        }
+
+        function calcularInversion() {
+            const items = document.querySelectorAll('#inversionItems input[type="number"]');
+            let total = 0;
+            items.forEach(item => {
+                total += parseFloat(item.value) || 0;
+            });
+            document.getElementById('totalInversion').innerHTML = `<span class="moneda">${monedaActual}</span> ${total.toLocaleString()}`;
+        }
+
+        function agregarInversion(button) {
+            const seccionCostos = button.closest('.costos-producto-item');
+            const container = seccionCostos.querySelector('.inversion-items');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3 items-center';
+            div.innerHTML = `
+                <input type="text" placeholder="Concepto" class="flex-1 p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent">
+                <div class="relative w-32">
+                    <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">${monedaActual}</span>
+                    <input type="number" placeholder="0" class="w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent" onchange="calcularInversion()">
+                </div>
+                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700 p-2">🗑️</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function calcularCostos() {
+            // Calcular costos fijos
+            const fijos = document.querySelectorAll('#costosFijos input[type="number"]');
+            let totalFijos = 0;
+            fijos.forEach(item => {
+                totalFijos += parseFloat(item.value) || 0;
+            });
+            document.getElementById('totalFijos').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalFijos.toLocaleString()}`;
+
+            // Calcular costos variables
+            const variables = document.querySelectorAll('#costosVariables input[type="number"]');
+            let totalVariables = 0;
+            variables.forEach(item => {
+                totalVariables += parseFloat(item.value) || 0;
+            });
+            document.getElementById('totalVariables').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalVariables.toLocaleString()}`;
+
+            // Actualizar punto de equilibrio
+            document.getElementById('costosFijosEquilibrio').value = totalFijos;
+            document.getElementById('costoVariableServicio').value = totalVariables;
+            calcularProductos();
+            calcularEquilibrio();
+            actualizarResumen();
+        }
+
+        function agregarCostoFijo(button) {
+            const seccionCostos = button.closest('.costos-producto-item');
+            const container = seccionCostos.querySelector('.costos-fijos');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3 items-center';
+            div.innerHTML = `
+                <input type="text" placeholder="Concepto" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                <div class="relative w-24">
+                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">${monedaActual}</span>
+                    <input type="number" placeholder="0" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                </div>
+                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function agregarCostoVariable(button) {
+            const seccionCostos = button.closest('.costos-producto-item');
+            const container = seccionCostos.querySelector('.costos-variables');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3 items-center';
+            div.innerHTML = `
+                <input type="text" placeholder="Concepto" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                <div class="relative w-24">
+                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">${monedaActual}</span>
+                    <input type="number" placeholder="0" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                </div>
+                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function eliminarItem(button) {
+            button.parentElement.remove();
+            calcularInversion();
+            calcularCostos();
+        }
+
+        function agregarProducto() {
+            contadorProductos++;
             
-            // Calculate total custom tax rate
-            const totalCustomRate = customTaxes.reduce((sum, tax) => sum + tax.rate, 0);
+            // Agregar nuevo producto a la sección de productos
+            const container = document.getElementById('productosContainer');
+            const div = document.createElement('div');
+            div.className = 'border border-amber-200 rounded-xl p-6 producto-item';
+            div.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-amber-800">📦 Producto ${contadorProductos}</h3>
+                    <button onclick="eliminarProducto(this)" class="text-red-500 hover:text-red-700 p-2">🗑️</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-amber-700 mb-2">Nombre del producto</label>
+                        <input type="text" placeholder="Ej: Producto nuevo" value="Producto ${contadorProductos}" class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-amber-700 mb-2">Costo de producción</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">${monedaActual}</span>
+                            <input type="number" placeholder="0" value="0" class="costo-produccion w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 bg-gray-100" readonly>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-amber-700 mb-2">Precio de venta deseado</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">${monedaActual}</span>
+                            <input type="number" placeholder="0" value="0" class="precio-venta w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularProductos()">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-amber-700 mb-2">Unidades producidas/mes</label>
+                        <input type="number" placeholder="0" value="1" min="1" class="unidades-mensuales w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularProductos()">
+                    </div>
+                </div>
+                
+                <!-- Resultados del producto -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <p class="text-sm text-blue-700">Costo total (con fijos)</p>
+                        <p class="costo-total text-lg font-bold text-blue-800"><span class="moneda">${monedaActual}</span> 0</p>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded-lg">
+                        <p class="text-sm text-red-700">Total impuestos</p>
+                        <p class="total-impuestos text-lg font-bold text-red-800"><span class="moneda">${monedaActual}</span> 0</p>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <p class="text-sm text-green-700">Ganancia neta</p>
+                        <p class="ganancia-neta text-lg font-bold text-green-800"><span class="moneda">${monedaActual}</span> 0</p>
+                    </div>
+                    <div class="lavender-accent p-3 rounded-lg">
+                        <p class="text-sm text-purple-700">Margen (%)</p>
+                        <p class="margen-porcentaje text-lg font-bold text-purple-800">0%</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+
+            // Agregar nueva sección de costos para este producto
+            agregarSeccionCostosProducto(contadorProductos);
+        }
+
+        function agregarSeccionCostosProducto(numeroProducto) {
+            const costosContainer = document.getElementById('costosProductosContainer');
             
-            currentTaxRate = totalCustomRate / 100;
-            currentCurrency = 'USD'; // Default currency for custom taxes
+            // Crear contenedor completo con título
+            const contenedorCompleto = document.createElement('div');
+            contenedorCompleto.className = 'mt-16';
             
-            document.getElementById('taxRate').textContent = totalCustomRate.toFixed(1) + '%';
-            
-            // Update tax info
-            const taxNames = customTaxes.map(tax => `${tax.name}: ${tax.rate}%`).join('<br>');
-            document.getElementById('tax-info').innerHTML = `
-                <strong>Impuestos personalizados aplicados:</strong><br>
-                ${taxNames}<br>
-                <strong>Total: ${totalCustomRate.toFixed(1)}%</strong>
+            // Crear título de sección
+            const tituloSeccion = document.createElement('div');
+            tituloSeccion.className = 'text-center mb-8';
+            tituloSeccion.innerHTML = `
+                <h2 class="text-3xl font-bold text-amber-900 mb-2">📦 Costos del Producto ${numeroProducto}</h2>
+                <p class="text-amber-600">Inversión inicial y costos mensuales específicos para este producto</p>
             `;
             
-            // Update all category displays with new currency
-            Object.keys(expenses).forEach(category => {
-                updateCategoryDisplay(category);
-            });
+            // Crear sección de costos
+            const nuevaSeccion = document.createElement('div');
+            nuevaSeccion.className = 'costos-producto-item grid grid-cols-1 lg:grid-cols-2 gap-8';
+            nuevaSeccion.setAttribute('data-producto', numeroProducto);
             
-            updateAllTotals();
-        }
-
-        function addExpense() {
-            const name = document.getElementById('expenseName').value;
-            const amount = parseFloat(document.getElementById('expenseAmount').value);
-            const category = document.getElementById('expenseCategory').value;
-
-            if (!name || !amount || !category) {
-                alert('Por favor completa todos los campos');
-                return;
-            }
-
-            expenses[category].push({ name, amount });
-            
-            document.getElementById('expenseName').value = '';
-            document.getElementById('expenseAmount').value = '';
-            document.getElementById('expenseCategory').value = '';
-            
-            updateCategoryDisplay(category);
-            updateAllTotals();
-        }
-
-        function removeExpense(category, index) {
-            expenses[category].splice(index, 1);
-            updateCategoryDisplay(category);
-            updateAllTotals();
-        }
-
-
-
-        function deleteCategory(category) {
-            // Prevent deletion of "Otros" category
-            if (category === 'otros') {
-                alert('La categoría "Otros" no puede ser eliminada.');
-                return;
-            }
-
-            // Find and remove the category card from DOM
-            const categoryList = document.getElementById(`${category}-list`);
-            if (categoryList) {
-                const categoryCard = categoryList.closest('.category-card');
-                if (categoryCard) {
-                    categoryCard.parentNode.removeChild(categoryCard);
-                }
-            }
-            
-            // Clear the category expenses
-            if (expenses[category]) {
-                delete expenses[category];
-            }
-            
-            // Remove from custom categories if it's a custom one
-            if (customCategories[category]) {
-                delete customCategories[category];
-            }
-            
-            // Remove the category from the dropdown
-            const dropdown = document.getElementById('expenseCategory');
-            const optionToRemove = dropdown.querySelector(`option[value="${category}"]`);
-            if (optionToRemove) {
-                optionToRemove.parentNode.removeChild(optionToRemove);
-            }
-            
-            // Update totals
-            updateAllTotals();
-        }
-
-        function updateCategoryDisplay(category) {
-            const list = document.getElementById(category + '-list');
-            const total = document.getElementById(category + '-total');
-            
-            list.innerHTML = '';
-            let categoryTotal = 0;
-            
-            expenses[category].forEach((expense, index) => {
-                categoryTotal += expense.amount;
-                const item = document.createElement('div');
-                item.className = 'flex justify-between items-center py-2 px-3 bg-gray-50 rounded';
-                item.innerHTML = `
-                    <span class="text-sm">${expense.name}</span>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm font-medium">${formatCurrency(expense.amount)}</span>
-                        <button onclick="removeExpense('${category}', ${index})" 
-                                class="text-red-500 hover:text-red-700 text-xs">✕</button>
+            nuevaSeccion.innerHTML = `
+                <!-- Tarjeta 1: Inversión Inicial -->
+                <div class="bg-white rounded-2xl p-8 card-shadow">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <span class="text-3xl mr-3">💰</span>
+                            <div>
+                                <h2 class="text-2xl font-bold text-amber-900">Inversión Inicial</h2>
+                                <p class="text-amber-600">Gastos necesarios para arrancar el negocio</p>
+                            </div>
+                        </div>
+                        <button onclick="eliminarSeccionCostosProducto(this)" class="text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-colors">
+                            🗑️
+                        </button>
                     </div>
-                `;
-                list.appendChild(item);
-            });
+                    
+                    <div class="inversion-items space-y-4 mb-6">
+                        <div class="flex gap-3 items-center">
+                            <input type="text" placeholder="Concepto" value="Equipo específico" class="flex-1 p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent">
+                            <div class="relative w-32">
+                                <span class="absolute left-3 top-3 text-amber-600 font-semibold moneda">${monedaActual}</span>
+                                <input type="number" placeholder="0" value="0" class="w-full pl-8 pr-3 py-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300 focus:border-transparent" onchange="calcularInversion()">
+                            </div>
+                            <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700 p-2">🗑️</button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="agregarInversion(this)" class="w-full p-3 bg-amber-100 text-amber-800 rounded-lg hover:bg-amber-200 transition-colors mb-4 font-medium">
+                        + Agregar costo inicial
+                    </button>
+                    
+                    <div class="chocolate-gradient text-white p-4 rounded-lg text-center">
+                        <p class="text-lg font-semibold">Total Inversión Inicial</p>
+                        <p class="total-inversion text-3xl font-bold"><span class="moneda">${monedaActual}</span> 0</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Costos Mensuales -->
+                <div class="bg-white rounded-2xl p-8 card-shadow">
+                    <div class="flex items-center mb-6">
+                        <span class="text-3xl mr-3">📊</span>
+                        <div>
+                            <h2 class="text-2xl font-bold text-amber-900">Costos Mensuales</h2>
+                            <p class="text-amber-600">Costos fijos y variables del negocio</p>
+                        </div>
+                    </div>
+
+                    <!-- Costos Fijos -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-amber-800 mb-3">Costos Fijos</h3>
+                        <div class="costos-fijos space-y-3 mb-4">
+                            <div class="flex gap-3 items-center">
+                                <input type="text" placeholder="Concepto" value="Costo específico" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                                <div class="relative w-24">
+                                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">${monedaActual}</span>
+                                    <input type="number" placeholder="0" value="0" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                                </div>
+                                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+                            </div>
+                        </div>
+                        <button onclick="agregarCostoFijo(this)" class="w-full p-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors text-sm">+ Agregar costo fijo</button>
+                        <div class="mt-3 p-3 bg-blue-50 rounded-lg">
+                            <p class="font-semibold text-blue-800">Total Fijos: <span class="total-fijos"><span class="moneda">${monedaActual}</span> 0</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Costos Variables -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-amber-800 mb-3">Costos Variables</h3>
+                        <div class="costos-variables space-y-3 mb-4">
+                            <div class="flex gap-3 items-center">
+                                <input type="text" placeholder="Concepto" value="Material específico" class="flex-1 p-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300">
+                                <div class="relative w-24">
+                                    <span class="absolute left-2 top-2 text-amber-600 font-semibold text-sm moneda">${monedaActual}</span>
+                                    <input type="number" placeholder="0" value="0" class="w-full pl-6 pr-2 py-2 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" onchange="calcularCostos()">
+                                </div>
+                                <button onclick="eliminarItem(this)" class="text-red-500 hover:text-red-700">🗑️</button>
+                            </div>
+                        </div>
+                        <button onclick="agregarCostoVariable(this)" class="w-full p-2 bg-purple-100 text-purple-800 rounded-lg hover:bg-purple-200 transition-colors text-sm">+ Agregar costo variable</button>
+                        <div class="mt-3 p-3 bg-purple-50 rounded-lg">
+                            <p class="font-semibold text-purple-800">Total Variables: <span class="total-variables"><span class="moneda">${monedaActual}</span> 0</span></p>
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            total.textContent = formatCurrency(categoryTotal);
+            // Ensamblar todo
+            contenedorCompleto.appendChild(tituloSeccion);
+            contenedorCompleto.appendChild(nuevaSeccion);
+            costosContainer.appendChild(contenedorCompleto);
         }
 
-        function updateAllTotals() {
-            let totalExpenses = 0;
-            Object.values(expenses).forEach(category => {
-                category.forEach(expense => {
-                    totalExpenses += expense.amount;
+        function eliminarSeccionCostosProducto(button) {
+            const seccion = button.closest('.costos-producto-item');
+            seccion.remove();
+            calcularCostos();
+        }
+
+        function eliminarProducto(button) {
+            const productoItem = button.closest('.producto-item');
+            const numeroProducto = Array.from(document.querySelectorAll('.producto-item')).indexOf(productoItem) + 1;
+            
+            // Eliminar el producto
+            productoItem.remove();
+            
+            // Eliminar la sección de costos correspondiente
+            const seccionCostos = document.querySelector(`.costos-producto-item[data-producto="${numeroProducto}"]`);
+            if (seccionCostos) {
+                seccionCostos.remove();
+            }
+            
+            calcularProductos();
+        }
+
+        function calcularInversion() {
+            // Calcular inversión para cada producto por separado
+            const seccionesCostos = document.querySelectorAll('.costos-producto-item');
+            
+            seccionesCostos.forEach(seccion => {
+                const items = seccion.querySelectorAll('.inversion-items input[type="number"]');
+                let total = 0;
+                items.forEach(item => {
+                    total += parseFloat(item.value) || 0;
                 });
+                const totalElement = seccion.querySelector('.total-inversion');
+                totalElement.innerHTML = `<span class="moneda">${monedaActual}</span> ${total.toLocaleString()}`;
             });
-
-            const taxes = totalExpenses * currentTaxRate;
-            const totalMonthly = totalExpenses + taxes;
-
-            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
-            document.getElementById('totalTaxes').textContent = formatCurrency(taxes);
-            document.getElementById('totalMonthly').textContent = formatCurrency(totalMonthly);
-
-            calculateHourlyRate();
+            
+            calcularProductos();
         }
 
-        function calculateHourlyRate() {
-            const hoursPerDay = parseFloat(document.getElementById('hoursPerDay').value) || 8;
-            const daysPerMonth = parseFloat(document.getElementById('daysPerMonth').value) || 22;
-            const monthlyHours = hoursPerDay * daysPerMonth;
+        function calcularCostos() {
+            // Calcular costos para cada producto por separado
+            const seccionesCostos = document.querySelectorAll('.costos-producto-item');
             
-            document.getElementById('monthlyHours').textContent = monthlyHours;
-
-            let totalExpenses = 0;
-            Object.values(expenses).forEach(category => {
-                category.forEach(expense => {
-                    totalExpenses += expense.amount;
+            seccionesCostos.forEach(seccion => {
+                // Calcular costos fijos
+                const fijos = seccion.querySelectorAll('.costos-fijos input[type="number"]');
+                let totalFijos = 0;
+                fijos.forEach(item => {
+                    totalFijos += parseFloat(item.value) || 0;
                 });
+                seccion.querySelector('.total-fijos').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalFijos.toLocaleString()}`;
+
+                // Calcular costos variables
+                const variables = seccion.querySelectorAll('.costos-variables input[type="number"]');
+                let totalVariables = 0;
+                variables.forEach(item => {
+                    totalVariables += parseFloat(item.value) || 0;
+                });
+                seccion.querySelector('.total-variables').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalVariables.toLocaleString()}`;
             });
 
-            const taxes = totalExpenses * currentTaxRate;
-            const totalMonthly = totalExpenses + taxes;
-            const hourlyRate = totalMonthly / monthlyHours;
-
-            document.getElementById('hourlyRate').textContent = formatCurrency(hourlyRate);
-            
-            calculateProjectPrices();
+            calcularProductos();
+            calcularEquilibrio();
+            actualizarResumen();
         }
 
-        function calculateProjectPrices() {
-            const projectHours = parseFloat(document.getElementById('projectHours').value) || 40;
-            const hourlyRateText = document.getElementById('hourlyRate').textContent;
-            const hourlyRate = parseFloat(hourlyRateText.replace(/[^\d.-]/g, '')) || 0;
-
-            const minimum = hourlyRate * projectHours;
-            const regular = minimum * 1.3;
-            const ideal = minimum * 2.3;
-
-            document.getElementById('minimumPrice').textContent = formatCurrency(minimum);
-            document.getElementById('regularPrice').textContent = formatCurrency(regular);
-            document.getElementById('idealPrice').textContent = formatCurrency(ideal);
-
-            // Update selected price if it's one of the calculated ones
-            if (selectedPriceType !== 'custom') {
-                selectPrice(selectedPriceType);
-            }
-        }
-
-        function selectPrice(type) {
-            selectedPriceType = type;
+        function calcularProductos() {
+            const productos = document.querySelectorAll('.producto-item');
+            const seccionesCostos = document.querySelectorAll('.costos-producto-item');
             
-            // Remove previous selections
-            document.querySelectorAll('.price-option').forEach(option => {
-                option.classList.remove('selected', 'border-terracota', 'bg-orange-50');
-                option.classList.add('border-gray-200');
+            const impuestosPersonalizadosRate = calcularTotalImpuestosPersonalizados();
+
+            let ingresosTotales = 0;
+            let costosTotales = 0;
+            let gananciaTotalGeneral = 0;
+            let totalUnidadesMensuales = 0;
+
+            // Calcular total de unidades mensuales para distribuir costos
+            productos.forEach(producto => {
+                const unidadesMensuales = parseFloat(producto.querySelector('.unidades-mensuales').value) || 0;
+                totalUnidadesMensuales += unidadesMensuales;
             });
 
-            let selectedAmount = 0;
-            let selectedElement;
+            productos.forEach((producto, index) => {
+                const precioVenta = parseFloat(producto.querySelector('.precio-venta').value) || 0;
+                const unidadesMensuales = parseFloat(producto.querySelector('.unidades-mensuales').value) || 0;
 
-            switch(type) {
-                case 'minimum':
-                    selectedAmount = parseFloat(document.getElementById('minimumPrice').textContent.replace(/[^\d.-]/g, ''));
-                    selectedElement = document.querySelectorAll('.price-option')[0];
-                    break;
-                case 'regular':
-                    selectedAmount = parseFloat(document.getElementById('regularPrice').textContent.replace(/[^\d.-]/g, ''));
-                    selectedElement = document.querySelectorAll('.price-option')[1];
-                    break;
-                case 'ideal':
-                    selectedAmount = parseFloat(document.getElementById('idealPrice').textContent.replace(/[^\d.-]/g, ''));
-                    selectedElement = document.querySelectorAll('.price-option')[2];
-                    break;
-                case 'custom':
-                    selectedAmount = parseFloat(document.getElementById('customPrice').value) || 0;
-                    selectedElement = document.querySelectorAll('.price-option')[3];
-                    break;
-            }
+                // Obtener costos específicos de este producto
+                let totalFijos = 0;
+                let totalVariables = 0;
+                let inversionInicial = 0;
 
-            if (selectedElement) {
-                selectedElement.classList.add('selected', 'border-terracota', 'bg-orange-50');
-                selectedElement.classList.remove('border-gray-200');
-            }
+                // Buscar la sección de costos correspondiente a este producto
+                const seccionCostos = seccionesCostos[index];
+                if (seccionCostos) {
+                    // Calcular inversión inicial de este producto
+                    const inversionItems = seccionCostos.querySelectorAll('.inversion-items input[type="number"]');
+                    inversionItems.forEach(item => {
+                        inversionInicial += parseFloat(item.value) || 0;
+                    });
 
-            document.getElementById('selectedPrice').textContent = formatCurrency(selectedAmount);
+                    // Calcular costos fijos de este producto
+                    const fijos = seccionCostos.querySelectorAll('.costos-fijos input[type="number"]');
+                    fijos.forEach(item => {
+                        totalFijos += parseFloat(item.value) || 0;
+                    });
 
-            // Check if price is below minimum
-            const minimumAmount = parseFloat(document.getElementById('minimumPrice').textContent.replace(/[^\d.-]/g, ''));
-            const warning = document.getElementById('priceWarning');
-            
-            if (selectedAmount < minimumAmount && selectedAmount > 0) {
-                warning.classList.remove('hidden');
+                    // Calcular costos variables de este producto
+                    const variables = seccionCostos.querySelectorAll('.costos-variables input[type="number"]');
+                    variables.forEach(item => {
+                        totalVariables += parseFloat(item.value) || 0;
+                    });
+                }
+
+                // Calcular costo de producción automáticamente para este producto específico
+                const amortizacionMensual = inversionInicial / 12;
+                const costoFijosPorUnidad = unidadesMensuales > 0 ? (totalFijos + amortizacionMensual) / unidadesMensuales : 0;
+                const costoVariablesPorUnidad = totalVariables;
+                
+                const costoProduccionCalculado = costoFijosPorUnidad + costoVariablesPorUnidad;
+                
+                // Actualizar el campo de costo de producción
+                producto.querySelector('.costo-produccion').value = Math.round(costoProduccionCalculado);
+
+                const costoTotal = costoProduccionCalculado;
+
+                // Calcular precio con estrategia seleccionada
+                const precioConEstrategia = costoTotal * (1 + porcentajeEstrategia / 100);
+                
+                // Solo actualizar el precio si está en 0 o vacío (para sugerencia inicial)
+                const campoPrecios = producto.querySelector('.precio-venta');
+                const precioActual = parseFloat(campoPrecios.value) || 0;
+                if (precioActual === 0) {
+                    campoPrecios.value = Math.round(precioConEstrategia);
+                    campoPrecios.placeholder = Math.round(precioConEstrategia);
+                } else {
+                    // Usar el precio ingresado por el usuario
+                    campoPrecios.placeholder = Math.round(precioConEstrategia);
+                }
+                
+                const precioVentaFinal = precioActual > 0 ? precioActual : precioConEstrategia;
+
+                // Calcular impuestos totales sobre el precio final
+                const totalImpuestos = (precioVentaFinal * impuestosPersonalizadosRate) / 100;
+
+                // Calcular ganancia
+                const gananciaNeta = precioVentaFinal - costoTotal - totalImpuestos;
+                const margenPorcentaje = precioVentaFinal > 0 ? (gananciaNeta / precioVentaFinal) * 100 : 0;
+
+                // Actualizar elementos del producto
+                producto.querySelector('.costo-total').innerHTML = `<span class="moneda">${monedaActual}</span> ${costoTotal.toFixed(2)}`;
+                producto.querySelector('.total-impuestos').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalImpuestos.toFixed(2)}`;
+                producto.querySelector('.ganancia-neta').innerHTML = `<span class="moneda">${monedaActual}</span> ${gananciaNeta.toFixed(2)}`;
+                producto.querySelector('.margen-porcentaje').textContent = `${margenPorcentaje.toFixed(1)}%`;
+
+                // Sumar a totales (multiplicado por unidades mensuales)
+                ingresosTotales += precioVentaFinal * unidadesMensuales;
+                costosTotales += (costoTotal + totalImpuestos) * unidadesMensuales;
+                gananciaTotalGeneral += gananciaNeta * unidadesMensuales;
+            });
+
+            // Actualizar resumen total
+            document.getElementById('ingresosTotales').innerHTML = `<span class="moneda">${monedaActual}</span> ${ingresosTotales.toLocaleString()}`;
+            document.getElementById('costosTotales').innerHTML = `<span class="moneda">${monedaActual}</span> ${costosTotales.toLocaleString()}`;
+            document.getElementById('gananciaTotalGeneral').innerHTML = `<span class="moneda">${monedaActual}</span> ${gananciaTotalGeneral.toLocaleString()}`;
+
+            calcularEquilibrio();
+            actualizarCotizacion();
+        }
+
+        function calcularEquilibrio() {
+            const totalFijos = parseFloat(document.getElementById('totalFijos').textContent.replace(/[^\d.-]/g, '')) || 0;
+            const inversionInicial = parseFloat(document.getElementById('totalInversion').textContent.replace(/[^\d.-]/g, '')) || 0;
+            const amortizacionMensual = inversionInicial / 12;
+            const costosFijos = totalFijos + amortizacionMensual;
+
+            // Calcular promedios ponderados de productos
+            const productos = document.querySelectorAll('.producto-item');
+            let totalIngresos = 0;
+            let totalUnidades = 0;
+            let totalCostosVariables = 0;
+
+            productos.forEach(producto => {
+                const precio = parseFloat(producto.querySelector('.precio-venta').value) || 0;
+                const unidades = parseFloat(producto.querySelector('.unidades-mensuales').value) || 0;
+                const costoProduccion = parseFloat(producto.querySelector('.costo-produccion').value) || 0;
+                
+                totalIngresos += precio * unidades;
+                totalUnidades += unidades;
+                totalCostosVariables += costoProduccion * unidades;
+            });
+
+            const precioPromedio = totalUnidades > 0 ? totalIngresos / totalUnidades : 0;
+            const costoVariablePromedio = totalUnidades > 0 ? totalCostosVariables / totalUnidades : 0;
+
+            // Actualizar displays
+            document.getElementById('costosFijosEquilibrioDisplay').textContent = costosFijos.toLocaleString();
+            document.getElementById('precioPromedioServicioDisplay').textContent = Math.round(precioPromedio).toLocaleString();
+            document.getElementById('costoVariableServicioDisplay').textContent = Math.round(costoVariablePromedio).toLocaleString();
+
+            const margen = precioPromedio - costoVariablePromedio;
+            const unidadesNecesarias = margen > 0 ? costosFijos / margen : 0;
+            const ingresosMinimos = unidadesNecesarias * precioPromedio;
+
+            document.getElementById('margenContribucion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(margen).toLocaleString()}`;
+            document.getElementById('serviciosEquilibrio').textContent = `${Math.ceil(unidadesNecesarias)} unidades/mes`;
+            document.getElementById('ingresosMinimos').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(ingresosMinimos).toLocaleString()}`;
+
+            // Mostrar análisis por producto si hay múltiples productos
+            if (productos.length > 1) {
+                mostrarAnalisisProductos(productos, costosFijos);
             } else {
-                warning.classList.add('hidden');
+                document.getElementById('analisisProductos').classList.add('hidden');
             }
         }
 
-        function generateInvoice() {
-            const clientName = document.getElementById('clientName').value || 'Cliente';
-            const serviceType = document.getElementById('serviceType').value || 'Servicio de diseño';
-            const deliveryDate = document.getElementById('deliveryDate').value || new Date().toISOString().split('T')[0];
-            const productName = document.getElementById('productName').value || 'Producto o Servicio';
+        function mostrarAnalisisProductos(productos, costosFijos) {
+            const analisisDiv = document.getElementById('analisisProductos');
+            const tabla = document.getElementById('tablaAnalisisProductos');
             
-            const projectHours = document.getElementById('projectHours').value;
-            const hourlyRate = document.getElementById('hourlyRate').textContent;
-            const selectedPrice = document.getElementById('selectedPrice').textContent;
+            analisisDiv.classList.remove('hidden');
             
-            // Calculate subtotal (before any markups)
-            const hourlyRateNum = parseFloat(hourlyRate.replace(/[^\d.-]/g, '')) || 0;
-            const subtotal = hourlyRateNum * parseFloat(projectHours);
+            tabla.innerHTML = Array.from(productos).map(producto => {
+                const nombre = producto.querySelector('input[type="text"]').value || 'Sin nombre';
+                const precio = parseFloat(producto.querySelector('.precio-venta').value) || 0;
+                const costoProduccion = parseFloat(producto.querySelector('.costo-produccion').value) || 0;
+                const margen = precio - costoProduccion;
+                const unidadesEquilibrio = margen > 0 ? Math.ceil(costosFijos / margen) : 0;
+                
+                return `
+                    <tr>
+                        <td class="border border-amber-200 p-3">${nombre}</td>
+                        <td class="border border-amber-200 p-3 text-center"><span class="moneda">${monedaActual}</span> ${precio.toLocaleString()}</td>
+                        <td class="border border-amber-200 p-3 text-center"><span class="moneda">${monedaActual}</span> ${Math.round(margen).toLocaleString()}</td>
+                        <td class="border border-amber-200 p-3 text-center">${unidadesEquilibrio} unidades</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function actualizarCotizacion() {
+            // Actualizar fecha de emisión
+            const fechaInput = document.getElementById('fechaEmisionInput');
+            const diasValidez = parseInt(document.getElementById('diasValidez').value);
             
-            document.getElementById('invoiceHours').textContent = projectHours + ' horas';
-            document.getElementById('invoiceHourlyRate').textContent = hourlyRate;
-            document.getElementById('invoiceSubtotal').textContent = formatCurrency(subtotal);
-            document.getElementById('invoiceTotal').textContent = selectedPrice;
+            let fechaEmision;
+            if (fechaInput.value) {
+                fechaEmision = new Date(fechaInput.value + 'T00:00:00');
+            } else {
+                fechaEmision = new Date();
+                fechaInput.value = fechaEmision.toISOString().split('T')[0];
+            }
             
-            // Set current date
-            const today = new Date().toLocaleDateString('es-ES', {
+            const fechaFormateada = fechaEmision.toLocaleDateString('es-ES', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            document.getElementById('issueDate').textContent = today;
+            document.getElementById('fechaEmision').textContent = fechaFormateada;
+
+            // Calcular y mostrar fecha de vencimiento
+            const fechaVencimientoDiv = document.getElementById('fechaVencimiento');
+            const validezCotizacionP = document.getElementById('validezCotizacion');
             
-            // Set form values
-            document.getElementById('clientName').value = clientName;
-            document.getElementById('serviceType').value = serviceType;
-            document.getElementById('deliveryDate').value = deliveryDate;
-            
-            // Set product name in invoice header
-            document.getElementById('invoiceProductName').textContent = productName;
-            
-            // Tax breakdown
-            let taxBreakdownHTML = '';
-            
-            if (customTaxes.length > 0) {
-                // Show custom taxes
-                const taxList = customTaxes.map(tax => `${tax.name}: ${tax.rate}%`).join('<br>');
-                const totalRate = customTaxes.reduce((sum, tax) => sum + tax.rate, 0);
+            if (diasValidez && diasValidez > 0) {
+                const fechaVencimiento = new Date(fechaEmision);
+                fechaVencimiento.setDate(fechaVencimiento.getDate() + diasValidez);
                 
-                taxBreakdownHTML = `
-                    <div class="mb-2">
-                        <p class="font-semibold text-gray-800 mb-2">Impuestos personalizados aplicados:</p>
-                        <div class="text-sm">${taxList}</div>
-                        <div class="text-sm font-medium mt-2">Total: ${totalRate.toFixed(1)}%</div>
-                    </div>
-                `;
+                const fechaVencimientoFormateada = fechaVencimiento.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Mostrar en la sección de configuración
+                document.getElementById('fechaVencimientoTexto').textContent = fechaVencimientoFormateada;
+                fechaVencimientoDiv.classList.remove('hidden');
+                
+                // Mostrar en la cotización impresa
+                document.getElementById('fechaValidez').textContent = fechaVencimientoFormateada;
+                validezCotizacionP.classList.remove('hidden');
             } else {
-                // Show regional taxes
-                const region = document.getElementById('region').value;
-                const taxInfo = taxRates[region];
-                taxBreakdownHTML = `
-                    <div class="mb-2">
-                        <p class="font-semibold text-gray-800 mb-2">Información fiscal aplicada:</p>
-                        <p class="text-sm">${taxInfo.breakdown}</p>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-2 border-t border-gray-200 pt-2">
-                        <p><strong>Detalles:</strong></p>
-                        <div class="mt-1">${taxInfo.details}</div>
-                    </div>
-                `;
+                fechaVencimientoDiv.classList.add('hidden');
+                validezCotizacionP.classList.add('hidden');
             }
+
+            // Actualizar beneficios clave
+            const beneficios = document.getElementById('beneficiosClave').value.trim();
+            const beneficiosDiv = document.getElementById('beneficiosImpresos');
+            const textoBeneficios = document.getElementById('textoBeneficios');
             
-            document.getElementById('taxBreakdown').innerHTML = taxBreakdownHTML;
+            if (beneficios) {
+                beneficiosDiv.classList.remove('hidden');
+                beneficiosDiv.classList.add('print-show');
+                textoBeneficios.textContent = beneficios;
+            } else {
+                beneficiosDiv.classList.add('hidden');
+                beneficiosDiv.classList.remove('print-show');
+            }
+
+            // Actualizar tabla de productos
+            const productos = document.querySelectorAll('.producto-item');
+            const tabla = document.getElementById('tablaProductosCotizacion');
             
-            document.getElementById('invoiceModal').classList.remove('hidden');
+            let totalGeneral = 0;
+            let totalGananciaNeta = 0;
+            let totalImpuestos = 0;
+            let totalMargen = 0;
+            let contadorProductos = 0;
+
+            if (productos.length === 0) {
+                tabla.innerHTML = '<tr><td colspan="4" class="border border-amber-200 p-4 text-center text-amber-600 italic">No hay productos configurados</td></tr>';
+            } else {
+                tabla.innerHTML = Array.from(productos).map(producto => {
+                    const nombre = producto.querySelector('input[type="text"]').value || 'Sin nombre';
+                    const precio = parseFloat(producto.querySelector('.precio-venta').value) || 0;
+                    const unidades = parseFloat(producto.querySelector('.unidades-mensuales').value) || 0;
+                    const subtotal = precio * unidades;
+                    
+                    // Obtener datos para resumen
+                    const gananciaNeta = parseFloat(producto.querySelector('.ganancia-neta').textContent.replace(/[^\d.-]/g, '')) || 0;
+                    const impuestosProducto = parseFloat(producto.querySelector('.total-impuestos').textContent.replace(/[^\d.-]/g, '')) || 0;
+                    const margenTexto = producto.querySelector('.margen-porcentaje').textContent;
+                    const margenNumero = parseFloat(margenTexto.replace('%', '')) || 0;
+                    
+                    totalGeneral += subtotal;
+                    totalGananciaNeta += gananciaNeta * unidades;
+                    totalImpuestos += impuestosProducto * unidades;
+                    totalMargen += margenNumero;
+                    contadorProductos++;
+                    
+                    return `
+                        <tr>
+                            <td class="border border-amber-200 p-3">${nombre}</td>
+                            <td class="border border-amber-200 p-3 text-center">${unidades}</td>
+                            <td class="border border-amber-200 p-3 text-right"><span class="moneda">${monedaActual}</span> ${precio.toLocaleString()}</td>
+                            <td class="border border-amber-200 p-3 text-right font-semibold"><span class="moneda">${monedaActual}</span> ${subtotal.toLocaleString()}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Actualizar totales
+            document.getElementById('totalGeneralCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalGeneral.toLocaleString()}`;
+            document.getElementById('gananciaNetaCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(totalGananciaNeta).toLocaleString()}`;
+            document.getElementById('totalImpuestosCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(totalImpuestos).toLocaleString()}`;
+            
+            const margenPromedio = contadorProductos > 0 ? totalMargen / contadorProductos : 0;
+            document.getElementById('margenPromedioCotizacion').textContent = `${margenPromedio.toFixed(1)}%`;
         }
 
-        function closeInvoice() {
-            document.getElementById('invoiceModal').classList.add('hidden');
-        }
-
-        function printInvoice() {
+        function imprimirCotizacion() {
+            actualizarCotizacion();
             window.print();
         }
 
-        function openEmojiPicker() {
-            // Create a simple emoji picker modal
-            const emojiModal = document.createElement('div');
-            emojiModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            emojiModal.innerHTML = `
-                <div class="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Seleccionar Emoticón</h3>
-                        <button onclick="closeEmojiPicker()" class="text-gray-500 hover:text-gray-700">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto">
-                        ${getCommonEmojis().map(emoji => 
-                            `<button onclick="selectEmoji('${emoji}')" class="text-2xl p-2 hover:bg-gray-100 rounded transition-colors">${emoji}</button>`
-                        ).join('')}
-                    </div>
-                </div>
-            `;
-            emojiModal.id = 'emojiModal';
-            document.body.appendChild(emojiModal);
-        }
-
-        function getCommonEmojis() {
-            return [
-                '😊', '😎', '🤔', '😍', '🥳', '😂', '🙂', '😉',
-                '💼', '💰', '📊', '📈', '💻', '🖥️', '📱', '⌚',
-                '🏠', '🏢', '🏪', '🏭', '🏦', '🏥', '🏫', '🏨',
-                '🚗', '✈️', '🚀', '⚡', '🔥', '💡', '🎯', '🎨',
-                '📚', '📝', '📋', '📌', '📍', '🔍', '🔧', '⚙️',
-                '🎵', '🎮', '🏆', '🎪', '🎭', '🎨', '🎬', '📷',
-                '🍕', '☕', '🍔', '🥗', '🍰', '🍎', '🥑', '🌮',
-                '⭐', '🌟', '💫', '✨', '🌈', '🔮', '💎', '👑'
-            ];
-        }
-
-        function selectEmoji(emoji) {
-            document.getElementById('newCategoryEmoji').value = emoji;
-            closeEmojiPicker();
-        }
-
-        function closeEmojiPicker() {
-            const modal = document.getElementById('emojiModal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        function captureAndPrint() {
-            // Since we can't actually take a screenshot in a web environment,
-            // we'll use the existing print functionality but with a message
-            alert('Preparando para imprimir la cotización...');
-            window.print();
-        }
-
-        function showAddCategoryForm() {
-            document.getElementById('addCategoryForm').classList.remove('hidden');
-            document.getElementById('newCategoryName').focus();
-        }
-
-        function hideAddCategoryForm() {
-            document.getElementById('addCategoryForm').classList.add('hidden');
-            document.getElementById('newCategoryName').value = '';
-            document.getElementById('newCategoryEmoji').value = '';
-        }
-
-        function createCategory() {
-            const categoryName = document.getElementById('newCategoryName').value.trim();
-            const categoryEmoji = document.getElementById('newCategoryEmoji').value.trim() || '📁';
-            
-            if (!categoryName) {
-                alert('Por favor ingresa un nombre para la categoría');
-                return;
-            }
-
-            // Generate a unique key for the category
-            const categoryKey = categoryName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
-            
-            // Check if category already exists
-            if (expenses[categoryKey] !== undefined || customCategories[categoryKey] !== undefined) {
-                alert('Ya existe una categoría con ese nombre');
-                return;
-            }
-
-            // Add to custom categories
-            customCategories[categoryKey] = {
-                name: categoryName,
-                emoji: categoryEmoji
-            };
-
-            // Initialize expenses array for this category
-            expenses[categoryKey] = [];
-
-            // Add to dropdown
-            const dropdown = document.getElementById('expenseCategory');
-            const option = document.createElement('option');
-            option.value = categoryKey;
-            option.textContent = `${categoryEmoji} ${categoryName}`;
-            
-            // Insert before "Otros" option (which should be last)
-            const otrosOption = dropdown.querySelector('option[value="otros"]');
-            dropdown.insertBefore(option, otrosOption);
-
-            // Create the category card
-            createCategoryCard(categoryKey, categoryName, categoryEmoji);
-
-            // Hide the form and clear input
-            hideAddCategoryForm();
-            
-            alert(`Categoría "${categoryEmoji} ${categoryName}" creada exitosamente`);
-        }
-
-        function createCategoryCard(categoryKey, categoryName, categoryEmoji = '📁') {
-            const categoriesContainer = document.querySelector('.grid.md\\:grid-cols-2.gap-6');
-            
-            const categoryCard = document.createElement('div');
-            categoryCard.className = 'category-card bg-white rounded-xl shadow-lg p-6 border border-gray-100';
-            categoryCard.innerHTML = `
-                <div class="mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                        <span class="mr-3">${categoryEmoji}</span>${categoryName}
-                    </h3>
-                </div>
-                <div id="${categoryKey}-list" class="space-y-2"></div>
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <span class="font-medium text-terracota">Total: <span id="${categoryKey}-total">$0</span></span>
-                </div>
-                <div class="mt-4 text-center">
-                    <button onclick="deleteCategory('${categoryKey}')" 
-                            class="text-red-600 hover:text-red-800 text-sm px-4 py-2 border border-red-300 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center mx-auto">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        Eliminar categoría
-                    </button>
-                </div>
-            `;
-            
-            // Insert before the "Otros" category card (which should be last)
-            const otrosCard = categoriesContainer.lastElementChild;
-            categoriesContainer.insertBefore(categoryCard, otrosCard);
-            
-            // Initialize the display
-            updateCategoryDisplay(categoryKey);
-        }
-
-        function formatCurrency(amount) {
-            const region = document.getElementById('region').value;
-            const taxInfo = taxRates[region];
-            return taxInfo.symbol + amount.toFixed(2);
-        }
-
-        // Initialize
-        updateRegion();
-        calculateHourlyRate();
-        selectPrice('minimum');
-        updateCustomTaxesDisplay();
+        // Inicializar cálculos
+        calcularInversion();
+        calcularCostos();
+        calcularProductos();
+        calcularEquilibrio();
+        actualizarListaImpuestosPersonalizados();
+        actualizarTotalImpuestosPersonalizados();
+        actualizarCotizacion();
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9804f4ecc7742073',t:'MTc1ODA3Mzg2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
