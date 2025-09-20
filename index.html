@@ -117,7 +117,7 @@
     <div class="product-card bg-white rounded-3xl p-8 border-2 border-teal-400 card-shadow mb-8" data-product-id="1" data-locked="true" data-profit="30">
       <div class="flex items-center justify-between mb-8">
         <div class="text-center mx-auto">
-          <h2 class="text-3xl font-bold text-gray-800">📦 PRODUCTO 1</h2>
+          <h2 class="text-3xl font-bold text-gray-800 product-title">📦 PRODUCTO 1</h2>
           <p class="text-gray-500 mt-1">Base del cálculo (no eliminable)</p>
         </div>
         <span class="ml-4 px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 font-semibold shrink-0">ID: P-1</span>
@@ -222,13 +222,26 @@
           <!-- Horas -->
           <div class="border-t border-gray-300 pt-4">
             <h5 class="text-sm font-semibold text-gray-700 mb-2">⏰ Horas de Trabajo</h5>
-            <div class="grid grid-cols-2 gap-2 mb-3">
-              <input type="number" placeholder="Horas trabajadas por día (ej. 6)" aria-label="Horas trabajadas por día" min="0" class="horas-por-dia w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-              <input type="number" placeholder="Días laborables por mes (ej. 22)" aria-label="Días laborables por mes" min="0" class="dias-por-mes w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-              <input type="number" placeholder="Horas totales estimadas del proyecto (ej. 12)" aria-label="Horas totales del proyecto" min="0" class="horas-proyecto w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-              <div class="relative">
-                <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                <input type="number" placeholder="Tarifa por hora (ej. 150)" aria-label="Tarifa por hora" min="0" class="honorarios-hora w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
+<p class="text-xs text-gray-600 mb-2">Consejo: indica tus horas/día, días/mes, horas del proyecto y tu tarifa. Esto impacta el costo fijo mensual.</p>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Horas trabajadas por día</label>
+                <input type="number" placeholder="Ej. 8" aria-label="Horas trabajadas por día" min="0" class="horas-por-dia w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Días laborables por mes</label>
+                <input type="number" placeholder="Ej. 22" aria-label="Días laborables por mes" min="0" class="dias-por-mes w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Horas totales estimadas del proyecto</label>
+                <input type="number" placeholder="Ej. 12" aria-label="Horas totales del proyecto" min="0" class="horas-proyecto w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Tarifa por hora</label>
+                <div class="relative">
+                  <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
+                  <input type="number" placeholder="Ej. Q 150" aria-label="Tarifa por hora" min="0" class="honorarios-hora w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
+                </div>
               </div>
             </div>
           </div>
@@ -248,7 +261,7 @@
         <div class="space-y-4 mb-4">
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-2">Nombre del producto</label>
-            <input type="text" value="Producto ejemplo" placeholder="Nombre del producto o servicio" class="nombre-producto w-full p-3 border border-teal-400 rounded-lg focus:ring-2 focus:ring-indigo-400" aria-label="Nombre del producto o servicio">
+            <input type="text" value="Producto ejemplo" placeholder="Nombre del producto o servicio" class="nombre-producto w-full p-3 border border-teal-400 rounded-lg focus:ring-2 focus:ring-indigo-400" aria-label="Nombre del producto o servicio" oninput="actualizarTituloProducto(this)">
           </div>
 
           <div>
@@ -697,7 +710,7 @@
       wrapper.innerHTML = `
         <div class="flex items-center justify-between mb-8">
           <div class="text-center mx-auto">
-            <h2 class="text-3xl font-bold text-gray-800">📦 PRODUCTO ${id}</h2>
+            <h2 class="text-3xl font-bold text-gray-800 product-title">📦 PRODUCTO ${id}</h2>
             <p class="text-gray-500 mt-1">Configuración completa</p>
           </div>
           <span class="ml-4 px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 font-semibold shrink-0">ID: P-${id}</span>
@@ -776,13 +789,26 @@
 
             <div class="border-t border-gray-300 pt-4">
               <h5 class="text-sm font-semibold text-gray-700 mb-2">⏰ Horas de Trabajo</h5>
-              <div class="grid grid-cols-2 gap-2 mb-3">
-                <input type="number" placeholder="Horas trabajadas por día (ej. 6)" aria-label="Horas trabajadas por día" min="0" class="horas-por-dia w-full p-2 border border-teal-400 rounded-lg text-xs">
-                <input type="number" placeholder="Días laborables por mes (ej. 22)" aria-label="Días laborables por mes" min="0" class="dias-por-mes w-full p-2 border border-teal-400 rounded-lg text-xs">
-                <input type="number" placeholder="Horas totales estimadas del proyecto (ej. 12)" aria-label="Horas totales del proyecto" min="0" class="horas-proyecto w-full p-2 border border-teal-400 rounded-lg text-xs">
-                <div class="relative">
-                  <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-                  <input type="number" placeholder="Tarifa por hora (ej. 150)" aria-label="Tarifa por hora" min="0" class="honorarios-hora w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
+<p class="text-xs text-gray-600 mb-2">Consejo: indica tus horas/día, días/mes, horas del proyecto y tu tarifa. Esto impacta el costo fijo mensual.</p>
+              <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label class="block text-xs font-medium text-gray-700 mb-1">Horas trabajadas por día</label>
+                  <input type="number" placeholder="Ej. 6" aria-label="Horas trabajadas por día" min="0" class="horas-por-dia w-full p-2 border border-teal-400 rounded-lg text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-gray-700 mb-1">Días laborables por mes</label>
+                  <input type="number" placeholder="Ej. 22" aria-label="Días laborables por mes" min="0" class="dias-por-mes w-full p-2 border border-teal-400 rounded-lg text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-gray-700 mb-1">Horas totales del proyecto</label>
+                  <input type="number" placeholder="Ej. 12" aria-label="Horas totales del proyecto" min="0" class="horas-proyecto w-full p-2 border border-teal-400 rounded-lg text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-gray-700 mb-1">Tarifa por hora</label>
+                  <div class="relative">
+                    <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                    <input type="number" placeholder="Ej. 150" aria-label="Tarifa por hora" min="0" class="honorarios-hora w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
+                  </div>
                 </div>
               </div>
             </div>
@@ -800,7 +826,7 @@
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-2">Nombre del producto</label>
-              <input type="text" value="Producto ${id}" class="nombre-producto w-full p-3 border border-teal-400 rounded-lg focus:ring-2 focus:ring-indigo-400">
+              <input type="text" value="Producto ${id}" class="nombre-producto w-full p-3 border border-teal-400 rounded-lg focus:ring-2 focus:ring-indigo-400" oninput="actualizarTituloProducto(this)">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-2">Costo de producción (auto)</label>
@@ -1142,6 +1168,13 @@
       }
     });
 
+    function actualizarTituloProducto(input){
+      const card = input.closest('.product-card');
+      const titulo = card.querySelector('.product-title');
+      const nombre = input.value.trim();
+      titulo.textContent = nombre ? `📦 ${nombre.toUpperCase()}` : `📦 ${card.getAttribute('data-locked')==='true' ? 'PRODUCTO 1' : 'PRODUCTO ' + card.getAttribute('data-product-id')}`;
+    }
+
     // Boot
     renderImpuestos();
     calcularInversion();
@@ -1150,5 +1183,5 @@
     calcularEquilibrio();
     initFechas();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981f4ecd70d28b47',t:'MTc1ODM1MDE3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981f6e6933afcc72',t:'MTc1ODM1MTQ3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
