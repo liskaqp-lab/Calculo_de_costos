@@ -19,6 +19,8 @@
     .btn-10.estrategia-activa { background: #ecfdf5; border-color: #10b981; }
     .btn-30.estrategia-activa { background: #eff6ff; border-color: #3b82f6; }
     .btn-130.estrategia-activa { background: #faf5ff; border-color: #8b5cf6; }
+      /* Estado seleccionado para "Personalizado" */
+    #customStrategy.estrategia-activa { background: #fffbeb; border-color: #f59e0b; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25); }
   </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -313,7 +315,8 @@
       <button id="btnAddProduct" class="px-8 py-4 orange-gradient text-white rounded-2xl hover:shadow-xl transition-all duration-300 font-bold text-lg shadow-lg transform hover:scale-105">
         + Agregar Nuevo Producto
       </button>
-      <p class="text-white/90 mt-2">Cada tarjeta incluye su propia selección de estrategia</p>
+      <p class="text-white/90 mt-2">Productos agregados: <span id="productCount" class="font-bold">0</span></p>
+      <p class="text-white/90 mt-1">Cada tarjeta incluye su propia selección de estrategia</p>
     </div>
 
     <!-- Punto de Equilibrio -->
@@ -412,10 +415,10 @@
             <p class="text-sm text-gray-600">+130% sobre costo de producción</p>
             <p class="text-xs text-gray-500 mt-1">Precio premium</p>
           </button>
-          <div class="px-4 py-3 border-2 border-amber-300 rounded-xl flex flex-col">
+          <div id="customStrategy" class="px-4 py-3 border-2 border-amber-300 rounded-xl flex flex-col items-center justify-center text-center">
             <div class="font-semibold text-amber-800 mb-2">Personalizado</div>
-            <div class="flex items-center gap-2 mb-1">
-              <input id="inputCustomProfitGlobal" type="number" min="0" step="1" placeholder="0" class="w-24 p-2 border border-amber-300 rounded-md" aria-label="Porcentaje personalizado (global)">
+            <div class="flex items-center gap-2 mb-1 justify-center">
+              <input id="inputCustomProfitGlobal" type="number" min="0" step="1" placeholder="0" class="w-24 p-2 border border-amber-300 rounded-md text-center" aria-label="Porcentaje personalizado (global)">
               <span class="text-amber-700 font-semibold">%</span>
             </div>
             <p class="text-xs text-amber-600">Se aplica automáticamente al escribir</p>
@@ -516,12 +519,18 @@
 
   <!-- Modal de eliminación (único) -->
   <div id="deleteModal" class="fixed inset-0 hidden items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-backdrop absolute inset-0 bg-black/50"></div>
-    <div class="modal-content relative bg-white rounded-xl p-6 w-11/12 max-w-md shadow-2xl">
-      <h2 id="modalTitle" class="text-lg font-bold text-gray-800 mb-4">¿Seguro que deseas eliminar este producto?</h2>
-      <div class="flex justify-end gap-3">
-        <button id="cancelDeleteBtn" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 focus-ring">Cancelar</button>
-        <button id="confirmDeleteBtn" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 focus-ring">Eliminación</button>
+    <div class="modal-backdrop absolute inset-0 bg-black/60"></div>
+    <div class="modal-content relative bg-white rounded-2xl p-6 w-11/12 max-w-lg shadow-2xl border border-red-100">
+      <div class="flex items-start gap-4">
+        <div class="shrink-0 w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl">⚠️</div>
+        <div>
+          <h2 id="modalTitle" class="text-xl font-bold text-gray-900">¿Estás seguro de que deseas eliminar este producto?</h2>
+          <p class="text-gray-600 mt-2">Esta acción no se puede deshacer.</p>
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 mt-6">
+        <button id="cancelDeleteBtn" class="px-5 py-3 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 focus-ring flex items-center gap-2">Cancelar</button>
+        <button id="confirmDeleteBtn" class="px-5 py-3 rounded-lg bg-red-600 text-white hover:bg-red-700 focus-ring flex items-center gap-2">Eliminar</button>
       </div>
     </div>
   </div>
@@ -621,6 +630,7 @@
       const stratBtn = e.target.closest('.estrategia-btn');
       if (stratBtn) {
         qsa('.estrategia-btn').forEach(b => b.classList.remove('estrategia-activa','bg-blue-50','border-blue-300'));
+        qs('#customStrategy')?.classList.remove('estrategia-activa');
         stratBtn.classList.add('estrategia-activa');
         const pr = parseFloat(stratBtn.getAttribute('data-profit')) || 30;
         // Aplicar a todas las tarjetas
@@ -636,6 +646,12 @@
     const confirmBtn = qs('#confirmDeleteBtn');
     const cancelBtn = qs('#cancelDeleteBtn');
     let lastFocused = null;
+
+    function actualizarConteoProductos(){
+      const extraCards = qsa('.product-card:not([data-locked="true"])').length;
+      const count = Math.max(0, extraCards - 0); // extraCards ya es el total de agregadas
+      const el = qs('#productCount'); if (el) el.textContent = String(count);
+    }
 
     function openDeleteModal(targetId) {
       modal.dataset.targetId = targetId;
@@ -672,6 +688,8 @@
       const card = qs(`.product-card[data-product-id="${CSS.escape(id)}"]`);
       if (card && card.getAttribute('data-locked') !== 'true') {
         card.remove();
+        actualizarConteoProductos(); // actualizar contador visible
+        // Si se solicita reiniciar el conteo global a cero, se refleja al no haber tarjetas extra
         calcularInversion();
         calcularCostos();
         calcularProductos();
@@ -684,9 +702,11 @@
     // Ingresar % personalizado global (aplica en vivo a todas las tarjetas)
     qs('#inputCustomProfitGlobal').addEventListener('input', (e) => {
       const val = parseFloat(e.target.value);
-      if (isNaN(val) || val < 0) return;
+      const customBlock = qs('#customStrategy');
+      if (isNaN(val) || val < 0) { customBlock.classList.remove('estrategia-activa'); return; }
       qsa('.product-card').forEach(card => card.dataset.profit = String(val));
       qsa('.estrategia-btn').forEach(b => b.classList.remove('estrategia-activa'));
+      customBlock.classList.add('estrategia-activa');
       calcularProductos();
       actualizarCotizacion();
     });
@@ -696,6 +716,7 @@
       contadorProductos++;
       const card = crearTarjetaProducto(contadorProductos);
       qs('#productosCompletosContainer').appendChild(card);
+      actualizarConteoProductos();
       calcularProductos();
       actualizarCotizacion();
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1183,5 +1204,5 @@
     calcularEquilibrio();
     initFechas();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981f6e6933afcc72',t:'MTc1ODM1MTQ3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981f815095490da2',t:'MTc1ODM1MjI0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
