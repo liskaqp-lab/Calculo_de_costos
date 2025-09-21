@@ -286,7 +286,7 @@
       </div>
 
       <!-- Resultados -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <div class="bg-blue-50 p-3 rounded-lg text-center">
           <p class="text-xs text-blue-700">Costo total</p>
           <p class="costo-total text-sm font-bold text-blue-800"><span class="moneda">Q</span> 538</p>
@@ -294,10 +294,6 @@
         <div class="bg-red-50 p-3 rounded-lg text-center">
           <p class="text-xs text-red-700">Impuestos</p>
           <p class="total-impuestos text-sm font-bold text-red-800"><span class="moneda">Q</span> 220</p>
-        </div>
-        <div class="bg-green-50 p-3 rounded-lg text-center">
-          <p class="text-xs text-green-700">Ganancia</p>
-          <p class="ganancia-neta text-sm font-bold text-green-800"><span class="moneda">Q</span> 242</p>
         </div>
         <div class="bg-purple-50 p-3 rounded-lg text-center">
           <p class="text-xs text-purple-700">Margen</p>
@@ -495,7 +491,7 @@
         </div>
 
         <!-- Resumen en pantalla -->
-        <div class="border-t border-amber-200 pt-6">
+        <div class="border-t border-amber-200 pt-6 info-adicional-print-hide">
           <h3 class="text-lg font-semibold text-amber-800 mb-3">📊 Información Adicional</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="bg-green-50 p-4 rounded-lg text-center">
@@ -520,17 +516,13 @@
   <!-- Modal de eliminación (único) -->
   <div id="deleteModal" class="fixed inset-0 hidden items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-backdrop absolute inset-0 bg-black/60"></div>
-    <div class="modal-content relative bg-white rounded-2xl p-6 w-11/12 max-w-lg shadow-2xl border border-red-100">
-      <div class="flex items-start gap-4">
-        <div class="shrink-0 w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-2xl">⚠️</div>
-        <div>
-          <h2 id="modalTitle" class="text-xl font-bold text-gray-900">¿Estás seguro de que deseas eliminar este producto?</h2>
-          <p class="text-gray-600 mt-2">Esta acción no se puede deshacer.</p>
-        </div>
-      </div>
-      <div class="flex justify-end gap-3 mt-6">
-        <button id="cancelDeleteBtn" class="px-5 py-3 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 focus-ring flex items-center gap-2">Cancelar</button>
-        <button id="confirmDeleteBtn" class="px-5 py-3 rounded-lg bg-red-600 text-white hover:bg-red-700 focus-ring flex items-center gap-2">Eliminar</button>
+    <div class="modal-content relative bg-white rounded-2xl p-8 w-11/12 max-w-md shadow-2xl border border-red-100 text-center">
+      <div class="mx-auto mb-4 w-20 h-20 rounded-2xl bg-red-50 flex items-center justify-center text-5xl">⚠️</div>
+      <h2 id="modalTitle" class="text-2xl font-extrabold text-gray-900">¿Estás seguro de que deseas eliminar este producto?</h2>
+      <p class="text-gray-600 mt-3 mb-6">Esta acción no se puede deshacer.</p>
+      <div class="flex justify-center gap-3">
+        <button id="cancelDeleteBtn" class="px-5 py-3 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 focus-ring">Cancelar</button>
+        <button id="confirmDeleteBtn" class="px-5 py-3 rounded-lg bg-red-600 text-white hover:bg-red-700 focus-ring">Sí, eliminar</button>
       </div>
     </div>
   </div>
@@ -648,9 +640,10 @@
     let lastFocused = null;
 
     function actualizarConteoProductos(){
-      const extraCards = qsa('.product-card:not([data-locked="true"])').length;
-      const count = Math.max(0, extraCards - 0); // extraCards ya es el total de agregadas
-      const el = qs('#productCount'); if (el) el.textContent = String(count);
+      const extraCards = qsa('.product-card:not([data-locked="true"])');
+      const el = qs('#productCount');
+      if (el) el.textContent = String(extraCards.length);
+      return extraCards.length;
     }
 
     function openDeleteModal(targetId) {
@@ -687,9 +680,14 @@
       if (!id) { closeDeleteModal(); return; }
       const card = qs(`.product-card[data-product-id="${CSS.escape(id)}"]`);
       if (card && card.getAttribute('data-locked') !== 'true') {
+        // Eliminar tarjeta
         card.remove();
-        actualizarConteoProductos(); // actualizar contador visible
-        // Si se solicita reiniciar el conteo global a cero, se refleja al no haber tarjetas extra
+        // Actualizar contador global según tarjetas visibles
+        const count = actualizarConteoProductos();
+        // Renumerar lo visible para mantener P-2, P-3...
+        renumerarTarjetas();
+        // Reajustar numeración futura: base (1) + existentes = siguiente índice
+        contadorProductos = 1 + count;
         calcularInversion();
         calcularCostos();
         calcularProductos();
@@ -713,14 +711,30 @@
 
     // Agregar nuevo producto
     qs('#btnAddProduct').addEventListener('click', () => {
-      contadorProductos++;
+      // Determinar siguiente índice basado en tarjetas existentes
+      const currentCount = actualizarConteoProductos();
+      contadorProductos = 1 + currentCount; // base (1) + actuales
       const card = crearTarjetaProducto(contadorProductos);
       qs('#productosCompletosContainer').appendChild(card);
       actualizarConteoProductos();
+      renumerarTarjetas();
       calcularProductos();
       actualizarCotizacion();
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+
+    function renumerarTarjetas() {
+      // Asegura títulos y IDs consecutivos a partir de 2
+      let index = 2;
+      qsa('.product-card:not([data-locked="true"])').forEach(card => {
+        card.setAttribute('data-product-id', String(index));
+        const title = card.querySelector('.product-title');
+        if (title) title.textContent = `📦 PRODUCTO ${index}`;
+        const idBadge = card.querySelector('span.bg-gray-100');
+        if (idBadge) idBadge.textContent = `ID: P-${index}`;
+        index++;
+      });
+    }
 
     function crearTarjetaProducto(id) {
       const wrapper = document.createElement('div');
@@ -865,7 +879,7 @@
         </div>
 
         <!-- Resultados -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           <div class="bg-blue-50 p-3 rounded-lg text-center">
             <p class="text-xs text-blue-700">Costo total</p>
             <p class="costo-total text-sm font-bold text-blue-800"><span class="moneda">${monedaActual}</span> 0</p>
@@ -873,10 +887,6 @@
           <div class="bg-red-50 p-3 rounded-lg text-center">
             <p class="text-xs text-red-700">Impuestos</p>
             <p class="total-impuestos text-sm font-bold text-red-800"><span class="moneda">${monedaActual}</span> 0</p>
-          </div>
-          <div class="bg-green-50 p-3 rounded-lg text-center">
-            <p class="text-xs text-green-700">Ganancia</p>
-            <p class="ganancia-neta text-sm font-bold text-green-800"><span class="moneda">${monedaActual}</span> 0</p>
           </div>
           <div class="bg-purple-50 p-3 rounded-lg text-center">
             <p class="text-xs text-purple-700">Margen</p>
@@ -1028,8 +1038,8 @@
 
         qs('.costo-total', card).innerHTML = `<span class="moneda">${monedaActual}</span> ${costoProduccion.toFixed(2)}`;
         qs('.total-impuestos', card).innerHTML = `<span class="moneda">${monedaActual}</span> ${impuestos.toFixed(2)}`;
-        qs('.ganancia-neta', card).innerHTML = `<span class="moneda">${monedaActual}</span> ${ganancia.toFixed(2)}`;
-        qs('.margen-porcentaje', card).textContent = `${margenPct.toFixed(1)}%`;
+        const margenEl = qs('.margen-porcentaje', card);
+        if (margenEl) margenEl.textContent = `${margenPct.toFixed(1)}%`;
       });
 
       calcularEquilibrio();
@@ -1157,6 +1167,8 @@
           table { border-collapse: collapse !important; width: 100% !important; }
           th, td { border: 1px solid #d97706 !important; padding: 8px !important; }
           th { background-color: #fef3c7 !important; }
+          /* Ocultar Información Adicional en impresión */
+          .info-adicional-print-hide { display: none !important; }
         }
         @page { margin: 1in; }
       `;
@@ -1204,5 +1216,5 @@
     calcularEquilibrio();
     initFechas();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981f815095490da2',t:'MTc1ODM1MjI0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98272057115ecc72',t:'MTc1ODQzMjE2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
