@@ -32,24 +32,24 @@
     </div>
 
     <!-- Configuración General -->
-    <div class="bg-white rounded-2xl p-8 card-shadow mb-8">
+    <div class="bg-white rounded-2xl p-4 sm:p-8 card-shadow mb-8">
       <div class="flex items-center mb-6">
         <span class="text-2xl mr-3">⚙️</span>
-        <h2 class="text-2xl font-bold text-gray-800">Configuración General</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Configuración General</h2>
       </div>
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         <!-- Moneda -->
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+        <div class="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl p-4 sm:p-6 border border-yellow-300">
           <div class="flex items-center mb-4">
-            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3 shrink-0">
               <span class="text-white text-lg">💱</span>
             </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800">Moneda de Trabajo</h3>
-              <p class="text-sm text-blue-600">Selecciona tu moneda principal</p>
+            <div class="min-w-0">
+              <h3 class="text-base sm:text-lg font-semibold text-gray-800">Moneda de Trabajo</h3>
+              <p class="text-xs sm:text-sm text-yellow-700">Selecciona tu moneda principal</p>
             </div>
           </div>
-          <select id="monedaSelector" class="w-full p-4 border-2 border-blue-300 rounded-xl focus:ring-2 focus:ring-blue-500 text-center font-semibold text-lg bg-white shadow-sm transition-all">
+          <select id="monedaSelector" class="w-full p-3 sm:p-4 border-2 border-yellow-400 rounded-xl focus:ring-2 focus:ring-yellow-500 text-center font-semibold text-base sm:text-lg bg-white shadow-sm transition-all">
             <option value="Q">🇬🇹 Quetzales (Q)</option>
             <option value="$">🇺🇸 Dólares ($)</option>
             <option value="€">🇪🇺 Euros (€)</option>
@@ -57,40 +57,40 @@
         </div>
 
         <!-- Impuestos -->
-        <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center">
-              <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center mr-3">
+        <div class="bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl p-4 sm:p-6 border border-slate-300">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+            <div class="flex items-center min-w-0">
+              <div class="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center mr-3 shrink-0">
                 <span class="text-white text-lg">🏷️</span>
               </div>
-              <div>
-                <h3 class="text-lg font-semibold text-gray-800">Impuestos</h3>
-                <p class="text-sm text-amber-600">Configura los impuestos aplicables</p>
+              <div class="min-w-0">
+                <h3 class="text-base sm:text-lg font-semibold text-gray-800">Impuestos</h3>
+                <p class="text-xs sm:text-sm text-slate-700">Configura los impuestos aplicables</p>
               </div>
             </div>
-            <button id="toggleFormularioImpuestos" class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors text-sm font-medium shadow-sm">
+            <button id="toggleFormularioImpuestos" class="px-3 sm:px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors text-xs sm:text-sm font-medium shadow-sm shrink-0">
               + Agregar
             </button>
           </div>
 
           <!-- Form Impuesto -->
-          <div id="formularioImpuestos" class="hidden bg-white p-4 rounded-lg border border-amber-300 mb-4 shadow-sm">
-            <p class="text-sm text-amber-700 mb-4 font-medium">💡 Ejemplos: IVA España 21%, GST Canadá 5%, ISR México 16%</p>
+          <div id="formularioImpuestos" class="hidden bg-white p-3 sm:p-4 rounded-lg border border-gray-300 mb-4 shadow-sm">
+            <p class="text-xs sm:text-sm text-gray-700 mb-4 font-medium">💡 Ejemplos: IVA España 21%, GST Canadá 5%, ISR México 16%</p>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-amber-800 mb-2">Nombre del impuesto</label>
-                <input type="text" id="nombreImpuestoPersonalizado" placeholder="Ej: IVA, GST, ISR" class="w-full p-3 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs sm:text-sm font-medium text-gray-800 mb-2">Nombre del impuesto</label>
+                <input type="text" id="nombreImpuestoPersonalizado" placeholder="Ej: IVA, GST, ISR" class="w-full p-2 sm:p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 text-sm">
               </div>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-amber-800 mb-2">Porcentaje (%)</label>
+                  <label class="block text-xs sm:text-sm font-medium text-gray-800 mb-2">Porcentaje (%)</label>
                   <div class="relative">
-                    <input type="number" id="porcentajeImpuestoPersonalizado" placeholder="0.0" step="0.1" min="0" class="w-full pl-3 pr-8 py-3 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                    <span class="absolute right-3 top-3 text-amber-600 font-semibold">%</span>
+                    <input type="number" id="porcentajeImpuestoPersonalizado" placeholder="0.0" step="0.1" min="0" class="w-full pl-3 pr-8 py-2 sm:py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 text-sm">
+                    <span class="absolute right-3 top-2 sm:top-3 text-gray-600 font-semibold text-sm">%</span>
                   </div>
                 </div>
                 <div class="flex items-end">
-                  <button id="btnAgregarImpuesto" class="w-full p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium">
+                  <button id="btnAgregarImpuesto" class="w-full p-2 sm:p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium text-sm">
                     ✓ Confirmar
                   </button>
                 </div>
@@ -116,42 +116,46 @@
     </div>
 
     <!-- Producto Base (bloqueado, sin eliminar) -->
-    <div class="product-card bg-white rounded-3xl p-8 border-2 border-teal-400 card-shadow mb-8" data-product-id="1" data-locked="true" data-profit="30">
-      <div class="flex items-center justify-between mb-8">
-        <div class="text-center mx-auto">
-          <h2 class="text-3xl font-bold text-gray-800 product-title">📦 PRODUCTO 1</h2>
-          <p class="text-gray-500 mt-1">Base del cálculo (no eliminable)</p>
+    <div class="product-card bg-white rounded-3xl p-4 sm:p-8 border-2 border-teal-400 card-shadow mb-8" data-product-id="1" data-locked="true" data-profit="30">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-3">
+        <div class="text-center sm:mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 product-title">📦 PRODUCTO 1</h2>
+          <p class="text-sm text-gray-500 mt-1">Base del cálculo (no eliminable)</p>
         </div>
-        <span class="ml-4 px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 font-semibold shrink-0">ID: P-1</span>
+        <span class="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 font-semibold shrink-0 self-center sm:self-auto">ID: P-1</span>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
         <!-- Inversión Inicial -->
-        <div class="bg-gray-50 rounded-2xl p-6 h-full">
+        <div class="bg-gray-50 rounded-2xl p-4 sm:p-6 h-full">
           <div class="flex items-center mb-4">
-            <span class="text-2xl mr-3">💰</span>
+            <span class="text-xl sm:text-2xl mr-2 sm:mr-3">💰</span>
             <div>
-              <h4 class="text-lg font-bold text-gray-800">Inversión Inicial</h4>
-              <p class="text-gray-500 text-sm">Gastos para arrancar</p>
+              <h4 class="text-base sm:text-lg font-bold text-gray-800">Inversión Inicial</h4>
+              <p class="text-gray-500 text-xs sm:text-sm">Gastos para arrancar</p>
             </div>
           </div>
 
           <div class="inversion-items space-y-3 mb-4">
-            <div class="flex gap-3 items-center">
-              <input type="text" value="Equipo principal" placeholder="Describe el concepto (ej. Cámara, luces, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-sm" aria-label="Concepto de inversión inicial">
-              <div class="relative w-28">
-                <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                <input type="number" value="15000" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-sm" onchange="calcularInversion();calcularProductos();">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
+              <input type="text" value="Equipo principal" placeholder="Describe el concepto (ej. Cámara, luces, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm" aria-label="Concepto de inversión inicial">
+              <div class="flex gap-2 items-center">
+                <div class="relative w-24 sm:w-28">
+                  <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
+                  <input type="number" value="15000" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm" onchange="calcularInversion();calcularProductos();">
+                </div>
+                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
               </div>
-              <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded">🗑️</button>
             </div>
-            <div class="flex gap-3 items-center">
-              <input type="text" value="Mobiliario y decoración" placeholder="Describe el concepto (ej. Sillas, mesas, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-sm" aria-label="Concepto de inversión inicial">
-              <div class="relative w-28">
-                <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                <input type="number" value="8000" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-sm" onchange="calcularInversion();calcularProductos();">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
+              <input type="text" value="Mobiliario y decoración" placeholder="Describe el concepto (ej. Sillas, mesas, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm" aria-label="Concepto de inversión inicial">
+              <div class="flex gap-2 items-center">
+                <div class="relative w-24 sm:w-28">
+                  <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
+                  <input type="number" value="8000" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm" onchange="calcularInversion();calcularProductos();">
+                </div>
+                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
               </div>
-              <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded">🗑️</button>
             </div>
           </div>
 
@@ -374,48 +378,41 @@
 
     <!-- Cotización -->
     <div class="bg-white rounded-2xl p-8 card-shadow mb-8">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center">
-          <span class="text-3xl mr-3">📋</span>
-          <div>
-            <h2 class="text-2xl font-bold text-gray-800">Cotización</h2>
-            <p class="text-gray-500">Formato de factura para presentar a clientes</p>
-          </div>
-        </div>
+      <div class="flex items-center mb-6">
+        <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">📋</span>
         <div>
-          <button id="btnImprimir" class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium flex items-center gap-2">
-            🖨️ Imprimir Cotización
-          </button>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Cotización</h2>
+          <p class="text-sm sm:text-base text-gray-500">Formato de factura para presentar a clientes</p>
         </div>
       </div>
 
       <!-- Estrategia de Precio (GLOBAL) -->
       <div class="mb-6">
-        <h3 class="text-lg font-semibold text-amber-800 mb-4">💰 Estrategia de Precio</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <button type="button" class="estrategia-btn btn-10 px-4 py-3 border-2 border-gray-300 rounded-xl text-center hover:shadow-lg" data-profit="10">
-            <div class="text-2xl mb-1 w-full flex items-center justify-center">💚</div>
-            <h4 class="font-semibold text-gray-700">Mínimo no negociable</h4>
-            <p class="text-sm text-gray-600">+10% sobre costo de producción</p>
+        <h3 class="text-base sm:text-lg font-semibold text-amber-800 mb-4">💰 Estrategia de Precio</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <button type="button" class="estrategia-btn btn-10 px-3 sm:px-4 py-3 border-2 border-gray-300 rounded-xl text-center hover:shadow-lg" data-profit="10">
+            <div class="text-xl sm:text-2xl mb-1 w-full flex items-center justify-center">💚</div>
+            <h4 class="font-semibold text-gray-700 text-sm sm:text-base">Mínimo no negociable</h4>
+            <p class="text-xs sm:text-sm text-gray-600">+10% sobre costo de producción</p>
             <p class="text-xs text-gray-500 mt-1">Precio de supervivencia</p>
           </button>
-          <button type="button" class="estrategia-btn btn-30 px-4 py-3 border-2 border-blue-300 bg-blue-50 rounded-xl text-center hover:shadow-lg estrategia-activa" data-profit="30">
-            <div class="text-2xl mb-1 w-full flex items-center justify-center">💙</div>
-            <h4 class="font-semibold text-blue-700">Precio regular</h4>
-            <p class="text-sm text-blue-600">+30% sobre costo de producción</p>
+          <button type="button" class="estrategia-btn btn-30 px-3 sm:px-4 py-3 border-2 border-blue-300 bg-blue-50 rounded-xl text-center hover:shadow-lg estrategia-activa" data-profit="30">
+            <div class="text-xl sm:text-2xl mb-1 w-full flex items-center justify-center">💙</div>
+            <h4 class="font-semibold text-blue-700 text-sm sm:text-base">Precio regular</h4>
+            <p class="text-xs sm:text-sm text-blue-600">+30% sobre costo de producción</p>
             <p class="text-xs text-blue-500 mt-1">Precio competitivo</p>
           </button>
-          <button type="button" class="estrategia-btn btn-130 px-4 py-3 border-2 border-purple-300 rounded-xl text-center hover:shadow-lg" data-profit="130">
-            <div class="text-2xl mb-1 w-full flex items-center justify-center">💜</div>
-            <h4 class="font-semibold text-gray-700">Precio ideal</h4>
-            <p class="text-sm text-gray-600">+130% sobre costo de producción</p>
+          <button type="button" class="estrategia-btn btn-130 px-3 sm:px-4 py-3 border-2 border-purple-300 rounded-xl text-center hover:shadow-lg" data-profit="130">
+            <div class="text-xl sm:text-2xl mb-1 w-full flex items-center justify-center">💜</div>
+            <h4 class="font-semibold text-gray-700 text-sm sm:text-base">Precio ideal</h4>
+            <p class="text-xs sm:text-sm text-gray-600">+130% sobre costo de producción</p>
             <p class="text-xs text-gray-500 mt-1">Precio premium</p>
           </button>
-          <div id="customStrategy" class="px-4 py-3 border-2 border-amber-300 rounded-xl flex flex-col items-center justify-center text-center">
-            <div class="font-semibold text-amber-800 mb-2">Personalizado</div>
+          <div id="customStrategy" class="px-3 sm:px-4 py-3 border-2 border-amber-300 rounded-xl flex flex-col items-center justify-center text-center">
+            <div class="font-semibold text-amber-800 mb-2 text-sm sm:text-base">Personalizado</div>
             <div class="flex items-center gap-2 mb-1 justify-center">
-              <input id="inputCustomProfitGlobal" type="number" min="0" step="1" placeholder="0" class="w-24 p-2 border border-amber-300 rounded-md text-center" aria-label="Porcentaje personalizado (global)">
-              <span class="text-amber-700 font-semibold">%</span>
+              <input id="inputCustomProfitGlobal" type="number" min="0" step="1" placeholder="0" class="w-20 sm:w-24 p-2 border border-amber-300 rounded-md text-center text-sm" aria-label="Porcentaje personalizado (global)">
+              <span class="text-amber-700 font-semibold text-sm">%</span>
             </div>
             <p class="text-xs text-amber-600">Se aplica automáticamente al escribir</p>
           </div>
@@ -461,16 +458,16 @@
         </div>
 
         <div>
-          <h3 class="text-lg font-semibold text-amber-800 mb-4">📦 Productos y Servicios</h3>
+          <h3 class="text-base sm:text-lg font-semibold text-amber-800 mb-4">📦 Productos y Servicios</h3>
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse shadow-lg rounded-xl overflow-hidden">
+            <table class="w-full border-collapse shadow-lg rounded-xl overflow-hidden min-w-[600px]">
               <thead>
                 <tr class="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-                  <th class="p-4 text-left font-bold">Producto/Servicio</th>
-                  <th class="p-4 text-center font-bold">Cantidad</th>
-                  <th class="p-4 text-right font-bold">Precio Unitario</th>
-                  <th class="p-4 text-right font-bold">Margen Contribución</th>
-                  <th class="p-4 text-right font-bold">Subtotal</th>
+                  <th class="p-2 sm:p-4 text-left font-bold text-xs sm:text-sm">Producto/Servicio</th>
+                  <th class="p-2 sm:p-4 text-center font-bold text-xs sm:text-sm">Cantidad</th>
+                  <th class="p-2 sm:p-4 text-right font-bold text-xs sm:text-sm">Precio Unitario</th>
+                  <th class="p-2 sm:p-4 text-right font-bold text-xs sm:text-sm">Margen Contribución</th>
+                  <th class="p-2 sm:p-4 text-right font-bold text-xs sm:text-sm">Subtotal</th>
                 </tr>
               </thead>
               <tbody id="tablaProductosCotizacion"></tbody>
@@ -493,7 +490,7 @@
         <!-- Resumen en pantalla -->
         <div class="border-t border-amber-200 pt-6 info-adicional-print-hide">
           <h3 class="text-lg font-semibold text-amber-800 mb-3">📊 Información Adicional</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="bg-green-50 p-4 rounded-lg text-center">
               <p class="text-sm text-green-700">Ganancia Neta Total</p>
               <p id="gananciaNetaCotizacion" class="text-xl font-bold text-green-800"><span class="moneda">Q</span> 0</p>
@@ -506,6 +503,15 @@
               <p class="text-sm text-purple-700">Total Impuestos</p>
               <p id="totalImpuestosCotizacion" class="text-xl font-bold text-purple-800"><span class="moneda">Q</span> 0</p>
             </div>
+          </div>
+          
+          <!-- Botón de Imprimir -->
+          <div class="text-center">
+            <button id="btnImprimir" class="px-8 py-4 bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition-colors font-bold text-lg shadow-lg transform hover:scale-105 flex items-center justify-center gap-3 mx-auto">
+              <span class="text-2xl">🖨️</span>
+              <span>Imprimir Cotización</span>
+            </button>
+            <p class="text-gray-500 text-sm mt-2">Genera una versión lista para presentar al cliente</p>
           </div>
         </div>
       </div>
@@ -1139,11 +1145,11 @@
 
         return `
           <tr class="hover:bg-amber-50 transition-colors duration-200 ${count % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
-            <td class="p-4 font-medium text-gray-800">${nombre}</td>
-            <td class="p-4 text-center text-gray-700">${unidades}</td>
-            <td class="p-4 text-right text-gray-700"><span class="moneda">${monedaActual}</span> ${precio.toFixed(2)}</td>
-            <td class="p-4 text-right text-green-600 font-semibold"><span class="moneda">${monedaActual}</span> ${margenContrib.toFixed(2)}</td>
-            <td class="p-4 text-right font-bold text-amber-800"><span class="moneda">${monedaActual}</span> ${(precio*unidades).toFixed(2)}</td>
+            <td class="p-2 sm:p-4 font-medium text-gray-800 text-xs sm:text-sm">${nombre}</td>
+            <td class="p-2 sm:p-4 text-center text-gray-700 text-xs sm:text-sm">${unidades}</td>
+            <td class="p-2 sm:p-4 text-right text-gray-700 text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${precio.toFixed(2)}</td>
+            <td class="p-2 sm:p-4 text-right text-green-600 font-semibold text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${margenContrib.toFixed(2)}</td>
+            <td class="p-2 sm:p-4 text-right font-bold text-amber-800 text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${(precio*unidades).toFixed(2)}</td>
           </tr>
         `;
       }).join('');
@@ -1325,5 +1331,5 @@
     calcularEquilibrio();
     initFechas();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984d88bb93e6443a',t:'MTc1ODgzNDg5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984db169a14ad7b3',t:'MTc1ODgzNjU2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
