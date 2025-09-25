@@ -463,14 +463,14 @@
         <div>
           <h3 class="text-lg font-semibold text-amber-800 mb-4">📦 Productos y Servicios</h3>
           <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
+            <table class="w-full border-collapse shadow-lg rounded-xl overflow-hidden">
               <thead>
-                <tr class="bg-amber-50">
-                  <th class="border border-amber-200 p-3 text-left text-amber-800 font-semibold">Producto/Servicio</th>
-                  <th class="border border-amber-200 p-3 text-center text-amber-800 font-semibold">Cantidad</th>
-                  <th class="border border-amber-200 p-3 text-right text-amber-800 font-semibold">Precio Unitario</th>
-                  <th class="border border-amber-200 p-3 text-right text-amber-800 font-semibold">Margen Contribución</th>
-                  <th class="border border-amber-200 p-3 text-right text-amber-800 font-semibold">Subtotal</th>
+                <tr class="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+                  <th class="p-4 text-left font-bold">Producto/Servicio</th>
+                  <th class="p-4 text-center font-bold">Cantidad</th>
+                  <th class="p-4 text-right font-bold">Precio Unitario</th>
+                  <th class="p-4 text-right font-bold">Margen Contribución</th>
+                  <th class="p-4 text-right font-bold">Subtotal</th>
                 </tr>
               </thead>
               <tbody id="tablaProductosCotizacion"></tbody>
@@ -1138,12 +1138,12 @@
         acumMargenPct += margPct; count++;
 
         return `
-          <tr>
-            <td class="border border-amber-200 p-3">${nombre}</td>
-            <td class="border border-amber-200 p-3 text-center">${unidades}</td>
-            <td class="border border-amber-200 p-3 text-right"><span class="moneda">${monedaActual}</span> ${precio.toFixed(2)}</td>
-            <td class="border border-amber-200 p-3 text-right"><span class="moneda">${monedaActual}</span> ${margenContrib.toFixed(2)}</td>
-            <td class="border border-amber-200 p-3 text-right font-semibold"><span class="moneda">${monedaActual}</span> ${(precio*unidades).toFixed(2)}</td>
+          <tr class="hover:bg-amber-50 transition-colors duration-200 ${count % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
+            <td class="p-4 font-medium text-gray-800">${nombre}</td>
+            <td class="p-4 text-center text-gray-700">${unidades}</td>
+            <td class="p-4 text-right text-gray-700"><span class="moneda">${monedaActual}</span> ${precio.toFixed(2)}</td>
+            <td class="p-4 text-right text-green-600 font-semibold"><span class="moneda">${monedaActual}</span> ${margenContrib.toFixed(2)}</td>
+            <td class="p-4 text-right font-bold text-amber-800"><span class="moneda">${monedaActual}</span> ${(precio*unidades).toFixed(2)}</td>
           </tr>
         `;
       }).join('');
@@ -1158,23 +1158,132 @@
     // Impresión solo de cotización
     qs('#btnImprimir').addEventListener('click', () => {
       actualizarCotizacion();
-      const style = document.createElement('style');
-      style.innerHTML = `
-        @media print {
-          body * { visibility: hidden !important; }
-          #cotizacion, #cotizacion * { visibility: visible !important; }
-          #cotizacion { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 20px; }
-          table { border-collapse: collapse !important; width: 100% !important; }
-          th, td { border: 1px solid #d97706 !important; padding: 8px !important; }
-          th { background-color: #fef3c7 !important; }
-          /* Ocultar Información Adicional en impresión */
-          .info-adicional-print-hide { display: none !important; }
-        }
-        @page { margin: 1in; }
-      `;
-      document.head.appendChild(style);
-      window.print();
-      setTimeout(() => { document.head.removeChild(style); }, 500);
+      
+      // Crear una nueva ventana para imprimir
+      const printWindow = window.open('', '_blank');
+      const cotizacionContent = qs('#cotizacion').innerHTML;
+      
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Cotización</title>
+          <style>
+            body {
+              font-family: 'Inter', Arial, sans-serif;
+              margin: 0;
+              padding: 20px;
+              background: white;
+              color: #000;
+              line-height: 1.4;
+            }
+            .text-center { text-align: center; }
+            .text-left { text-align: left; }
+            .text-right { text-align: right; }
+            .font-bold { font-weight: bold; }
+            .font-semibold { font-weight: 600; }
+            .text-3xl { font-size: 1.875rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .text-xl { font-size: 1.25rem; }
+            .text-lg { font-size: 1.125rem; }
+            .text-sm { font-size: 0.875rem; }
+            .text-xs { font-size: 0.75rem; }
+            .mb-2 { margin-bottom: 0.5rem; }
+            .mb-3 { margin-bottom: 0.75rem; }
+            .mb-4 { margin-bottom: 1rem; }
+            .mb-6 { margin-bottom: 1.5rem; }
+            .mt-2 { margin-top: 0.5rem; }
+            .mt-6 { margin-top: 1.5rem; }
+            .p-3 { padding: 0.75rem; }
+            .p-4 { padding: 1rem; }
+            .pb-6 { padding-bottom: 1.5rem; }
+            .pt-6 { padding-top: 1.5rem; }
+            .border-b-2 { border-bottom: 2px solid #d97706; }
+            .bg-amber-50 { background-color: #fffbeb; }
+            .text-amber-900 { color: #78350f; }
+            .text-amber-800 { color: #92400e; }
+            .text-amber-700 { color: #b45309; }
+            .text-amber-600 { color: #d97706; }
+            .rounded-lg { border-radius: 0.5rem; }
+            .space-y-6 > * + * { margin-top: 1.5rem; }
+            .space-y-4 > * + * { margin-top: 1rem; }
+            .grid { display: grid; }
+            .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+            .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .gap-4 { gap: 1rem; }
+            .max-w-md { max-width: 28rem; }
+            .w-full { width: 100%; }
+            .flex { display: flex; }
+            .justify-end { justify-content: flex-end; }
+            .justify-between { justify-content: space-between; }
+            .items-center { align-items: center; }
+            .overflow-x-auto { overflow-x: auto; }
+            .border-collapse { border-collapse: collapse; }
+            .border { border: 1px solid #d97706; }
+            .border-amber-200 { border-color: #fde68a; }
+            .italic { font-style: italic; }
+            .hidden { display: none; }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 1rem 0;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+              overflow: hidden;
+            }
+            
+            th, td {
+              padding: 12px 16px;
+              text-align: left;
+            }
+            
+            th {
+              background: linear-gradient(to right, #f59e0b, #ea580c);
+              font-weight: bold;
+              color: white;
+            }
+            
+            tr:nth-child(even) {
+              background-color: #f9fafb;
+            }
+            
+            tr:nth-child(odd) {
+              background-color: white;
+            }
+            
+            .text-green-600 { color: #059669; }
+            .text-gray-800 { color: #1f2937; }
+            .text-gray-700 { color: #374151; }
+            
+            .info-adicional-print-hide {
+              display: none;
+            }
+            
+            @media print {
+              body { margin: 0; }
+              @page { margin: 0.5in; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="space-y-6">
+            ${cotizacionContent}
+          </div>
+        </body>
+        </html>
+      `);
+      
+      printWindow.document.close();
+      
+      // Esperar a que se cargue el contenido y luego imprimir
+      printWindow.onload = function() {
+        setTimeout(() => {
+          printWindow.print();
+          printWindow.close();
+        }, 250);
+      };
     });
 
     // Inicialización
@@ -1216,5 +1325,5 @@
     calcularEquilibrio();
     initFechas();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98272057115ecc72',t:'MTc1ODQzMjE2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984d88bb93e6443a',t:'MTc1ODgzNDg5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
