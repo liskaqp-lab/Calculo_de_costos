@@ -7,7 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      box-sizing: border-box;
+    }
     .card-shadow { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
     .gradient-bg { background: linear-gradient(135deg, #65C1C0 0%, #6767AD 100%); }
     .orange-gradient { background: linear-gradient(135deg, #EA5F0B 0%, #F4BA3B 100%); }
@@ -115,197 +118,7 @@
       </div>
     </div>
 
-    <!-- Producto Base (bloqueado, sin eliminar) -->
-    <div class="product-card bg-white rounded-3xl p-4 sm:p-8 border-2 border-teal-400 card-shadow mb-8" data-product-id="1" data-locked="true" data-profit="30">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-3">
-        <div class="text-center sm:mx-auto">
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 product-title">📦 PRODUCTO 1</h2>
-          <p class="text-sm text-gray-500 mt-1">Base del cálculo (no eliminable)</p>
-        </div>
-        <span class="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 font-semibold shrink-0 self-center sm:self-auto">ID: P-1</span>
-      </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
-        <!-- Inversión Inicial -->
-        <div class="bg-gray-50 rounded-2xl p-4 sm:p-6 h-full">
-          <div class="flex items-center mb-4">
-            <span class="text-xl sm:text-2xl mr-2 sm:mr-3">💰</span>
-            <div>
-              <h4 class="text-base sm:text-lg font-bold text-gray-800">Inversión Inicial</h4>
-              <p class="text-gray-500 text-xs sm:text-sm">Gastos para arrancar</p>
-            </div>
-          </div>
-
-          <div class="inversion-items space-y-3 mb-4">
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
-              <input type="text" value="Equipo principal" placeholder="Describe el concepto (ej. Cámara, luces, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm" aria-label="Concepto de inversión inicial">
-              <div class="flex gap-2 items-center">
-                <div class="relative w-24 sm:w-28">
-                  <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                  <input type="number" value="15000" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm" onchange="calcularInversion();calcularProductos();">
-                </div>
-                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
-              </div>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
-              <input type="text" value="Mobiliario y decoración" placeholder="Describe el concepto (ej. Sillas, mesas, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm" aria-label="Concepto de inversión inicial">
-              <div class="flex gap-2 items-center">
-                <div class="relative w-24 sm:w-28">
-                  <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                  <input type="number" value="8000" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm" onchange="calcularInversion();calcularProductos();">
-                </div>
-                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
-              </div>
-            </div>
-          </div>
-
-          <button onclick="agregarInversion(this)" class="w-full p-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors mb-3 font-medium text-sm">
-            + Agregar costo inicial
-          </button>
-
-          <div class="bg-gradient-to-r from-gray-800 to-indigo-700 text-white p-3 rounded-lg text-center">
-            <p class="text-sm font-semibold">Total Inversión</p>
-            <p class="total-inversion text-xl font-bold"><span class="moneda">Q</span> 23,000</p>
-          </div>
-        </div>
-
-        <!-- Costos Mensuales -->
-        <div class="bg-gray-50 rounded-2xl p-6 h-full">
-          <div class="flex items-center mb-4">
-            <span class="text-2xl mr-3">📊</span>
-            <div>
-              <h4 class="text-lg font-bold text-gray-800">Costos Mensuales</h4>
-              <p class="text-gray-500 text-sm">Fijos y variables</p>
-            </div>
-          </div>
-
-          <!-- Fijos -->
-          <div class="mb-4">
-            <h5 class="text-sm font-semibold text-teal-700 mb-2">Costos Fijos</h5>
-            <div class="costos-fijos space-y-2 mb-3">
-              <div class="flex gap-2 items-center">
-                <input type="text" value="Alquiler/Renta" placeholder="Ej. alquiler del local" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs" aria-label="Concepto de costo fijo">
-                <div class="relative w-24">
-                  <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                  <input type="number" value="3000" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs" onchange="calcularCostos();">
-                </div>
-                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
-              </div>
-              <div class="flex gap-2 items-center">
-                <input type="text" value="Servicios básicos" placeholder="Ej. luz, agua, internet" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs" aria-label="Concepto de costo fijo">
-                <div class="relative w-24">
-                  <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                  <input type="number" value="800" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs" onchange="calcularCostos();">
-                </div>
-                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
-              </div>
-            </div>
-            <button onclick="agregarCostoFijo(this)" class="w-full p-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors text-xs mb-2">+ Agregar fijo</button>
-            <div class="p-2 bg-blue-50 rounded-lg">
-              <p class="font-semibold text-blue-800 text-xs">Total Fijos: <span class="total-fijos"><span class="moneda">Q</span> 3,800</span></p>
-            </div>
-          </div>
-
-          <!-- Variables -->
-          <div class="mb-4">
-            <h5 class="text-sm font-semibold text-purple-700 mb-2">Costos Variables</h5>
-            <div class="costos-variables space-y-2 mb-3">
-              <div class="flex gap-2 items-center">
-                <input type="text" value="Materiales por unidad" placeholder="Ej. insumos por pieza" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs" aria-label="Concepto de costo variable">
-                <div class="relative w-24">
-                  <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                  <input type="number" value="200" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs" onchange="calcularCostos();">
-                </div>
-                <button onclick="eliminarItem(this)" class="text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
-              </div>
-            </div>
-            <button onclick="agregarCostoVariable(this)" class="w-full p-2 bg-purple-100 text-purple-800 rounded-lg hover:bg-purple-200 transition-colors text-xs mb-2">+ Agregar variable</button>
-            <div class="p-2 bg-purple-50 rounded-lg">
-              <p class="font-semibold text-purple-800 text-xs">Total Variables: <span class="total-variables"><span class="moneda">Q</span> 200</span></p>
-            </div>
-          </div>
-
-          <!-- Horas -->
-          <div class="border-t border-gray-300 pt-4">
-            <h5 class="text-sm font-semibold text-gray-700 mb-2">⏰ Horas de Trabajo</h5>
-<p class="text-xs text-gray-600 mb-2">Consejo: indica tus horas/día, días/mes, horas del proyecto y tu tarifa. Esto impacta el costo fijo mensual.</p>
-            <div class="grid grid-cols-2 gap-3 mb-3">
-              <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Horas trabajadas por día</label>
-                <input type="number" placeholder="Ej. 8" aria-label="Horas trabajadas por día" min="0" class="horas-por-dia w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Días laborables por mes</label>
-                <input type="number" placeholder="Ej. 22" aria-label="Días laborables por mes" min="0" class="dias-por-mes w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Horas totales estimadas del proyecto</label>
-                <input type="number" placeholder="Ej. 12" aria-label="Horas totales del proyecto" min="0" class="horas-proyecto w-full p-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Tarifa por hora</label>
-                <div class="relative">
-                  <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">Q</span>
-                  <input type="number" placeholder="Ej. Q 150" aria-label="Tarifa por hora" min="0" class="honorarios-hora w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs" onchange="calcularHorasTrabajo();">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Configuración del Producto -->
-      <div class="bg-gray-50 rounded-2xl p-6 mb-8">
-        <div class="flex items-center mb-4">
-          <span class="text-2xl mr-3">🛍️</span>
-          <div>
-            <h4 class="text-lg font-bold text-gray-800">Configuración</h4>
-            <p class="text-gray-500 text-sm">Precio y producción</p>
-          </div>
-        </div>
-
-        <div class="space-y-4 mb-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-600 mb-2">Nombre del producto</label>
-            <input type="text" value="Producto ejemplo" placeholder="Nombre del producto o servicio" class="nombre-producto w-full p-3 border border-teal-400 rounded-lg focus:ring-2 focus:ring-indigo-400" aria-label="Nombre del producto o servicio" oninput="actualizarTituloProducto(this)">
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-600 mb-2">Costo de producción (auto)</label>
-            <div class="relative">
-              <span class="absolute left-3 top-3 text-teal-700 font-semibold moneda">Q</span>
-              <input type="number" value="500" class="costo-produccion w-full pl-8 pr-3 py-3 border border-teal-400 rounded-lg bg-gray-100" readonly>
-            </div>
-          </div>
-
-          <div class="bg-green-50 rounded-lg px-4 py-3 text-green-800 text-sm">
-            El precio se calcula automáticamente a partir del costo de producción y la estrategia elegida.
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-600 mb-2">Unidades producidas/mes</label>
-            <input type="number" value="10" min="1" class="unidades-mensuales w-full p-3 border border-teal-400 rounded-lg focus:ring-2 focus:ring-indigo-400" onchange="calcularProductos()">
-          </div>
-        </div>
-      </div>
-
-      <!-- Resultados -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        <div class="bg-blue-50 p-3 rounded-lg text-center">
-          <p class="text-xs text-blue-700">Costo total</p>
-          <p class="costo-total text-sm font-bold text-blue-800"><span class="moneda">Q</span> 538</p>
-        </div>
-        <div class="bg-red-50 p-3 rounded-lg text-center">
-          <p class="text-xs text-red-700">Impuestos</p>
-          <p class="total-impuestos text-sm font-bold text-red-800"><span class="moneda">Q</span> 220</p>
-        </div>
-        <div class="bg-purple-50 p-3 rounded-lg text-center">
-          <p class="text-xs text-purple-700">Margen</p>
-          <p class="margen-porcentaje text-sm font-bold text-purple-800">24.2%</p>
-        </div>
-      </div>
-      <!-- No hay botón eliminar en producto base -->
-    </div>
 
     <!-- Contenedor de Productos Adicionales -->
     <div id="productosCompletosContainer" class="space-y-8"></div>
@@ -536,7 +349,7 @@
   <script>
     // Estado global
     let monedaActual = 'Q';
-    let contadorProductos = 1; // Producto base = 1
+    let contadorProductos = 0; // Sin producto base
     let impuestosPersonalizados = [];
 
     // Helpers
@@ -637,6 +450,84 @@
         actualizarCotizacion();
         return;
       }
+
+      // Botones del producto base y adicionales
+      // Agregar inversión
+      if (e.target.classList.contains('add-inversion')) {
+        const card = e.target.closest('.product-card');
+        const container = card.querySelector('.inversion-items');
+        const row = document.createElement('div');
+        row.className = 'flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center';
+        row.innerHTML = `
+          <input type="text" placeholder="Describe el concepto (ej. Cámara, luces, etc.)" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm" aria-label="Concepto de inversión inicial">
+          <div class="flex gap-2 items-center">
+            <div class="relative w-24 sm:w-28">
+              <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+              <input type="number" value="0" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
+            </div>
+            <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
+          </div>
+        `;
+        container.appendChild(row);
+        calcularInversion(); calcularProductos(); actualizarCotizacion();
+        return;
+      }
+
+      // Agregar costo fijo
+      if (e.target.classList.contains('add-fijo')) {
+        const card = e.target.closest('.product-card');
+        const container = card.querySelector('.costos-fijos');
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-center';
+        row.innerHTML = `
+          <input type="text" placeholder="Ej. alquiler del local" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs" aria-label="Concepto de costo fijo">
+          <div class="relative w-24">
+            <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+            <input type="number" value="0" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
+          </div>
+          <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
+        `;
+        container.appendChild(row);
+        calcularCostos(); actualizarCotizacion();
+        return;
+      }
+
+      // Agregar costo variable
+      if (e.target.classList.contains('add-variable')) {
+        const card = e.target.closest('.product-card');
+        const container = card.querySelector('.costos-variables');
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-center';
+        row.innerHTML = `
+          <input type="text" placeholder="Ej. insumos por pieza" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs" aria-label="Concepto de costo variable">
+          <div class="relative w-24">
+            <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+            <input type="number" value="0" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
+          </div>
+          <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
+        `;
+        container.appendChild(row);
+        calcularCostos(); actualizarCotizacion();
+        return;
+      }
+
+      // Eliminar item
+      if (e.target.classList.contains('eliminar-item') || e.target.textContent.includes('🗑️')) {
+        const btn = e.target;
+        
+        // Buscar la fila que contiene este botón - empezar desde el botón mismo
+        let row = btn.closest('.flex');
+        
+        // Verificar que la fila esté dentro de una sección válida
+        if (row) {
+          const container = row.parentElement;
+          if (container && (container.classList.contains('inversion-items') || container.classList.contains('costos-fijos') || container.classList.contains('costos-variables'))) {
+            row.remove();
+            calcularInversion(); calcularCostos(); calcularProductos(); actualizarCotizacion();
+          }
+        }
+        return;
+      }
     });
 
     // Modal de eliminación
@@ -646,10 +537,10 @@
     let lastFocused = null;
 
     function actualizarConteoProductos(){
-      const extraCards = qsa('.product-card:not([data-locked="true"])');
+      const allCards = qsa('.product-card');
       const el = qs('#productCount');
-      if (el) el.textContent = String(extraCards.length);
-      return extraCards.length;
+      if (el) el.textContent = String(allCards.length);
+      return allCards.length;
     }
 
     function openDeleteModal(targetId) {
@@ -685,15 +576,15 @@
       const id = modal.dataset.targetId;
       if (!id) { closeDeleteModal(); return; }
       const card = qs(`.product-card[data-product-id="${CSS.escape(id)}"]`);
-      if (card && card.getAttribute('data-locked') !== 'true') {
+      if (card) {
         // Eliminar tarjeta
         card.remove();
         // Actualizar contador global según tarjetas visibles
         const count = actualizarConteoProductos();
-        // Renumerar lo visible para mantener P-2, P-3...
+        // Renumerar lo visible para mantener P-1, P-2, P-3...
         renumerarTarjetas();
-        // Reajustar numeración futura: base (1) + existentes = siguiente índice
-        contadorProductos = 1 + count;
+        // Reajustar numeración futura: existentes = siguiente índice
+        contadorProductos = count;
         calcularInversion();
         calcularCostos();
         calcularProductos();
@@ -719,7 +610,7 @@
     qs('#btnAddProduct').addEventListener('click', () => {
       // Determinar siguiente índice basado en tarjetas existentes
       const currentCount = actualizarConteoProductos();
-      contadorProductos = 1 + currentCount; // base (1) + actuales
+      contadorProductos = currentCount + 1; // siguiente número
       const card = crearTarjetaProducto(contadorProductos);
       qs('#productosCompletosContainer').appendChild(card);
       actualizarConteoProductos();
@@ -730,9 +621,9 @@
     });
 
     function renumerarTarjetas() {
-      // Asegura títulos y IDs consecutivos a partir de 2
-      let index = 2;
-      qsa('.product-card:not([data-locked="true"])').forEach(card => {
+      // Asegura títulos y IDs consecutivos a partir de 1
+      let index = 1;
+      qsa('.product-card').forEach(card => {
         card.setAttribute('data-product-id', String(index));
         const title = card.querySelector('.product-title');
         if (title) title.textContent = `📦 PRODUCTO ${index}`;
@@ -744,7 +635,7 @@
 
     function crearTarjetaProducto(id) {
       const wrapper = document.createElement('div');
-      wrapper.className = 'product-card bg-white rounded-3xl p-8 border-2 border-teal-400 card-shadow';
+      wrapper.className = 'product-card bg-white rounded-3xl p-8 border-2 border-teal-400 card-shadow mb-8';
       wrapper.setAttribute('data-product-id', String(id));
       wrapper.setAttribute('data-profit', '30');
 
@@ -906,193 +797,178 @@
           </button>
         </div>
       `;
-      // Eventos locales de inputs recién creados
-      wrapper.addEventListener('input', (e) => {
-        const target = e.target;
-        if (['number','text'].includes(target.type)) {
-          if (target.closest('.inversion-items') || target.closest('.costos-fijos') || target.closest('.costos-variables')) {
-            calcularInversion();
-            calcularCostos();
-          }
-          if (target.classList.contains('unidades-mensuales') || target.classList.contains('horas-por-dia') || target.classList.contains('dias-por-mes') || target.classList.contains('honorarios-hora')) {
-            calcularProductos();
-          }
-        }
-      });
-      // Botones locales
-      wrapper.addEventListener('click', (e) => {
-        if (e.target.classList.contains('eliminar-item')) {
-          e.preventDefault();
-          e.target.closest('.flex').remove();
-          calcularInversion(); calcularCostos(); calcularProductos(); actualizarCotizacion();
-        }
-        if (e.target.classList.contains('add-inversion')) {
-          const c = wrapper.querySelector('.inversion-items');
-          const row = document.createElement('div');
-          row.className = 'flex gap-3 items-center';
-          row.innerHTML = `
-            <input type="text" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-sm">
-            <div class="relative w-28">
-              <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-              <input type="number" value="0" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-sm">
-            </div>
-            <button class="text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded eliminar-item">🗑️</button>
-          `;
-          c.appendChild(row);
-        }
-        if (e.target.classList.contains('add-fijo')) {
-          const c = wrapper.querySelector('.costos-fijos');
-          const row = document.createElement('div');
-          row.className = 'flex gap-2 items-center';
-          row.innerHTML = `
-            <input type="text" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
-            <div class="relative w-24">
-              <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-              <input type="number" value="0" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
-            </div>
-            <button class="text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded eliminar-item">🗑️</button>
-          `;
-          c.appendChild(row);
-        }
-        if (e.target.classList.contains('add-variable')) {
-          const c = wrapper.querySelector('.costos-variables');
-          const row = document.createElement('div');
-          row.className = 'flex gap-2 items-center';
-          row.innerHTML = `
-            <input type="text" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
-            <div class="relative w-24">
-              <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-              <input type="number" value="0" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
-            </div>
-            <button class="text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded eliminar-item">🗑️</button>
-          `;
-          c.appendChild(row);
-        }
-      });
+      
       return wrapper;
     }
 
     // Cálculos
-    function calcularHorasTrabajo() {
-      qsa('.product-card').forEach(card => {
-        const horasPorDia = parseFloat(qs('.horas-por-dia', card)?.value) || 0;
-        const diasPorMes = parseFloat(qs('.dias-por-mes', card)?.value) || 0;
-        const honorHora = parseFloat(qs('.honorarios-hora', card)?.value) || 0;
-        const totalHoras = horasPorDia * diasPorMes;
-        const totalHonor = totalHoras * honorHora;
-        const horasEl = qs('.total-horas-mensuales', card);
-        const honorEl = qs('.costo-honorarios-mensuales', card);
-        if (horasEl) horasEl.textContent = `${totalHoras}`;
-        if (honorEl) honorEl.innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(totalHonor).toLocaleString()}`;
-      });
-      calcularCostos();
-    }
-
     function calcInversionCard(card) {
       let total = 0;
-      qsa('.inversion-items input[type="number"]', card).forEach(i => total += parseFloat(i.value) || 0);
+      qsa('.inversion-items input[type="number"]', card).forEach(i => {
+        const valor = parseFloat(i.value) || 0;
+        total += valor;
+      });
       const target = qs('.total-inversion', card);
       if (target) target.innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(total).toLocaleString()}`;
       return total;
     }
+
     function calcularInversion() {
       qsa('.product-card').forEach(card => calcInversionCard(card));
     }
 
     function calcCostosCard(card) {
-      // fijos + honorarios
+      // Calcular costos fijos (sin honorarios por ahora)
       let totalFijos = 0;
-      qsa('.costos-fijos input[type="number"]', card).forEach(i => totalFijos += parseFloat(i.value) || 0);
+      qsa('.costos-fijos input[type="number"]', card).forEach(i => {
+        const valor = parseFloat(i.value) || 0;
+        totalFijos += valor;
+      });
+
+      // Agregar honorarios mensuales a costos fijos
       const hpd = parseFloat(qs('.horas-por-dia', card)?.value) || 0;
       const dpm = parseFloat(qs('.dias-por-mes', card)?.value) || 0;
       const hh = parseFloat(qs('.honorarios-hora', card)?.value) || 0;
-      totalFijos += (hpd * dpm * hh);
+      const honorariosMensuales = hpd * dpm * hh;
+      totalFijos += honorariosMensuales;
+
+      // Mostrar total de costos fijos
       const fijosEl = qs('.total-fijos', card);
       if (fijosEl) fijosEl.innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(totalFijos).toLocaleString()}`;
 
+      // Calcular costos variables
       let totalVariables = 0;
-      qsa('.costos-variables input[type="number"]', card).forEach(i => totalVariables += parseFloat(i.value) || 0);
+      qsa('.costos-variables input[type="number"]', card).forEach(i => {
+        const valor = parseFloat(i.value) || 0;
+        totalVariables += valor;
+      });
+
+      // Mostrar total de costos variables
       const varEl = qs('.total-variables', card);
       if (varEl) varEl.innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(totalVariables).toLocaleString()}`;
+
       return { totalFijos, totalVariables };
     }
+
     function calcularCostos() {
       qsa('.product-card').forEach(card => calcCostosCard(card));
-      calcularProductos();
-      calcularEquilibrio();
-      actualizarCotizacion();
     }
 
     function calcularProductos() {
       const impRate = impuestosPersonalizados.reduce((s, i) => s + i.porcentaje, 0);
+      
       qsa('.product-card').forEach(card => {
-        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 0;
+        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 1;
+        
+        // Obtener inversión y calcular amortización mensual
         const inversion = calcInversionCard(card);
         const amortMensual = inversion / 12;
 
+        // Obtener costos mensuales
         const { totalFijos, totalVariables } = calcCostosCard(card);
+        
+        // Calcular costo de producción por unidad
         const costoFijoUnidad = unidades > 0 ? (totalFijos + amortMensual) / unidades : 0;
         const costoProduccion = costoFijoUnidad + totalVariables;
+        
+        // Actualizar campo de costo de producción
         const cpEl = qs('.costo-produccion', card);
-        if (cpEl) cpEl.value = Math.round(costoProduccion);
+        if (cpEl) cpEl.value = costoProduccion.toFixed(2);
 
+        // Calcular precio con margen de ganancia
         const profit = parseFloat(card.dataset.profit || '30') || 30;
-        const precio = costoProduccion * (1 + profit / 100);
-        const impuestos = precio * impRate / 100;
-        const ganancia = precio - costoProduccion - impuestos;
-        const margenPct = precio > 0 ? (ganancia / precio) * 100 : 0;
+        const precioSinImpuestos = costoProduccion * (1 + profit / 100);
+        
+        // Calcular impuestos sobre el precio
+        const impuestos = precioSinImpuestos * impRate / 100;
+        const precioFinal = precioSinImpuestos + impuestos;
+        
+        // Calcular ganancia neta (precio final - costo - impuestos)
+        const gananciaNeta = precioFinal - costoProduccion - impuestos;
+        const margenPct = precioFinal > 0 ? (gananciaNeta / precioFinal) * 100 : 0;
 
-        qs('.costo-total', card).innerHTML = `<span class="moneda">${monedaActual}</span> ${costoProduccion.toFixed(2)}`;
-        qs('.total-impuestos', card).innerHTML = `<span class="moneda">${monedaActual}</span> ${impuestos.toFixed(2)}`;
+        // Actualizar displays
+        const costoTotalEl = qs('.costo-total', card);
+        if (costoTotalEl) costoTotalEl.innerHTML = `<span class="moneda">${monedaActual}</span> ${costoProduccion.toFixed(2)}`;
+        
+        const impuestosEl = qs('.total-impuestos', card);
+        if (impuestosEl) impuestosEl.innerHTML = `<span class="moneda">${monedaActual}</span> ${impuestos.toFixed(2)}`;
+        
         const margenEl = qs('.margen-porcentaje', card);
         if (margenEl) margenEl.textContent = `${margenPct.toFixed(1)}%`;
       });
 
+      // Recalcular equilibrio y cotización después de actualizar productos
       calcularEquilibrio();
       actualizarCotizacion();
     }
 
     function calcularEquilibrio() {
       const cards = qsa('.product-card');
-      let totalFijos = 0, totalInv = 0, totalIngresos = 0, totalUnidades = 0, totalVarPuross = 0;
+      let totalFijosMensuales = 0;
+      let totalInversion = 0;
+      let totalIngresos = 0;
+      let totalUnidades = 0;
+      let totalCostosVariables = 0;
 
       cards.forEach(card => {
-        qsa('.costos-fijos input[type="number"]', card).forEach(i => totalFijos += parseFloat(i.value) || 0);
+        // Sumar costos fijos mensuales (incluyendo honorarios)
+        qsa('.costos-fijos input[type="number"]', card).forEach(i => {
+          totalFijosMensuales += parseFloat(i.value) || 0;
+        });
+        
         const hpd = parseFloat(qs('.horas-por-dia', card)?.value) || 0;
         const dpm = parseFloat(qs('.dias-por-mes', card)?.value) || 0;
         const hh = parseFloat(qs('.honorarios-hora', card)?.value) || 0;
-        totalFijos += (hpd * dpm * hh);
+        totalFijosMensuales += (hpd * dpm * hh);
 
-        qsa('.inversion-items input[type="number"]', card).forEach(i => totalInv += parseFloat(i.value) || 0);
+        // Sumar inversión total
+        qsa('.inversion-items input[type="number"]', card).forEach(i => {
+          totalInversion += parseFloat(i.value) || 0;
+        });
 
-        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 0;
-        const cp = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+        // Calcular ingresos y costos variables por producto
+        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 1;
+        const costoProduccion = parseFloat(qs('.costo-produccion', card)?.value) || 0;
         const profit = parseFloat(card.dataset.profit || '30') || 30;
-        const precio = cp * (1 + profit / 100);
-        totalIngresos += precio * unidades;
+        
+        // Precio sin impuestos (para el análisis de equilibrio)
+        const precioUnitario = costoProduccion * (1 + profit / 100);
+        
+        totalIngresos += precioUnitario * unidades;
         totalUnidades += unidades;
 
-        let varUnit = 0;
-        qsa('.costos-variables input[type="number"]', card).forEach(i => varUnit += parseFloat(i.value) || 0);
-        totalVarPuross += varUnit * unidades;
+        // Costos variables totales
+        let costosVariablesCard = 0;
+        qsa('.costos-variables input[type="number"]', card).forEach(i => {
+          costosVariablesCard += parseFloat(i.value) || 0;
+        });
+        totalCostosVariables += costosVariablesCard * unidades;
       });
 
-      const amort = totalInv / 12;
-      const fijosTotales = totalFijos + amort;
-      const precioProm = totalUnidades > 0 ? totalIngresos / totalUnidades : 0;
-      const varProm = totalUnidades > 0 ? totalVarPuross / totalUnidades : 0;
+      // Calcular amortización mensual de la inversión
+      const amortizacionMensual = totalInversion / 12;
+      
+      // Total de costos fijos mensuales (incluyendo amortización)
+      const costosFijosTotales = totalFijosMensuales + amortizacionMensual;
+      
+      // Promedios
+      const precioPromedio = totalUnidades > 0 ? totalIngresos / totalUnidades : 0;
+      const costoVariablePromedio = totalUnidades > 0 ? totalCostosVariables / totalUnidades : 0;
 
-      qs('#costosFijosEquilibrioDisplay').textContent = Math.round(fijosTotales).toLocaleString();
-      qs('#precioPromedioServicioDisplay').textContent = Math.round(precioProm).toLocaleString();
-      qs('#costoVariableServicioDisplay').textContent = Math.round(varProm).toLocaleString();
+      // Actualizar displays
+      qs('#costosFijosEquilibrioDisplay').textContent = Math.round(costosFijosTotales).toLocaleString();
+      qs('#precioPromedioServicioDisplay').textContent = Math.round(precioPromedio).toLocaleString();
+      qs('#costoVariableServicioDisplay').textContent = Math.round(costoVariablePromedio).toLocaleString();
 
-      const margenContrib = precioProm - varProm;
-      const unidadesEq = margenContrib > 0 ? fijosTotales / margenContrib : 0;
-      const ingresosMin = unidadesEq * precioProm;
+      // Cálculo del punto de equilibrio
+      const margenContribucion = precioPromedio - costoVariablePromedio;
+      const unidadesEquilibrio = margenContribucion > 0 ? costosFijosTotales / margenContribucion : 0;
+      const ingresosMinimos = unidadesEquilibrio * precioPromedio;
 
-      qs('#margenContribucion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(margenContrib).toLocaleString()}`;
-      qs('#serviciosEquilibrio').textContent = `${Math.ceil(unidadesEq)} unidades/mes`;
-      qs('#ingresosMinimos').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(ingresosMin).toLocaleString()}`;
+      qs('#margenContribucion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(margenContribucion).toLocaleString()}`;
+      qs('#serviciosEquilibrio').textContent = `${Math.ceil(unidadesEquilibrio)} unidades/mes`;
+      qs('#ingresosMinimos').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(ingresosMinimos).toLocaleString()}`;
     }
 
     // Cotización
@@ -1124,39 +1000,58 @@
       // tabla
       const tbody = qs('#tablaProductosCotizacion');
       const cards = qsa('.product-card');
-      let totalGeneral = 0, totalGan = 0, totalImp = 0, acumMargenPct = 0, count = 0;
+      let totalGeneral = 0, totalGananciaNeta = 0, totalImpuestos = 0, acumMargenPct = 0, count = 0;
       const impRate = impuestosPersonalizados.reduce((s,i)=>s+i.porcentaje,0);
 
-      tbody.innerHTML = cards.map(card => {
+      tbody.innerHTML = cards.map((card, index) => {
         const nombre = qs('.nombre-producto', card)?.value || 'Sin nombre';
-        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 0;
-        const cp = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 1;
+        const costoProduccion = parseFloat(qs('.costo-produccion', card)?.value) || 0;
         const profit = parseFloat(card.dataset.profit || '30') || 30;
-        const precio = cp * (1 + profit / 100);
-        const margenContrib = precio - cp;
-        const imp = precio * impRate / 100;
-        const gan = precio - cp - imp;
+        
+        // Precio sin impuestos
+        const precioSinImpuestos = costoProduccion * (1 + profit / 100);
+        
+        // Impuestos sobre el precio
+        const impuestosUnitarios = precioSinImpuestos * impRate / 100;
+        
+        // Precio final (con impuestos)
+        const precioFinal = precioSinImpuestos + impuestosUnitarios;
+        
+        // Margen de contribución (precio sin impuestos - costo)
+        const margenContribucion = precioSinImpuestos - costoProduccion;
+        
+        // Ganancia neta (precio final - costo - impuestos)
+        const gananciaNeta = precioFinal - costoProduccion - impuestosUnitarios;
 
-        totalGeneral += (precio * unidades);
-        totalGan += (gan * unidades);
-        totalImp += (imp * unidades);
-        const margPct = precio > 0 ? (gan / precio) * 100 : 0;
-        acumMargenPct += margPct; count++;
+        // Totales
+        const subtotalSinImpuestos = precioSinImpuestos * unidades;
+        const subtotalImpuestos = impuestosUnitarios * unidades;
+        const subtotalFinal = precioFinal * unidades;
+        const subtotalGananciaNeta = gananciaNeta * unidades;
+
+        totalGeneral += subtotalFinal;
+        totalGananciaNeta += subtotalGananciaNeta;
+        totalImpuestos += subtotalImpuestos;
+        
+        const margPct = precioFinal > 0 ? (gananciaNeta / precioFinal) * 100 : 0;
+        acumMargenPct += margPct; 
+        count++;
 
         return `
-          <tr class="hover:bg-amber-50 transition-colors duration-200 ${count % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
+          <tr class="hover:bg-amber-50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
             <td class="p-2 sm:p-4 font-medium text-gray-800 text-xs sm:text-sm">${nombre}</td>
             <td class="p-2 sm:p-4 text-center text-gray-700 text-xs sm:text-sm">${unidades}</td>
-            <td class="p-2 sm:p-4 text-right text-gray-700 text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${precio.toFixed(2)}</td>
-            <td class="p-2 sm:p-4 text-right text-green-600 font-semibold text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${margenContrib.toFixed(2)}</td>
-            <td class="p-2 sm:p-4 text-right font-bold text-amber-800 text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${(precio*unidades).toFixed(2)}</td>
+            <td class="p-2 sm:p-4 text-right text-gray-700 text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${precioFinal.toFixed(2)}</td>
+            <td class="p-2 sm:p-4 text-right text-green-600 font-semibold text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${margenContribucion.toFixed(2)}</td>
+            <td class="p-2 sm:p-4 text-right font-bold text-amber-800 text-xs sm:text-sm"><span class="moneda">${monedaActual}</span> ${subtotalFinal.toFixed(2)}</td>
           </tr>
         `;
       }).join('');
 
       qs('#totalGeneralCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalGeneral.toFixed(2)}`;
-      qs('#gananciaNetaCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalGan.toFixed(2)}`;
-      qs('#totalImpuestosCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalImp.toFixed(2)}`;
+      qs('#gananciaNetaCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalGananciaNeta.toFixed(2)}`;
+      qs('#totalImpuestosCotizacion').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalImpuestos.toFixed(2)}`;
       const margenProm = count > 0 ? (acumMargenPct / count) : 0;
       qs('#margenPromedioCotizacion').textContent = `${margenProm.toFixed(1)}%`;
     }
@@ -1306,10 +1201,13 @@
     document.addEventListener('input', (e) => {
       const t = e.target;
       if (t.matches('.inversion-items input[type="number"], .costos-fijos input[type="number"], .costos-variables input[type="number"]')) {
-        calcularInversion(); calcularCostos();
+        calcularInversion(); 
+        calcularCostos();
+        calcularProductos(); // Recalcular productos después de cambios en costos
       }
       if (t.matches('.unidades-mensuales, .horas-por-dia, .dias-por-mes, .honorarios-hora')) {
-        calcularProductos();
+        calcularCostos(); // Recalcular costos primero (incluye honorarios)
+        calcularProductos(); // Luego productos
       }
       if (t.id === 'beneficiosClave' || t.id === 'diasValidez' || t.id === 'fechaEmisionInput') {
         actualizarCotizacion();
@@ -1323,13 +1221,278 @@
       titulo.textContent = nombre ? `📦 ${nombre.toUpperCase()}` : `📦 ${card.getAttribute('data-locked')==='true' ? 'PRODUCTO 1' : 'PRODUCTO ' + card.getAttribute('data-product-id')}`;
     }
 
+    // Sistema de guardado automático en localStorage
+    const STORAGE_KEY = 'calculadora_precios_data';
+    
+    function guardarDatos() {
+      try {
+        const data = {
+          version: '1.0',
+          timestamp: Date.now(),
+          monedaActual,
+          contadorProductos,
+          impuestosPersonalizados,
+          configuracionGeneral: {
+            fechaEmision: qs('#fechaEmisionInput')?.value || '',
+            diasValidez: qs('#diasValidez')?.value || '',
+            beneficiosClave: qs('#beneficiosClave')?.value || '',
+            customProfitGlobal: qs('#inputCustomProfitGlobal')?.value || '',
+            estrategiaActiva: qs('.estrategia-btn.estrategia-activa')?.getAttribute('data-profit') || '30'
+          },
+          productos: []
+        };
+
+        // Guardar datos de cada producto
+        qsa('.product-card').forEach(card => {
+          const productId = card.getAttribute('data-product-id');
+          const profit = card.getAttribute('data-profit') || '30';
+
+          const producto = {
+            id: productId,
+            profit: profit,
+            nombre: qs('.nombre-producto', card)?.value || '',
+            unidadesMensuales: qs('.unidades-mensuales', card)?.value || '1',
+            horasTrabajo: {
+              horasPorDia: qs('.horas-por-dia', card)?.value || '',
+              diasPorMes: qs('.dias-por-mes', card)?.value || '',
+              horasProyecto: qs('.horas-proyecto', card)?.value || '',
+              honorariosHora: qs('.honorarios-hora', card)?.value || ''
+            },
+            inversion: [],
+            costosFijos: [],
+            costosVariables: []
+          };
+
+          // Guardar inversión inicial
+          qsa('.inversion-items .flex', card).forEach(row => {
+            const concepto = qs('input[type="text"]', row)?.value || '';
+            const valor = qs('input[type="number"]', row)?.value || '0';
+            if (concepto || valor !== '0') {
+              producto.inversion.push({ concepto, valor });
+            }
+          });
+
+          // Guardar costos fijos
+          qsa('.costos-fijos .flex', card).forEach(row => {
+            const concepto = qs('input[type="text"]', row)?.value || '';
+            const valor = qs('input[type="number"]', row)?.value || '0';
+            if (concepto || valor !== '0') {
+              producto.costosFijos.push({ concepto, valor });
+            }
+          });
+
+          // Guardar costos variables
+          qsa('.costos-variables .flex', card).forEach(row => {
+            const concepto = qs('input[type="text"]', row)?.value || '';
+            const valor = qs('input[type="number"]', row)?.value || '0';
+            if (concepto || valor !== '0') {
+              producto.costosVariables.push({ concepto, valor });
+            }
+          });
+
+          data.productos.push(producto);
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (error) {
+        console.warn('Error al guardar datos:', error);
+      }
+    }
+
+    function cargarDatos() {
+      try {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (!savedData) return false;
+
+        const data = JSON.parse(savedData);
+        if (!data.version) return false;
+
+        // Restaurar configuración general
+        monedaActual = data.monedaActual || 'Q';
+        contadorProductos = data.contadorProductos || 1;
+        impuestosPersonalizados = data.impuestosPersonalizados || [];
+
+        // Actualizar selector de moneda
+        qs('#monedaSelector').value = monedaActual;
+        qsa('.moneda').forEach(el => el.textContent = monedaActual);
+
+        // Restaurar campos de configuración
+        if (data.configuracionGeneral) {
+          const config = data.configuracionGeneral;
+          if (config.fechaEmision) qs('#fechaEmisionInput').value = config.fechaEmision;
+          if (config.diasValidez) qs('#diasValidez').value = config.diasValidez;
+          if (config.beneficiosClave) qs('#beneficiosClave').value = config.beneficiosClave;
+          if (config.customProfitGlobal) qs('#inputCustomProfitGlobal').value = config.customProfitGlobal;
+          
+          // Restaurar estrategia activa
+          qsa('.estrategia-btn').forEach(btn => btn.classList.remove('estrategia-activa','bg-blue-50','border-blue-300'));
+          qs('#customStrategy')?.classList.remove('estrategia-activa');
+          
+          if (config.customProfitGlobal && config.customProfitGlobal !== '') {
+            qs('#customStrategy')?.classList.add('estrategia-activa');
+          } else {
+            const activeBtn = qs(`.estrategia-btn[data-profit="${config.estrategiaActiva}"]`);
+            if (activeBtn) activeBtn.classList.add('estrategia-activa');
+          }
+        }
+
+        // Renderizar impuestos
+        renderImpuestos();
+
+        // Restaurar productos
+        if (data.productos && data.productos.length > 0) {
+          // Limpiar productos existentes
+          qsa('.product-card').forEach(card => card.remove());
+
+          data.productos.forEach(producto => {
+            // Crear producto
+            const card = crearTarjetaProducto(producto.id);
+            qs('#productosCompletosContainer').appendChild(card);
+
+            // Restaurar datos básicos
+            card.setAttribute('data-profit', producto.profit || '30');
+            if (producto.nombre) qs('.nombre-producto', card).value = producto.nombre;
+            if (producto.unidadesMensuales) qs('.unidades-mensuales', card).value = producto.unidadesMensuales;
+
+            // Restaurar horas de trabajo
+            if (producto.horasTrabajo) {
+              const ht = producto.horasTrabajo;
+              if (ht.horasPorDia) qs('.horas-por-dia', card).value = ht.horasPorDia;
+              if (ht.diasPorMes) qs('.dias-por-mes', card).value = ht.diasPorMes;
+              if (ht.horasProyecto) qs('.horas-proyecto', card).value = ht.horasProyecto;
+              if (ht.honorariosHora) qs('.honorarios-hora', card).value = ht.honorariosHora;
+            }
+
+            // Restaurar inversión inicial
+            const inversionContainer = qs('.inversion-items', card);
+            if (inversionContainer && producto.inversion) {
+              // Limpiar filas existentes
+              inversionContainer.innerHTML = '';
+              
+              producto.inversion.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center';
+                row.innerHTML = `
+                  <input type="text" value="${item.concepto}" placeholder="Describe el concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
+                  <div class="flex gap-2 items-center">
+                    <div class="relative w-24 sm:w-28">
+                      <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                      <input type="number" value="${item.valor}" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
+                    </div>
+                    <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
+                  </div>
+                `;
+                inversionContainer.appendChild(row);
+              });
+            }
+
+            // Restaurar costos fijos
+            const fijosContainer = qs('.costos-fijos', card);
+            if (fijosContainer && producto.costosFijos) {
+              fijosContainer.innerHTML = '';
+              
+              producto.costosFijos.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex gap-2 items-center';
+                row.innerHTML = `
+                  <input type="text" value="${item.concepto}" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
+                  <div class="relative w-24">
+                    <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                    <input type="number" value="${item.valor}" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
+                  </div>
+                  <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
+                `;
+                fijosContainer.appendChild(row);
+              });
+            }
+
+            // Restaurar costos variables
+            const variablesContainer = qs('.costos-variables', card);
+            if (variablesContainer && producto.costosVariables) {
+              variablesContainer.innerHTML = '';
+              
+              producto.costosVariables.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex gap-2 items-center';
+                row.innerHTML = `
+                  <input type="text" value="${item.concepto}" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
+                  <div class="relative w-24">
+                    <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                    <input type="number" value="${item.valor}" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
+                  </div>
+                  <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded">🗑️</button>
+                `;
+                variablesContainer.appendChild(row);
+              });
+            }
+
+            // Actualizar título del producto
+            actualizarTituloProducto(qs('.nombre-producto', card));
+          });
+
+          // Actualizar contador de productos
+          actualizarConteoProductos();
+        }
+
+        return true;
+      } catch (error) {
+        console.warn('Error al cargar datos:', error);
+        return false;
+      }
+    }
+
+    // Guardar automáticamente cuando hay cambios
+    function setupAutoSave() {
+      // Guardar en cambios de inputs
+      document.addEventListener('input', debounce(guardarDatos, 1000));
+      document.addEventListener('change', debounce(guardarDatos, 500));
+      
+      // Guardar en clicks importantes (agregar/eliminar elementos)
+      document.addEventListener('click', (e) => {
+        if (e.target.matches('.eliminar-item, .add-inversion, .add-fijo, .add-variable, .delete-btn, .estrategia-btn, #btnAgregarImpuesto, [data-remove-tax], #btnAddProduct')) {
+          setTimeout(guardarDatos, 100); // Pequeño delay para que se complete la acción
+        }
+      });
+
+      // Guardar antes de cerrar la página
+      window.addEventListener('beforeunload', guardarDatos);
+      
+      // Guardar periódicamente (cada 30 segundos)
+      setInterval(guardarDatos, 30000);
+    }
+
+    // Función debounce para evitar guardar demasiado frecuentemente
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
     // Boot
-    renderImpuestos();
-    calcularInversion();
-    calcularCostos();
-    calcularProductos();
-    calcularEquilibrio();
-    initFechas();
+    const datosRestaurados = cargarDatos();
+    
+    if (!datosRestaurados) {
+      // Si no hay datos guardados, inicializar normalmente
+      renderImpuestos();
+      initFechas();
+      actualizarConteoProductos();
+    } else {
+      // Si se restauraron datos, recalcular todo
+      calcularInversion();
+      calcularCostos();
+      calcularProductos();
+      calcularEquilibrio();
+      actualizarCotizacion();
+    }
+    
+    // Configurar guardado automático
+    setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984db169a14ad7b3',t:'MTc1ODgzNjU2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9860802283c274b4',t:'MTc1OTAzMzc3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
