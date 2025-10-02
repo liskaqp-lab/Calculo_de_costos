@@ -515,16 +515,39 @@
       if (e.target.classList.contains('eliminar-item') || e.target.textContent.includes('🗑️')) {
         const btn = e.target;
         
-        // Buscar la fila que contiene este botón - empezar desde el botón mismo
-        let row = btn.closest('.flex');
+        // Buscar la fila que contiene este botón
+        // Subir por el DOM hasta encontrar un elemento que:
+        // 1. Sea un div
+        // 2. Contenga al menos un input
+        // 3. Su padre sea uno de los contenedores válidos
+        let currentElement = btn;
+        let targetRow = null;
         
-        // Verificar que la fila esté dentro de una sección válida
-        if (row) {
-          const container = row.parentElement;
-          if (container && (container.classList.contains('inversion-items') || container.classList.contains('costos-fijos') || container.classList.contains('costos-variables'))) {
-            row.remove();
-            calcularInversion(); calcularCostos(); calcularProductos(); actualizarCotizacion();
+        while (currentElement && currentElement !== document.body) {
+          currentElement = currentElement.parentElement;
+          
+          if (currentElement && 
+              currentElement.tagName === 'DIV' && 
+              currentElement.querySelector('input') &&
+              currentElement.parentElement) {
+            
+            const parentContainer = currentElement.parentElement;
+            if (parentContainer.classList.contains('inversion-items') || 
+                parentContainer.classList.contains('costos-fijos') || 
+                parentContainer.classList.contains('costos-variables')) {
+              targetRow = currentElement;
+              break;
+            }
           }
+        }
+        
+        // Si encontramos la fila correcta, eliminarla
+        if (targetRow) {
+          targetRow.remove();
+          calcularInversion(); 
+          calcularCostos(); 
+          calcularProductos(); 
+          actualizarCotizacion();
         }
         return;
       }
@@ -1494,5 +1517,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9860802283c274b4',t:'MTc1OTAzMzc3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98805bb4142b1350',t:'MTc1OTM2NzgyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
