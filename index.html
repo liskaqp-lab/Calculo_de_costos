@@ -189,6 +189,8 @@
       </div>
     </div>
 
+
+
     <!-- Cotización -->
     <div class="bg-white rounded-2xl p-8 card-shadow mb-8">
       <div class="flex items-center mb-6">
@@ -330,6 +332,261 @@
       </div>
     </div>
 
+    <!-- Proyecciones Financieras -->
+    <div class="bg-white rounded-2xl p-4 sm:p-8 card-shadow mb-8">
+      <div class="flex items-center mb-6">
+        <span class="text-2xl sm:text-3xl mr-2 sm:mr-3">📈</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Proyecciones Financieras</h2>
+          <p class="text-sm sm:text-base text-gray-500">Análisis de mercado y proyecciones basadas en tus productos</p>
+        </div>
+      </div>
+
+      <!-- Estimación de Mercado -->
+      <div class="mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">🎯 Estimación de Mercado</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          
+          <!-- TAM -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 border border-blue-200">
+            <div class="flex items-center mb-4">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                <span class="text-white text-sm sm:text-lg">🌍</span>
+              </div>
+              <div>
+                <h4 class="text-sm sm:text-lg font-semibold text-blue-800">TAM</h4>
+                <p class="text-xs sm:text-sm text-blue-600">Total Addressable Market</p>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="block text-xs sm:text-sm font-medium text-blue-700 mb-2">Tamaño total del mercado</label>
+              <input type="number" id="tamValue" placeholder="Ej. 17000000" min="0" class="w-full p-2 sm:p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+              <p class="text-xs text-blue-600 mt-1">Ejemplo: Población total del país</p>
+            </div>
+            <div class="bg-blue-100 p-2 sm:p-3 rounded-lg">
+              <p class="text-xs sm:text-sm text-blue-800 font-semibold">TAM: <span id="tamDisplay">0</span></p>
+            </div>
+          </div>
+
+          <!-- SAM -->
+          <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-6 border border-green-200">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+              <div class="flex items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                  <span class="text-white text-sm sm:text-lg">🎯</span>
+                </div>
+                <div>
+                  <h4 class="text-sm sm:text-lg font-semibold text-green-800">SAM</h4>
+                  <p class="text-xs sm:text-sm text-green-600">Serviceable Available Market</p>
+                </div>
+              </div>
+              <button id="toggleSamForm" class="px-2 sm:px-3 py-1 sm:py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-xs shrink-0">+ Filtro</button>
+            </div>
+            
+            <!-- Formulario SAM -->
+            <div id="samForm" class="hidden bg-white p-3 rounded-lg border border-green-300 mb-4">
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-medium text-green-800 mb-1">Nombre del filtro</label>
+                  <input type="text" id="samFilterName" placeholder="Ej. Con acceso a internet" class="w-full p-2 border border-green-300 rounded text-xs">
+                </div>
+                <div class="flex gap-2 items-end">
+                  <div class="flex-1">
+                    <label class="block text-xs font-medium text-green-800 mb-1">Porcentaje (%)</label>
+                    <input type="number" id="samFilterPercentage" placeholder="0" min="0" max="100" class="w-full p-2 border border-green-300 rounded text-xs">
+                  </div>
+                  <button id="confirmSamFilter" class="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-xs">✓</button>
+                </div>
+              </div>
+            </div>
+            
+            <div id="samFilters" class="space-y-2 mb-4"></div>
+            
+            <div class="bg-green-100 p-2 sm:p-3 rounded-lg">
+              <p class="text-xs sm:text-sm text-green-800 font-semibold">SAM: <span id="samDisplay">0</span></p>
+              <p class="text-xs text-green-600">Reducción: <span id="samReduction">0%</span></p>
+            </div>
+          </div>
+
+          <!-- SOM -->
+          <div class="bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-4 sm:p-6 border border-purple-200">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+              <div class="flex items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                  <span class="text-white text-sm sm:text-lg">🏆</span>
+                </div>
+                <div>
+                  <h4 class="text-sm sm:text-lg font-semibold text-purple-800">SOM</h4>
+                  <p class="text-xs sm:text-sm text-purple-600">Serviceable Obtainable Market</p>
+                </div>
+              </div>
+              <button id="toggleSomForm" class="px-2 sm:px-3 py-1 sm:py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-xs shrink-0">+ Filtro</button>
+            </div>
+            
+            <!-- Formulario SOM -->
+            <div id="somForm" class="hidden bg-white p-3 rounded-lg border border-purple-300 mb-4">
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-medium text-purple-800 mb-1">Nombre del filtro</label>
+                  <input type="text" id="somFilterName" placeholder="Ej. Dispuestos a pagar" class="w-full p-2 border border-purple-300 rounded text-xs">
+                </div>
+                <div class="flex gap-2 items-end">
+                  <div class="flex-1">
+                    <label class="block text-xs font-medium text-purple-800 mb-1">Porcentaje (%)</label>
+                    <input type="number" id="somFilterPercentage" placeholder="0" min="0" max="100" class="w-full p-2 border border-purple-300 rounded text-xs">
+                  </div>
+                  <button id="confirmSomFilter" class="px-3 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 text-xs">✓</button>
+                </div>
+              </div>
+            </div>
+            
+            <div id="somFilters" class="space-y-2 mb-4"></div>
+            
+            <div class="bg-purple-100 p-2 sm:p-3 rounded-lg">
+              <p class="text-xs sm:text-sm text-purple-800 font-semibold">SOM: <span id="somDisplay">0</span></p>
+              <p class="text-xs text-purple-600">Del SAM: <span id="somPercentage">0%</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proyección Mensual -->
+      <div class="mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">📅 Proyección Mensual (Año 1)</h3>
+        <div id="monthlyProjectionsContainer"></div>
+      </div>
+
+      <!-- Título Principal de Proyecciones -->
+      <div class="text-center mb-8 proyecciones-print-hide">
+        <h2 class="text-2xl sm:text-3xl font-bold text-indigo-900 mb-2">PROYECCIONES FINANCIERAS</h2>
+        <div class="w-full h-1 bg-indigo-600 rounded-full"></div>
+      </div>
+
+      <!-- Gráfica de Escenarios -->
+      <div class="mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">📊 Gráfica de Escenarios</h3>
+        <div class="bg-gray-50 rounded-xl p-4 sm:p-6">
+          <canvas id="projectionsChart" width="800" height="400" class="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-sm"></canvas>
+          <div class="mt-4 text-center">
+            <p class="text-xs sm:text-sm text-gray-600">Comparación de escenarios de ventas mensuales por producto</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen por Escenario -->
+      <div class="mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">💰 Resumen por Escenario</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Optimista -->
+          <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+            <h5 class="font-semibold text-green-800 mb-2">🚀 Optimista</h5>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-green-700">Unidades:</span>
+                <span id="optimistUnits" class="font-bold text-green-800">0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-green-700">Ingresos:</span>
+                <span id="optimistRevenue" class="font-bold text-green-800"><span class="moneda">Q</span> 0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-green-700">Costos:</span>
+                <span id="optimistCosts" class="font-bold text-red-600"><span class="moneda">Q</span> 0</span>
+              </div>
+              <div class="flex justify-between border-t border-green-300 pt-2">
+                <span class="text-green-700">Utilidad:</span>
+                <span id="optimistProfit" class="font-bold text-green-800"><span class="moneda">Q</span> 0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Realista -->
+          <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <h5 class="font-semibold text-blue-800 mb-2">📈 Realista</h5>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-blue-700">Unidades:</span>
+                <span id="realistUnits" class="font-bold text-blue-800">0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-blue-700">Ingresos:</span>
+                <span id="realistRevenue" class="font-bold text-blue-800"><span class="moneda">Q</span> 0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-blue-700">Costos:</span>
+                <span id="realistCosts" class="font-bold text-red-600"><span class="moneda">Q</span> 0</span>
+              </div>
+              <div class="flex justify-between border-t border-blue-300 pt-2">
+                <span class="text-blue-700">Utilidad:</span>
+                <span id="realistProfit" class="font-bold text-blue-800"><span class="moneda">Q</span> 0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pesimista -->
+          <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+            <h5 class="font-semibold text-orange-800 mb-2">⚠️ Pesimista</h5>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-orange-700">Unidades:</span>
+                <span id="pessimistUnits" class="font-bold text-orange-800">0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-orange-700">Ingresos:</span>
+                <span id="pessimistRevenue" class="font-bold text-orange-800"><span class="moneda">Q</span> 0</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-orange-700">Costos:</span>
+                <span id="pessimistCosts" class="font-bold text-red-600"><span class="moneda">Q</span> 0</span>
+              </div>
+              <div class="flex justify-between border-t border-orange-300 pt-2">
+                <span class="text-orange-700">Utilidad:</span>
+                <span id="pessimistProfit" class="font-bold text-orange-800"><span class="moneda">Q</span> 0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Indicadores Financieros -->
+      <div class="mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">💎 Indicadores Financieros</h3>
+        <div class="bg-gray-50 rounded-xl p-4 sm:p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-lg border text-center">
+              <p class="text-xs sm:text-sm text-gray-600 mb-1">Inversión Inicial Total</p>
+              <p id="totalInvestment" class="text-lg sm:text-xl font-bold text-red-600"><span class="moneda">Q</span> 0</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border text-center">
+              <p class="text-xs sm:text-sm text-gray-600 mb-1">Tasa de Descuento (TIR)</p>
+              <p id="discountRateDisplay" class="text-lg sm:text-xl font-bold text-blue-600">12%</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg border text-center">
+              <p class="text-xs sm:text-sm text-gray-600 mb-1">Años para Rentabilidad</p>
+              <p id="yearsToProfit" class="text-lg sm:text-xl font-bold text-green-600">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Análisis de Rentabilidad -->
+      <div class="mb-8">
+        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">⚡ Análisis de Rentabilidad</h3>
+        <div id="profitabilityAnalysis" class="bg-gray-50 rounded-xl p-4 sm:p-6">
+          <!-- El contenido se genera dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Botón de Imprimir -->
+      <div class="text-center proyecciones-print-hide" style="margin-top: 24px;">
+        <button id="btnImprimirProyecciones" class="px-6 sm:px-8 py-3 sm:py-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-bold text-sm sm:text-lg shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 mx-auto">
+          <span class="text-xl sm:text-2xl">🖨️</span>
+          <span>Imprimir Proyecciones</span>
+        </button>
+        <p class="text-gray-500 text-xs sm:text-sm mt-2">Genera un reporte completo de las proyecciones financieras</p>
+      </div>
+    </div>
+
   </div>
 
   <!-- Modal de eliminación (único) -->
@@ -351,6 +608,11 @@
     let monedaActual = 'Q';
     let contadorProductos = 0; // Sin producto base
     let impuestosPersonalizados = [];
+    
+    // Estado para proyecciones financieras
+    let samFilters = [];
+    let somFilters = [];
+    let productColors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'];
 
     // Helpers
     const qs = (s, root=document) => root.querySelector(s);
@@ -422,6 +684,51 @@
         renderImpuestos();
         calcularProductos();
         actualizarCotizacion();
+        return;
+      }
+
+      // Toggle formularios de filtros
+      if (e.target.id === 'toggleSamForm') {
+        toggleSamForm();
+        return;
+      }
+
+      if (e.target.id === 'toggleSomForm') {
+        toggleSomForm();
+        return;
+      }
+
+      // Confirmar filtros
+      if (e.target.id === 'confirmSamFilter') {
+        confirmSamFilter();
+        return;
+      }
+
+      if (e.target.id === 'confirmSomFilter') {
+        confirmSomFilter();
+        return;
+      }
+
+      // Botón imprimir proyecciones
+      if (e.target.id === 'btnImprimirProyecciones') {
+        imprimirProyecciones();
+        return;
+      }
+
+      // Eliminar filtros de mercado
+      const removeFilterBtn = e.target.closest('[data-remove-filter]');
+      if (removeFilterBtn) {
+        const type = removeFilterBtn.getAttribute('data-filter-type');
+        const id = parseInt(removeFilterBtn.getAttribute('data-remove-filter'));
+        if (type === 'sam') {
+          samFilters = samFilters.filter(f => f.id !== id);
+          renderSamFilters();
+        } else if (type === 'som') {
+          somFilters = somFilters.filter(f => f.id !== id);
+          renderSomFilters();
+        }
+        calculateMarketSizes();
+        updateProjections();
         return;
       }
 
@@ -617,6 +924,7 @@
         calcularProductos();
         calcularEquilibrio();
         actualizarCotizacion();
+        updateProjections(); // Actualizar proyecciones cuando se elimina producto
       }
       closeDeleteModal();
     });
@@ -644,6 +952,7 @@
       renumerarTarjetas();
       calcularProductos();
       actualizarCotizacion();
+      updateProjections(); // Actualizar proyecciones cuando se agrega producto
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
@@ -1210,6 +1519,1551 @@
       actualizarCotizacion();
     }
 
+    // Funciones para proyecciones financieras
+    function toggleSamForm() {
+      const form = qs('#samForm');
+      const btn = qs('#toggleSamForm');
+      const isHidden = form.classList.contains('hidden');
+      
+      if (isHidden) {
+        form.classList.remove('hidden');
+        btn.textContent = 'Cancelar';
+        qs('#samFilterName').focus();
+      } else {
+        form.classList.add('hidden');
+        btn.textContent = '+ Filtro';
+        qs('#samFilterName').value = '';
+        qs('#samFilterPercentage').value = '';
+      }
+    }
+
+    function toggleSomForm() {
+      const form = qs('#somForm');
+      const btn = qs('#toggleSomForm');
+      const isHidden = form.classList.contains('hidden');
+      
+      if (isHidden) {
+        form.classList.remove('hidden');
+        btn.textContent = 'Cancelar';
+        qs('#somFilterName').focus();
+      } else {
+        form.classList.add('hidden');
+        btn.textContent = '+ Filtro';
+        qs('#somFilterName').value = '';
+        qs('#somFilterPercentage').value = '';
+      }
+    }
+
+    function confirmSamFilter() {
+      const name = qs('#samFilterName').value.trim();
+      const percentage = parseFloat(qs('#samFilterPercentage').value);
+      
+      if (!name || isNaN(percentage) || percentage <= 0 || percentage > 100) {
+        alert('Ingresa un nombre válido y un porcentaje entre 1 y 100');
+        return;
+      }
+      
+      samFilters.push({
+        id: Date.now(),
+        name: name,
+        percentage: percentage
+      });
+      
+      renderSamFilters();
+      toggleSamForm();
+      calculateMarketSizes();
+      updateProjections();
+    }
+
+    function confirmSomFilter() {
+      const name = qs('#somFilterName').value.trim();
+      const percentage = parseFloat(qs('#somFilterPercentage').value);
+      
+      if (!name || isNaN(percentage) || percentage <= 0 || percentage > 100) {
+        alert('Ingresa un nombre válido y un porcentaje entre 1 y 100');
+        return;
+      }
+      
+      somFilters.push({
+        id: Date.now(),
+        name: name,
+        percentage: percentage
+      });
+      
+      renderSomFilters();
+      toggleSomForm();
+      calculateMarketSizes();
+      updateProjections();
+    }
+
+    function renderSamFilters() {
+      const container = qs('#samFilters');
+      if (samFilters.length === 0) {
+        container.classList.add('hidden');
+        return;
+      }
+      
+      container.classList.remove('hidden');
+      container.innerHTML = samFilters.map(filter => `
+        <div class="flex gap-2 items-center bg-white p-2 rounded border border-green-200">
+          <div class="flex-1">
+            <span class="text-xs font-medium text-green-800">${filter.name}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-xs font-bold text-green-700">${filter.percentage}%</span>
+          </div>
+          <button data-remove-filter="${filter.id}" data-filter-type="sam" 
+                  class="text-red-500 hover:text-red-700 text-xs p-1 rounded hover:bg-red-50">🗑️</button>
+        </div>
+      `).join('');
+    }
+
+    function renderSomFilters() {
+      const container = qs('#somFilters');
+      if (somFilters.length === 0) {
+        container.classList.add('hidden');
+        return;
+      }
+      
+      container.classList.remove('hidden');
+      container.innerHTML = somFilters.map(filter => `
+        <div class="flex gap-2 items-center bg-white p-2 rounded border border-purple-200">
+          <div class="flex-1">
+            <span class="text-xs font-medium text-purple-800">${filter.name}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-xs font-bold text-purple-700">${filter.percentage}%</span>
+          </div>
+          <button data-remove-filter="${filter.id}" data-filter-type="som" 
+                  class="text-red-500 hover:text-red-700 text-xs p-1 rounded hover:bg-red-50">🗑️</button>
+        </div>
+      `).join('');
+    }
+
+
+
+    function calculateMarketSizes() {
+      const tam = parseFloat(qs('#tamValue')?.value) || 0;
+      qs('#tamDisplay').textContent = tam.toLocaleString();
+
+      // Calcular SAM aplicando filtros secuencialmente
+      let sam = tam;
+      let totalSamReduction = 0;
+      samFilters.forEach(filter => {
+        if (filter.percentage > 0) {
+          sam = sam * (filter.percentage / 100);
+          totalSamReduction += (100 - filter.percentage);
+        }
+      });
+      
+      qs('#samDisplay').textContent = Math.round(sam).toLocaleString();
+      qs('#samReduction').textContent = `${totalSamReduction.toFixed(1)}%`;
+
+      // Calcular SOM aplicando filtros sobre SAM
+      let som = sam;
+      somFilters.forEach(filter => {
+        if (filter.percentage > 0) {
+          som = som * (filter.percentage / 100);
+        }
+      });
+
+      qs('#somDisplay').textContent = Math.round(som).toLocaleString();
+      const somPercentage = sam > 0 ? (som / sam) * 100 : 0;
+      qs('#somPercentage').textContent = `${somPercentage.toFixed(1)}%`;
+    }
+
+    function updateMonthlyProjections() {
+      const container = qs('#monthlyProjectionsContainer');
+      const products = qsa('.product-card');
+      
+      if (products.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">Agrega productos para ver las proyecciones mensuales</p>';
+        updateProjectionsChart();
+        updateScenarioSummary();
+        calculateProfitabilityAnalysis();
+        return;
+      }
+
+      // 🔄 PRESERVAR DATOS ANTES DE RECONSTRUIR
+      const currentProjectionData = preserveProjectionData();
+      console.log('💾 Datos de proyección preservados antes de reconstruir tablas');
+
+      container.innerHTML = products.map((card, index) => {
+        const productName = qs('.nombre-producto', card)?.value || `Producto ${index + 1}`;
+        const productId = card.getAttribute('data-product-id'); // ID único del producto
+        const price = calculateProductPrice(card);
+        const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+        const color = productColors[index % productColors.length];
+        
+        return `
+          <div class="mb-6 bg-white rounded-lg border overflow-hidden shadow-sm" data-projection-product-id="${productId}">
+            <div class="p-3 text-white font-semibold text-sm sm:text-base" style="background-color: ${color}">
+              ${productName} - Proyección Mensual
+              <div class="text-xs opacity-90 mt-1">
+                Precio: <span class="moneda">${monedaActual}</span> ${price.toFixed(2)} | Costo: <span class="moneda">${monedaActual}</span> ${cost.toFixed(2)}
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[800px]">
+                <thead>
+                  <tr class="bg-gray-50">
+                    <th class="p-2 text-left text-xs font-medium w-24">Escenario</th>
+                    ${Array.from({length: 12}, (_, i) => `<th class="p-2 text-center text-xs font-medium">Mes ${i + 1}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${['optimist', 'realist', 'pessimist'].map((scenario, scenarioIndex) => {
+                    const scenarioNames = {optimist: 'Optimista', realist: 'Realista', pessimist: 'Pesimista'};
+                    const scenarioIcons = {optimist: '🚀', realist: '📈', pessimist: '⚠️'};
+                    const scenarioColors = {
+                      optimist: `${color}E6`, // Más intenso
+                      realist: `${color}B3`, // Medio
+                      pessimist: `${color}80`  // Más claro
+                    };
+                    
+                    return `
+                      <tr>
+                        <td class="p-2 text-xs font-medium text-white text-center" style="background-color: ${scenarioColors[scenario]}">
+                          <div class="flex flex-col items-center">
+                            <span class="text-sm">${scenarioIcons[scenario]}</span>
+                            <span class="text-xs">${scenarioNames[scenario]}</span>
+                          </div>
+                        </td>
+                        ${Array.from({length: 12}, (_, monthIndex) => `
+                          <td class="p-1">
+                            <input type="number" min="0" value="0" 
+                                   class="monthly-input w-full p-1 border rounded text-xs text-center" 
+                                   data-product-id="${productId}" data-scenario="${scenario}" data-month="${monthIndex}">
+                          </td>
+                        `).join('')}
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // 🔄 RESTAURAR DATOS DESPUÉS DE RECONSTRUIR
+      setTimeout(() => {
+        restoreProjectionData(currentProjectionData);
+        console.log('🔄 Datos de proyección restaurados después de reconstruir tablas');
+        
+        // Configurar eventos inmediatos para nuevos inputs
+        setupImmediateProjectionSave();
+        
+        // Actualizar TODOS los cálculos después de restaurar datos
+        updateProjectionsChart();
+        updateScenarioSummary();
+        calculateProfitabilityAnalysis();
+      }, 50);
+    }
+
+    // 🔄 FUNCIÓN PARA PRESERVAR DATOS DE PROYECCIÓN ANTES DE RECONSTRUIR
+    function preserveProjectionData() {
+      const data = {};
+      const projectionInputs = qsa('.monthly-input, input[data-product-id][data-scenario][data-month]');
+      
+      projectionInputs.forEach(input => {
+        const productId = input.getAttribute('data-product-id');
+        const scenario = input.getAttribute('data-scenario');
+        const month = input.getAttribute('data-month');
+        const value = input.value;
+        
+        if (productId && scenario && month !== null) {
+          const key = `${productId}-${scenario}-${month}`;
+          data[key] = value;
+        }
+      });
+      
+      console.log(`💾 Preservados ${Object.keys(data).length} valores de proyección`);
+      return data;
+    }
+
+    // 🔄 FUNCIÓN PARA RESTAURAR DATOS DE PROYECCIÓN DESPUÉS DE RECONSTRUIR
+    function restoreProjectionData(data) {
+      let restored = 0;
+      
+      Object.keys(data).forEach(key => {
+        const [productId, scenario, month] = key.split('-');
+        const value = data[key];
+        
+        // Buscar el input recién creado
+        const input = qs(`input[data-product-id="${productId}"][data-scenario="${scenario}"][data-month="${month}"]`);
+        
+        if (input && value !== '0') {
+          input.value = value;
+          restored++;
+        }
+      });
+      
+      console.log(`🔄 Restaurados ${restored} valores de proyección`);
+    }
+
+    function calculateProductPrice(card) {
+      const costoProduccion = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+      const profit = parseFloat(card.dataset.profit || '30') || 30;
+      const impRate = impuestosPersonalizados.reduce((s, i) => s + i.porcentaje, 0);
+      
+      const precioSinImpuestos = costoProduccion * (1 + profit / 100);
+      const impuestos = precioSinImpuestos * impRate / 100;
+      return precioSinImpuestos + impuestos;
+    }
+
+    function updateScenarioSummary() {
+      const products = qsa('.product-card');
+      
+      let totalOptimistUnits = 0, totalOptimistRevenue = 0, totalOptimistCosts = 0;
+      let totalRealistUnits = 0, totalRealistRevenue = 0, totalRealistCosts = 0;
+      let totalPessimistUnits = 0, totalPessimistRevenue = 0, totalPessimistCosts = 0;
+
+      products.forEach((card, productIndex) => {
+        const productId = card.getAttribute('data-product-id');
+        const price = calculateProductPrice(card);
+        const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+        
+        // Calcular totales anuales sumando todos los meses
+        let optimistUnitsYear = 0, realistUnitsYear = 0, pessimistUnitsYear = 0;
+        
+        for (let month = 0; month < 12; month++) {
+          // Búsqueda robusta de inputs usando múltiples estrategias
+          let optimistInput = qs(`input[data-product-id="${productId}"][data-scenario="optimist"][data-month="${month}"]`);
+          let realistInput = qs(`input[data-product-id="${productId}"][data-scenario="realist"][data-month="${month}"]`);
+          let pessimistInput = qs(`input[data-product-id="${productId}"][data-scenario="pessimist"][data-month="${month}"]`);
+          
+          // Fallback: buscar por índice de producto
+          if (!optimistInput) {
+            optimistInput = qs(`input[data-product="${productIndex}"][data-scenario="optimist"][data-month="${month}"]`);
+          }
+          if (!realistInput) {
+            realistInput = qs(`input[data-product="${productIndex}"][data-scenario="realist"][data-month="${month}"]`);
+          }
+          if (!pessimistInput) {
+            pessimistInput = qs(`input[data-product="${productIndex}"][data-scenario="pessimist"][data-month="${month}"]`);
+          }
+          
+          optimistUnitsYear += parseFloat(optimistInput?.value) || 0;
+          realistUnitsYear += parseFloat(realistInput?.value) || 0;
+          pessimistUnitsYear += parseFloat(pessimistInput?.value) || 0;
+        }
+        
+        // Calcular ingresos y costos por escenario
+        const optimistRevenue = optimistUnitsYear * price;
+        const realistRevenue = realistUnitsYear * price;
+        const pessimistRevenue = pessimistUnitsYear * price;
+        
+        const optimistCost = optimistUnitsYear * cost;
+        const realistCost = realistUnitsYear * cost;
+        const pessimistCost = pessimistUnitsYear * cost;
+        
+        // Acumular totales
+        totalOptimistUnits += optimistUnitsYear;
+        totalOptimistRevenue += optimistRevenue;
+        totalOptimistCosts += optimistCost;
+        
+        totalRealistUnits += realistUnitsYear;
+        totalRealistRevenue += realistRevenue;
+        totalRealistCosts += realistCost;
+        
+        totalPessimistUnits += pessimistUnitsYear;
+        totalPessimistRevenue += pessimistRevenue;
+        totalPessimistCosts += pessimistCost;
+      });
+
+      // Actualizar resumen por escenario
+      qs('#optimistUnits').textContent = totalOptimistUnits.toLocaleString();
+      qs('#optimistRevenue').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalOptimistRevenue.toFixed(2)}`;
+      qs('#optimistCosts').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalOptimistCosts.toFixed(2)}`;
+      qs('#optimistProfit').innerHTML = `<span class="moneda">${monedaActual}</span> ${(totalOptimistRevenue - totalOptimistCosts).toFixed(2)}`;
+      
+      qs('#realistUnits').textContent = totalRealistUnits.toLocaleString();
+      qs('#realistRevenue').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalRealistRevenue.toFixed(2)}`;
+      qs('#realistCosts').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalRealistCosts.toFixed(2)}`;
+      qs('#realistProfit').innerHTML = `<span class="moneda">${monedaActual}</span> ${(totalRealistRevenue - totalRealistCosts).toFixed(2)}`;
+      
+      qs('#pessimistUnits').textContent = totalPessimistUnits.toLocaleString();
+      qs('#pessimistRevenue').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalPessimistRevenue.toFixed(2)}`;
+      qs('#pessimistCosts').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalPessimistCosts.toFixed(2)}`;
+      qs('#pessimistProfit').innerHTML = `<span class="moneda">${monedaActual}</span> ${(totalPessimistRevenue - totalPessimistCosts).toFixed(2)}`;
+    }
+
+
+
+    function updateProjectionsChart() {
+      const canvas = qs('#projectionsChart');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      const products = qsa('.product-card');
+      
+      // Limpiar canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      if (products.length === 0) {
+        // Mostrar mensaje cuando no hay productos
+        ctx.fillStyle = '#6B7280';
+        ctx.font = '16px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Agrega productos para ver la gráfica de proyecciones', canvas.width / 2, canvas.height / 2);
+        return;
+      }
+      
+      // Configuración de la gráfica - EXTENDIDA PARA MÚLTIPLES AÑOS
+      const padding = 80;
+      const chartWidth = canvas.width - 2 * padding;
+      const chartHeight = canvas.height - 2 * padding;
+      
+      // Determinar cuántos años necesitamos mostrar basado en análisis de rentabilidad
+      const yearsToShow = determineYearsForProfitability();
+      const totalMonths = yearsToShow * 12;
+      
+      // Recopilar datos de todos los productos y escenarios
+      let maxValue = 0;
+      const chartData = [];
+      
+      products.forEach((card, productIndex) => {
+        const productName = qs('.nombre-producto', card)?.value || `Producto ${productIndex + 1}`;
+        const productId = card.getAttribute('data-product-id');
+        const baseColor = productColors[productIndex % productColors.length];
+        
+        ['optimist', 'realist', 'pessimist'].forEach((scenario, scenarioIndex) => {
+          const scenarioName = {optimist: 'Optimista', realist: 'Realista', pessimist: 'Pesimista'}[scenario];
+          const data = [];
+          
+          // Obtener datos del primer año (de los inputs) con búsqueda robusta
+          const firstYearData = [];
+          for (let month = 0; month < 12; month++) {
+            // Búsqueda principal por ID único
+            let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            
+            // Fallback: buscar por índice
+            if (!input) {
+              input = qs(`input[data-product="${productIndex}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            }
+            
+            const value = parseFloat(input?.value) || 0;
+            firstYearData.push(value);
+            maxValue = Math.max(maxValue, value);
+          }
+          
+          // Extender datos para años adicionales (repetir patrón del primer año)
+          for (let year = 0; year < yearsToShow; year++) {
+            firstYearData.forEach(monthValue => {
+              data.push(monthValue);
+            });
+          }
+          
+          // Colores con diferentes saturaciones para cada escenario
+          const saturation = {optimist: 'FF', realist: 'B3', pessimist: '80'}[scenario];
+          const lineColor = baseColor + saturation;
+          
+          chartData.push({
+            label: `${productName} - ${scenarioName}`,
+            data: data,
+            color: lineColor,
+            productIndex: productIndex,
+            scenario: scenario
+          });
+        });
+      });
+      
+      if (maxValue === 0) maxValue = 10;
+      
+      // Dibujar ejes
+      ctx.strokeStyle = '#E5E7EB';
+      ctx.lineWidth = 1;
+      
+      // Eje Y
+      ctx.beginPath();
+      ctx.moveTo(padding, padding);
+      ctx.lineTo(padding, padding + chartHeight);
+      ctx.stroke();
+      
+      // Eje X
+      ctx.beginPath();
+      ctx.moveTo(padding, padding + chartHeight);
+      ctx.lineTo(padding + chartWidth, padding + chartHeight);
+      ctx.stroke();
+      
+      // Etiquetas del eje X - SOLO MARCAR INICIO DE AÑOS
+      ctx.fillStyle = '#6B7280';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      
+      for (let year = 0; year < yearsToShow; year++) {
+        const monthIndex = year * 12; // Enero de cada año
+        const x = padding + (monthIndex / totalMonths) * chartWidth;
+        
+        // Línea vertical para marcar el año
+        ctx.strokeStyle = '#D1D5DB';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, padding);
+        ctx.lineTo(x, padding + chartHeight);
+        ctx.stroke();
+        
+        // Etiqueta del año
+        ctx.fillStyle = '#374151';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.fillText(`Año ${year + 1}`, x, padding + chartHeight + 20);
+      }
+      
+      // Etiquetas del eje Y
+      ctx.textAlign = 'right';
+      ctx.font = '11px Inter, sans-serif';
+      for (let i = 0; i <= 5; i++) {
+        const value = (maxValue / 5) * i;
+        const y = padding + chartHeight - (i * chartHeight / 5);
+        ctx.fillText(Math.round(value).toString(), padding - 10, y + 4);
+        
+        // Líneas de cuadrícula horizontales
+        if (i > 0) {
+          ctx.strokeStyle = '#F9FAFB';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(padding, y);
+          ctx.lineTo(padding + chartWidth, y);
+          ctx.stroke();
+        }
+      }
+      
+      // Dibujar líneas de datos
+      chartData.forEach((series, seriesIndex) => {
+        ctx.strokeStyle = series.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        let hasData = false;
+        let firstPoint = true;
+        
+        series.data.forEach((value, monthIndex) => {
+          if (value > 0) {
+            const x = padding + (monthIndex / totalMonths) * chartWidth;
+            const y = padding + chartHeight - (value / maxValue) * chartHeight;
+            
+            if (firstPoint) {
+              ctx.moveTo(x, y);
+              firstPoint = false;
+            } else {
+              ctx.lineTo(x, y);
+            }
+            hasData = true;
+          }
+        });
+        
+        if (hasData) {
+          ctx.stroke();
+          
+          // Dibujar puntos solo en algunos meses para no saturar
+          ctx.fillStyle = series.color;
+          series.data.forEach((value, monthIndex) => {
+            if (value > 0 && monthIndex % 3 === 0) { // Solo cada 3 meses
+              const x = padding + (monthIndex / totalMonths) * chartWidth;
+              const y = padding + chartHeight - (value / maxValue) * chartHeight;
+              
+              ctx.beginPath();
+              ctx.arc(x, y, 2, 0, 2 * Math.PI);
+              ctx.fill();
+            }
+          });
+        }
+      });
+      
+      // Leyenda mejorada
+      const legendStartY = 15;
+      let legendY = legendStartY;
+      let legendX = padding;
+      
+      ctx.font = '10px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      
+      // Agrupar por producto para mejor organización
+      const productGroups = {};
+      chartData.forEach(series => {
+        if (!productGroups[series.productIndex]) {
+          productGroups[series.productIndex] = [];
+        }
+        productGroups[series.productIndex].push(series);
+      });
+      
+      Object.values(productGroups).forEach((productSeries, groupIndex) => {
+        productSeries.forEach((series, index) => {
+          // Cuadrado de color
+          ctx.fillStyle = series.color;
+          ctx.fillRect(legendX, legendY, 10, 10);
+          
+          // Texto
+          ctx.fillStyle = '#374151';
+          const scenarioShort = {optimist: 'Opt', realist: 'Real', pessimist: 'Pes'}[series.scenario];
+          const label = `${series.label.split(' - ')[0]} ${scenarioShort}`;
+          ctx.fillText(label, legendX + 14, legendY + 8);
+          
+          legendX += ctx.measureText(label).width + 25;
+          
+          // Nueva línea si es necesario
+          if (legendX > canvas.width - 80) {
+            legendX = padding;
+            legendY += 15;
+          }
+        });
+      });
+    }
+
+    function determineYearsForProfitability() {
+      const products = qsa('.product-card');
+      if (products.length === 0) return 1;
+      
+      // Calcular inversión total
+      let totalInvestment = 0;
+      products.forEach(card => {
+        qsa('.inversion-items input[type="number"]', card).forEach(input => {
+          totalInvestment += parseFloat(input.value) || 0;
+        });
+      });
+      
+      if (totalInvestment === 0) return 1;
+      
+      // Calcular flujo de caja mensual promedio de todos los escenarios
+      let monthlyAverageCashFlow = 0;
+      let scenarioCount = 0;
+      
+      ['optimist', 'realist', 'pessimist'].forEach(scenario => {
+        let scenarioCashFlow = 0;
+        
+        products.forEach((card, productIndex) => {
+          const productId = card.getAttribute('data-product-id');
+          const price = calculateProductPrice(card);
+          const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+          
+          // Sumar flujo mensual de todo el año
+          for (let month = 0; month < 12; month++) {
+            // Buscar input usando múltiples estrategias
+            let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            if (!input) {
+              input = qs(`input[data-product="${productIndex}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            }
+            const units = parseFloat(input?.value) || 0;
+            scenarioCashFlow += (price - cost) * units;
+          }
+        });
+        
+        if (scenarioCashFlow > 0) {
+          monthlyAverageCashFlow += scenarioCashFlow / 12; // Promedio mensual
+          scenarioCount++;
+        }
+      });
+      
+      if (scenarioCount > 0) {
+        monthlyAverageCashFlow = monthlyAverageCashFlow / scenarioCount;
+      }
+      
+      if (monthlyAverageCashFlow <= 0) return 3; // Mostrar 3 años por defecto si no hay flujo positivo
+      
+      // Calcular cuántos meses se necesitan para recuperar la inversión
+      const monthsToBreakeven = Math.ceil(totalInvestment / monthlyAverageCashFlow);
+      const yearsToBreakeven = Math.ceil(monthsToBreakeven / 12);
+      
+      // Mostrar al menos 1 año, máximo 5 años
+      return Math.min(Math.max(yearsToBreakeven, 1), 5);
+    }
+
+    function calculateProfitabilityAnalysis() {
+      const products = qsa('.product-card');
+      const container = qs('#profitabilityAnalysis');
+      
+      if (products.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">Agrega productos para ver el análisis de rentabilidad</p>';
+        return;
+      }
+      
+      // Calcular inversión total
+      let totalInvestment = 0;
+      products.forEach(card => {
+        qsa('.inversion-items input[type="number"]', card).forEach(input => {
+          totalInvestment += parseFloat(input.value) || 0;
+        });
+      });
+      
+      if (totalInvestment === 0) {
+        container.innerHTML = `
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div class="flex items-center">
+              <span class="text-2xl mr-3">⚠️</span>
+              <div>
+                <h4 class="font-semibold text-yellow-800">Sin Inversión Inicial</h4>
+                <p class="text-yellow-700 text-sm">Agrega inversión inicial en los productos para analizar la rentabilidad.</p>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      // Analizar cada escenario
+      const scenarios = ['optimist', 'realist', 'pessimist'];
+      const scenarioNames = {optimist: 'Optimista', realist: 'Realista', pessimist: 'Pesimista'};
+      const scenarioColors = {optimist: 'green', realist: 'blue', pessimist: 'orange'};
+      const scenarioIcons = {optimist: '🚀', realist: '📈', pessimist: '⚠️'};
+      
+      let analysisResults = [];
+      let anyProfitableInFirstYear = false;
+      
+      scenarios.forEach(scenario => {
+        let monthlyCashFlow = 0;
+        
+        products.forEach((card, productIndex) => {
+          const productId = card.getAttribute('data-product-id');
+          const price = calculateProductPrice(card);
+          const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+          
+          // Calcular flujo de caja anual sumando todos los meses
+          let annualUnits = 0;
+          for (let month = 0; month < 12; month++) {
+            // Búsqueda principal por ID único
+            let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            
+            // Fallback: buscar por índice
+            if (!input) {
+              input = qs(`input[data-product="${productIndex}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            }
+            
+            annualUnits += parseFloat(input?.value) || 0;
+          }
+          
+          monthlyCashFlow += (price - cost) * annualUnits / 12; // Promedio mensual
+        });
+        
+        const annualCashFlow = monthlyCashFlow * 12;
+        let monthsToBreakeven = 0;
+        let yearsToBreakeven = 0;
+        let isProfitable = false;
+        
+        if (monthlyCashFlow > 0) {
+          monthsToBreakeven = Math.ceil(totalInvestment / monthlyCashFlow);
+          yearsToBreakeven = Math.ceil(monthsToBreakeven / 12);
+          isProfitable = true;
+          
+          if (yearsToBreakeven <= 1) {
+            anyProfitableInFirstYear = true;
+          }
+        }
+        
+        analysisResults.push({
+          scenario,
+          name: scenarioNames[scenario],
+          color: scenarioColors[scenario],
+          icon: scenarioIcons[scenario],
+          monthlyCashFlow,
+          annualCashFlow,
+          monthsToBreakeven,
+          yearsToBreakeven,
+          isProfitable
+        });
+      });
+      
+      // Generar HTML del análisis
+      let html = `
+        <div class="mb-6">
+          <div class="flex items-center mb-4">
+            <span class="text-2xl mr-3">💰</span>
+            <div>
+              <h4 class="font-semibold text-gray-800">Inversión Total Requerida</h4>
+              <p class="text-2xl font-bold text-red-600"><span class="moneda">${monedaActual}</span> ${totalInvestment.toLocaleString()}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      `;
+      
+      analysisResults.forEach(result => {
+        const statusClass = result.isProfitable ? 
+          (result.yearsToBreakeven <= 1 ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200') : 
+          'bg-red-50 border-red-200';
+        
+        const statusText = result.isProfitable ? 
+          (result.yearsToBreakeven <= 1 ? 'Rentable en el primer año' : `Rentable en ${result.yearsToBreakeven} año${result.yearsToBreakeven > 1 ? 's' : ''}`) : 
+          'No rentable con estos datos';
+        
+        const statusColor = result.isProfitable ? 
+          (result.yearsToBreakeven <= 1 ? 'text-green-800' : 'text-yellow-800') : 
+          'text-red-800';
+        
+        html += `
+          <div class="${statusClass} border rounded-lg p-4">
+            <div class="flex items-center mb-3">
+              <span class="text-2xl mr-2">${result.icon}</span>
+              <h5 class="font-semibold text-gray-800">${result.name}</h5>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Flujo mensual:</span>
+                <span class="font-semibold ${result.monthlyCashFlow > 0 ? 'text-green-600' : 'text-red-600'}">
+                  <span class="moneda">${monedaActual}</span> ${result.monthlyCashFlow.toFixed(2)}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Flujo anual:</span>
+                <span class="font-semibold ${result.annualCashFlow > 0 ? 'text-green-600' : 'text-red-600'}">
+                  <span class="moneda">${monedaActual}</span> ${result.annualCashFlow.toFixed(2)}
+                </span>
+              </div>
+              ${result.isProfitable ? `
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Punto de equilibrio:</span>
+                  <span class="font-semibold text-blue-600">${result.monthsToBreakeven} meses</span>
+                </div>
+              ` : ''}
+              <div class="pt-2 border-t">
+                <p class="font-semibold ${statusColor}">${statusText}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      
+      // Advertencia o confirmación general
+      if (!anyProfitableInFirstYear) {
+        const bestScenario = analysisResults.filter(r => r.isProfitable).sort((a, b) => a.yearsToBreakeven - b.yearsToBreakeven)[0];
+        
+        if (bestScenario) {
+          html += `
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <div class="flex items-start">
+                <span class="text-2xl mr-3">⚠️</span>
+                <div>
+                  <h4 class="font-semibold text-yellow-800 mb-2">Advertencia: Rentabilidad a Largo Plazo</h4>
+                  <p class="text-yellow-700 text-sm mb-2">
+                    Ningún escenario alcanza la rentabilidad en el primer año. El mejor escenario (${bestScenario.name}) 
+                    requiere ${bestScenario.yearsToBreakeven} año${bestScenario.yearsToBreakeven > 1 ? 's' : ''} para recuperar la inversión.
+                  </p>
+                  <p class="text-yellow-700 text-sm">
+                    <strong>Recomendación:</strong> Considera ajustar precios, reducir costos o aumentar las proyecciones de ventas.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+              <div class="flex items-start">
+                <span class="text-2xl mr-3">🚨</span>
+                <div>
+                  <h4 class="font-semibold text-red-800 mb-2">Alerta: Proyecto No Rentable</h4>
+                  <p class="text-red-700 text-sm mb-2">
+                    Ningún escenario genera flujos de caja positivos suficientes para recuperar la inversión inicial.
+                  </p>
+                  <p class="text-red-700 text-sm">
+                    <strong>Acción requerida:</strong> Revisa completamente el modelo de negocio, precios y costos antes de proceder.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      } else {
+        html += `
+          <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <div class="flex items-start">
+              <span class="text-2xl mr-3">✅</span>
+              <div>
+                <h4 class="font-semibold text-green-800 mb-2">Excelente: Rentabilidad en el Primer Año</h4>
+                <p class="text-green-700 text-sm">
+                  Al menos uno de los escenarios muestra rentabilidad en el primer año de operación. 
+                  El proyecto tiene potencial de generar retornos rápidos sobre la inversión.
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      container.innerHTML = html;
+    }
+
+    function calculateFinancialIndicators() {
+      const products = qsa('.product-card');
+      let totalInvestment = 0;
+      
+      // Calcular inversión total
+      products.forEach(card => {
+        qsa('.inversion-items input[type="number"]', card).forEach(input => {
+          totalInvestment += parseFloat(input.value) || 0;
+        });
+      });
+      
+      qs('#totalInvestment').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalInvestment.toLocaleString()}`;
+      
+      // Tasa de descuento fija del 12%
+      const discountRate = 12;
+      qs('#discountRateDisplay').textContent = `${discountRate}%`;
+      
+      // Calcular años necesarios para alcanzar rentabilidad
+      let yearsToProfit = calculateYearsToProfit();
+      qs('#yearsToProfit').textContent = yearsToProfit > 0 ? `${yearsToProfit} año${yearsToProfit > 1 ? 's' : ''}` : 'No rentable';
+      
+      // Actualizar análisis de rentabilidad
+      calculateProfitabilityAnalysis();
+    }
+
+    function calculateYearsToProfit() {
+      const products = qsa('.product-card');
+      if (products.length === 0) return 0;
+      
+      // Calcular inversión total
+      let totalInvestment = 0;
+      products.forEach(card => {
+        qsa('.inversion-items input[type="number"]', card).forEach(input => {
+          totalInvestment += parseFloat(input.value) || 0;
+        });
+      });
+      
+      if (totalInvestment === 0) return 0;
+      
+      // Calcular flujo de caja mensual promedio de todos los escenarios
+      let monthlyAverageCashFlow = 0;
+      let scenarioCount = 0;
+      
+      ['optimist', 'realist', 'pessimist'].forEach(scenario => {
+        let scenarioCashFlow = 0;
+        
+        products.forEach((card, productIndex) => {
+          const productId = card.getAttribute('data-product-id');
+          const price = calculateProductPrice(card);
+          const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+          
+          // Sumar flujo mensual de todo el año con búsqueda robusta
+          for (let month = 0; month < 12; month++) {
+            // Búsqueda principal por ID único
+            let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            
+            // Fallback: buscar por índice
+            if (!input) {
+              input = qs(`input[data-product="${productIndex}"][data-scenario="${scenario}"][data-month="${month}"]`);
+            }
+            
+            const units = parseFloat(input?.value) || 0;
+            scenarioCashFlow += (price - cost) * units;
+          }
+        });
+        
+        if (scenarioCashFlow > 0) {
+          monthlyAverageCashFlow += scenarioCashFlow / 12; // Promedio mensual
+          scenarioCount++;
+        }
+      });
+      
+      if (scenarioCount > 0) {
+        monthlyAverageCashFlow = monthlyAverageCashFlow / scenarioCount;
+      }
+      
+      if (monthlyAverageCashFlow <= 0) return -1; // No rentable
+      
+      // Calcular cuántos meses se necesitan para recuperar la inversión
+      const monthsToBreakeven = Math.ceil(totalInvestment / monthlyAverageCashFlow);
+      const yearsToBreakeven = Math.ceil(monthsToBreakeven / 12);
+      
+      return yearsToBreakeven;
+    }
+
+    function updateProjections() {
+      updateMonthlyProjections();
+      calculateFinancialIndicators();
+    }
+
+    function imprimirProyecciones() {
+      // Crear imagen de la gráfica antes de imprimir
+      const canvas = qs('#projectionsChart');
+      let chartImageData = '';
+      
+      if (canvas) {
+        try {
+          chartImageData = canvas.toDataURL('image/png');
+        } catch (error) {
+          console.warn('No se pudo generar imagen de la gráfica:', error);
+        }
+      }
+      
+      // Crear una nueva ventana para imprimir
+      const printWindow = window.open('', '_blank');
+      
+      // Crear el contenido de impresión optimizado para papel
+      let proyeccionesContent = `
+        <!-- Encabezado Principal -->
+        <div class="header-section">
+          <h1 class="main-title">PROYECCIONES FINANCIERAS</h1>
+          <p class="subtitle">Fecha de análisis: ${new Date().toLocaleDateString('es-ES', {year:'numeric',month:'long',day:'numeric'})}</p>
+        </div>
+
+        <!-- Gráfica de Escenarios -->
+        <div class="section">
+          <h2 class="section-title">📊 Gráfica de Escenarios</h2>
+          <div class="chart-container">
+            ${chartImageData ? 
+              `<img src="${chartImageData}" alt="Gráfica de Proyecciones Financieras" class="chart-image">
+               <p class="chart-caption">Comparación de escenarios de ventas mensuales por producto</p>` :
+              `<div class="chart-placeholder">
+                 <div class="chart-content">
+                   <p class="chart-main">📈 Gráfica de Proyecciones</p>
+                   <p class="chart-desc">Comparación visual de escenarios de ventas mensuales</p>
+                   <p class="chart-note">Agrega productos y datos para ver la gráfica</p>
+                 </div>
+               </div>`
+            }
+          </div>
+        </div>
+
+        <!-- Resumen por Escenario -->
+        <div class="section">
+          <h2 class="section-title">💰 Resumen por Escenario</h2>
+          <div class="scenarios-grid">
+            <!-- Optimista -->
+            <div class="scenario-card optimist">
+              <h3 class="scenario-header">🚀 Optimista</h3>
+              <div class="scenario-data">
+                <div class="data-row">
+                  <span>Unidades:</span>
+                  <span class="value">${qs('#optimistUnits')?.textContent || '0'}</span>
+                </div>
+                <div class="data-row">
+                  <span>Ingresos:</span>
+                  <span class="value">${qs('#optimistRevenue')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+                <div class="data-row">
+                  <span>Costos:</span>
+                  <span class="value cost">${qs('#optimistCosts')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+                <div class="data-row total">
+                  <span>Utilidad:</span>
+                  <span class="value">${qs('#optimistProfit')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Realista -->
+            <div class="scenario-card realist">
+              <h3 class="scenario-header">📈 Realista</h3>
+              <div class="scenario-data">
+                <div class="data-row">
+                  <span>Unidades:</span>
+                  <span class="value">${qs('#realistUnits')?.textContent || '0'}</span>
+                </div>
+                <div class="data-row">
+                  <span>Ingresos:</span>
+                  <span class="value">${qs('#realistRevenue')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+                <div class="data-row">
+                  <span>Costos:</span>
+                  <span class="value cost">${qs('#realistCosts')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+                <div class="data-row total">
+                  <span>Utilidad:</span>
+                  <span class="value">${qs('#realistProfit')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pesimista -->
+            <div class="scenario-card pessimist">
+              <h3 class="scenario-header">⚠️ Pesimista</h3>
+              <div class="scenario-data">
+                <div class="data-row">
+                  <span>Unidades:</span>
+                  <span class="value">${qs('#pessimistUnits')?.textContent || '0'}</span>
+                </div>
+                <div class="data-row">
+                  <span>Ingresos:</span>
+                  <span class="value">${qs('#pessimistRevenue')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+                <div class="data-row">
+                  <span>Costos:</span>
+                  <span class="value cost">${qs('#pessimistCosts')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+                <div class="data-row total">
+                  <span>Utilidad:</span>
+                  <span class="value">${qs('#pessimistProfit')?.innerHTML || '<span class="moneda">Q</span> 0'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicadores Financieros -->
+        <div class="section">
+          <h2 class="section-title">💎 Indicadores Financieros</h2>
+          <div class="indicators-grid">
+            <div class="indicator-card">
+              <p class="indicator-label">Inversión Inicial Total</p>
+              <p class="indicator-value investment">${qs('#totalInvestment')?.innerHTML || '<span class="moneda">Q</span> 0'}</p>
+            </div>
+            <div class="indicator-card">
+              <p class="indicator-label">Tasa de Descuento (TIR)</p>
+              <p class="indicator-value rate">${qs('#discountRateDisplay')?.textContent || '12%'}</p>
+            </div>
+            <div class="indicator-card">
+              <p class="indicator-label">Años para Rentabilidad</p>
+              <p class="indicator-value years">${qs('#yearsToProfit')?.textContent || '-'}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Análisis de Rentabilidad -->
+        <div class="section">
+          <h2 class="section-title">⚡ Análisis de Rentabilidad</h2>
+          <div class="analysis-content">
+            ${qs('#profitabilityAnalysis')?.innerHTML || '<p class="no-data">No hay análisis disponible</p>'}
+          </div>
+        </div>
+      `;
+      
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Proyecciones Financieras</title>
+          <style>
+            /* Reset y configuración base */
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            
+            body {
+              font-family: 'Inter', Arial, sans-serif;
+              background: white;
+              color: #1f2937;
+              line-height: 1.5;
+              font-size: 14px;
+              padding: 15px;
+            }
+
+            /* Encabezado principal */
+            .header-section {
+              text-align: center;
+              border-bottom: 3px solid #4f46e5;
+              padding-bottom: 15px;
+              margin-bottom: 20px;
+            }
+
+            .main-title {
+              font-size: 28px;
+              font-weight: bold;
+              color: #312e81;
+              margin-bottom: 8px;
+              letter-spacing: 1px;
+            }
+
+            .subtitle {
+              color: #4f46e5;
+              font-size: 14px;
+              font-weight: 500;
+            }
+
+            /* Secciones */
+            .section {
+              margin-bottom: 18px;
+              page-break-inside: avoid;
+            }
+
+            .section-title {
+              font-size: 16px;
+              font-weight: bold;
+              color: #3730a3;
+              margin-bottom: 10px;
+              padding-bottom: 5px;
+              border-bottom: 1px solid #e5e7eb;
+            }
+
+            /* Contenedor de gráfica */
+            .chart-container {
+              text-align: center;
+              margin: 15px 0;
+            }
+
+            .chart-image {
+              max-width: 100%;
+              height: auto;
+              border: 1px solid #d1d5db;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              background: white;
+              padding: 10px;
+            }
+
+            .chart-caption {
+              font-size: 12px;
+              color: #6b7280;
+              margin-top: 8px;
+              font-style: italic;
+            }
+
+            /* Placeholder de gráfica */
+            .chart-placeholder {
+              background: #f9fafb;
+              border: 1px solid #e5e7eb;
+              border-radius: 8px;
+              padding: 20px;
+              text-align: center;
+            }
+
+            .chart-content {
+              background: white;
+              padding: 15px;
+              border-radius: 6px;
+              border: 1px solid #d1d5db;
+            }
+
+            .chart-main {
+              font-size: 16px;
+              color: #4b5563;
+              margin-bottom: 5px;
+            }
+
+            .chart-desc {
+              font-size: 12px;
+              color: #6b7280;
+              margin-bottom: 8px;
+            }
+
+            .chart-note {
+              font-size: 10px;
+              color: #9ca3af;
+              font-style: italic;
+            }
+
+            /* Grid de escenarios */
+            .scenarios-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 12px;
+            }
+
+            .scenario-card {
+              border: 1px solid #d1d5db;
+              border-radius: 8px;
+              padding: 12px;
+              page-break-inside: avoid;
+            }
+
+            .scenario-card.optimist {
+              background: #f0fdf4;
+              border-color: #bbf7d0;
+            }
+
+            .scenario-card.realist {
+              background: #eff6ff;
+              border-color: #bfdbfe;
+            }
+
+            .scenario-card.pessimist {
+              background: #fff7ed;
+              border-color: #fed7aa;
+            }
+
+            .scenario-header {
+              font-size: 14px;
+              font-weight: bold;
+              margin-bottom: 8px;
+              text-align: center;
+            }
+
+            .optimist .scenario-header { color: #166534; }
+            .realist .scenario-header { color: #1e40af; }
+            .pessimist .scenario-header { color: #9a3412; }
+
+            .scenario-data {
+              font-size: 11px;
+            }
+
+            .data-row {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 4px;
+              padding: 2px 0;
+            }
+
+            .data-row.total {
+              border-top: 1px solid #d1d5db;
+              padding-top: 6px;
+              margin-top: 6px;
+              font-weight: bold;
+            }
+
+            .data-row .value {
+              font-weight: 600;
+            }
+
+            .data-row .value.cost {
+              color: #dc2626;
+            }
+
+            /* Grid de indicadores */
+            .indicators-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 12px;
+            }
+
+            .indicator-card {
+              background: white;
+              border: 1px solid #d1d5db;
+              border-radius: 8px;
+              padding: 12px;
+              text-align: center;
+            }
+
+            .indicator-label {
+              font-size: 11px;
+              color: #6b7280;
+              margin-bottom: 4px;
+            }
+
+            .indicator-value {
+              font-size: 16px;
+              font-weight: bold;
+            }
+
+            .indicator-value.investment { color: #dc2626; }
+            .indicator-value.rate { color: #2563eb; }
+            .indicator-value.years { color: #16a34a; }
+
+            /* Contenido de análisis */
+            .analysis-content {
+              background: #f9fafb;
+              border-radius: 8px;
+              padding: 12px;
+            }
+
+            .no-data {
+              text-align: center;
+              color: #6b7280;
+              font-style: italic;
+              padding: 12px;
+            }
+
+            /* Estilos para el contenido del análisis de rentabilidad */
+            .analysis-content .flex {
+              display: flex;
+            }
+
+            .analysis-content .items-center {
+              align-items: center;
+            }
+
+            .analysis-content .items-start {
+              align-items: flex-start;
+            }
+
+            .analysis-content .justify-between {
+              justify-content: space-between;
+            }
+
+            .analysis-content .mb-2 { margin-bottom: 6px; }
+            .analysis-content .mb-3 { margin-bottom: 8px; }
+            .analysis-content .mb-4 { margin-bottom: 10px; }
+            .analysis-content .mb-6 { margin-bottom: 12px; }
+            .analysis-content .mr-3 { margin-right: 8px; }
+
+            .analysis-content .grid {
+              display: grid;
+            }
+
+            .analysis-content .grid-cols-3 {
+              grid-template-columns: repeat(3, 1fr);
+            }
+
+            .analysis-content .gap-4 {
+              gap: 8px;
+            }
+
+            .analysis-content .p-4 {
+              padding: 8px;
+            }
+
+            .analysis-content .rounded-lg {
+              border-radius: 6px;
+            }
+
+            .analysis-content .border {
+              border: 1px solid #d1d5db;
+            }
+
+            .analysis-content .text-center {
+              text-align: center;
+            }
+
+            .analysis-content .font-semibold {
+              font-weight: 600;
+            }
+
+            .analysis-content .text-sm {
+              font-size: 10px;
+              line-height: 1.3;
+            }
+
+            .analysis-content .text-2xl {
+              font-size: 14px;
+              line-height: 1.2;
+            }
+
+            /* Ajustes específicos para tarjetas de análisis */
+            .analysis-content > div {
+              page-break-inside: avoid;
+              margin-bottom: 8px;
+            }
+
+            /* Inversión total - más compacto */
+            .analysis-content > div:first-child {
+              margin-bottom: 10px;
+            }
+
+            .analysis-content > div:first-child .text-2xl {
+              font-size: 16px;
+            }
+
+            /* Grid de escenarios - más compacto */
+            .analysis-content .grid-cols-3 > div {
+              padding: 6px;
+              font-size: 9px;
+            }
+
+            .analysis-content .grid-cols-3 h5 {
+              font-size: 10px;
+              margin-bottom: 4px;
+            }
+
+            .analysis-content .grid-cols-3 .space-y-2 > div {
+              margin-bottom: 2px;
+            }
+
+            .analysis-content .grid-cols-3 .border-t {
+              border-top: 1px solid;
+              padding-top: 3px;
+              margin-top: 3px;
+            }
+
+            /* Alertas y advertencias - más compactas */
+            .analysis-content > div:last-child {
+              padding: 8px;
+              font-size: 10px;
+            }
+
+            .analysis-content > div:last-child h4 {
+              font-size: 11px;
+              margin-bottom: 4px;
+            }
+
+            .analysis-content > div:last-child p {
+              margin-bottom: 3px;
+              line-height: 1.3;
+            }
+
+            /* Colores para el análisis */
+            .analysis-content .bg-green-50 { background-color: #f0fdf4; }
+            .analysis-content .bg-yellow-50 { background-color: #fefce8; }
+            .analysis-content .bg-red-50 { background-color: #fef2f2; }
+            .analysis-content .border-green-200 { border-color: #bbf7d0; }
+            .analysis-content .border-yellow-200 { border-color: #fef3c7; }
+            .analysis-content .border-red-200 { border-color: #fecaca; }
+            .analysis-content .text-green-800 { color: #166534; }
+            .analysis-content .text-yellow-800 { color: #92400e; }
+            .analysis-content .text-red-800 { color: #991b1b; }
+            .analysis-content .text-green-600 { color: #16a34a; }
+            .analysis-content .text-red-600 { color: #dc2626; }
+            .analysis-content .text-blue-600 { color: #2563eb; }
+            .analysis-content .text-gray-600 { color: #4b5563; }
+
+            /* Configuración de impresión */
+            @media print {
+              body { 
+                margin: 0; 
+                padding: 10px;
+                font-size: 12px;
+              }
+              
+              @page { 
+                margin: 0.4in;
+                size: letter;
+              }
+              
+              .section {
+                page-break-inside: avoid;
+                margin-bottom: 12px;
+              }
+              
+              .scenarios-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+              }
+              
+              .indicators-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+              }
+              
+              .main-title {
+                font-size: 22px;
+              }
+              
+              .section-title {
+                font-size: 13px;
+              }
+              
+              /* Análisis de rentabilidad específico para impresión */
+              .analysis-content {
+                padding: 8px;
+                font-size: 9px;
+              }
+              
+              .analysis-content .grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+              }
+              
+              .analysis-content .grid-cols-3 > div {
+                padding: 4px;
+                font-size: 8px;
+              }
+              
+              .analysis-content > div:last-child {
+                padding: 6px;
+                font-size: 9px;
+              }
+              
+              .analysis-content > div:last-child h4 {
+                font-size: 10px;
+              }
+            }
+
+            /* Responsive para pantallas pequeñas */
+            @media screen and (max-width: 768px) {
+              .scenarios-grid,
+              .indicators-grid {
+                grid-template-columns: 1fr;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${proyeccionesContent}
+        </body>
+        </html>
+      `);
+      
+      printWindow.document.close();
+      
+      // Esperar a que se cargue el contenido y luego imprimir
+      printWindow.onload = function() {
+        setTimeout(() => {
+          printWindow.print();
+          printWindow.close();
+        }, 250);
+      };
+    }
+
     // Entradas que impactan cálculos globales
     document.addEventListener('input', (e) => {
       const t = e.target;
@@ -1217,13 +3071,24 @@
         calcularInversion(); 
         calcularCostos();
         calcularProductos(); // Recalcular productos después de cambios en costos
+        updateProjections(); // Actualizar proyecciones
       }
       if (t.matches('.unidades-mensuales, .horas-por-dia, .dias-por-mes, .honorarios-hora')) {
         calcularCostos(); // Recalcular costos primero (incluye honorarios)
         calcularProductos(); // Luego productos
+        updateProjections(); // Actualizar proyecciones
       }
       if (t.id === 'beneficiosClave' || t.id === 'diasValidez' || t.id === 'fechaEmisionInput') {
         actualizarCotizacion();
+      }
+      
+      // Proyecciones financieras
+      if (t.id === 'tamValue') {
+        calculateMarketSizes();
+      }
+      if (t.matches('.monthly-input')) {
+        updateScenarioSummary();
+        calculateFinancialIndicators();
       }
     });
 
@@ -1247,7 +3112,7 @@
       console.log('💾 Iniciando guardado automático...');
       try {
         const data = {
-          version: '1.0',
+          version: '1.2',
           timestamp: Date.now(),
           monedaActual,
           contadorProductos,
@@ -1257,10 +3122,91 @@
             diasValidez: qs('#diasValidez')?.value || '',
             beneficiosClave: qs('#beneficiosClave')?.value || '',
             customProfitGlobal: qs('#inputCustomProfitGlobal')?.value || '',
-            estrategiaActiva: qs('.estrategia-btn.estrategia-activa')?.getAttribute('data-profit') || '30'
+            estrategiaActiva: getActiveStrategy()
           },
           productos: []
         };
+
+        // Función para obtener estrategia activa
+        function getActiveStrategy() {
+          const customStrategy = qs('#customStrategy');
+          const customInput = qs('#inputCustomProfitGlobal');
+          
+          if (customStrategy && customStrategy.classList.contains('estrategia-activa') && customInput && customInput.value) {
+            return { type: 'custom', value: customInput.value };
+          }
+          
+          const activeBtn = qs('.estrategia-btn.estrategia-activa');
+          if (activeBtn) {
+            return { type: 'preset', value: activeBtn.getAttribute('data-profit') };
+          }
+          
+          return { type: 'preset', value: '30' };
+        }
+
+        // Guardar datos de proyecciones financieras
+        data.proyeccionesFinancieras = {
+          tam: qs('#tamValue')?.value || '',
+          samFilters: samFilters || [],
+          somFilters: somFilters || [],
+          proyeccionesMensuales: []
+        };
+
+        // GUARDADO MEJORADO DE PROYECCIONES MENSUALES CON ID ÚNICO
+        const productCards = qsa('.product-card');
+        console.log(`💾 Encontradas ${productCards.length} tarjetas de producto para guardar proyecciones`);
+        
+        productCards.forEach((card, productIndex) => {
+          const productId = card.getAttribute('data-product-id');
+          console.log(`💾 Procesando proyecciones para producto ID: ${productId} (índice: ${productIndex})`);
+          
+          const proyeccionMensual = {
+            productId: productId, // Usar ID único como identificador principal
+            optimista: [],
+            realista: [],
+            pesimista: []
+          };
+
+          let hasData = false;
+
+          ['optimist', 'realist', 'pessimist'].forEach(scenario => {
+            const scenarioKey = scenario === 'optimist' ? 'optimista' : scenario === 'realist' ? 'realista' : 'pesimista';
+            
+            for (let month = 0; month < 12; month++) {
+              // Buscar input usando el ID único del producto
+              let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenario}"][data-month="${month}"]`);
+              
+              // Fallback: buscar por índice (compatibilidad con versiones anteriores)
+              if (!input) {
+                input = qs(`input[data-product="${productIndex}"][data-scenario="${scenario}"][data-month="${month}"]`);
+              }
+              
+              // Fallback: buscar en la tabla específica del producto
+              if (!input) {
+                const monthlyTables = qsa('#monthlyProjectionsContainer table');
+                if (monthlyTables[productIndex]) {
+                  input = qs(`input[data-scenario="${scenario}"][data-month="${month}"]`, monthlyTables[productIndex]);
+                }
+              }
+              
+              const value = input?.value || '0';
+              proyeccionMensual[scenarioKey].push(value);
+              
+              if (value !== '0') {
+                hasData = true;
+                console.log(`📊 Guardado: Producto ID ${productId}, ${scenario}, Mes ${month + 1}: ${value}`);
+              }
+            }
+          });
+
+          if (hasData) {
+            console.log(`✅ Producto ID ${productId} tiene datos de proyección, guardando...`);
+          } else {
+            console.log(`ℹ️ Producto ID ${productId} sin datos de proyección (valores en 0)`);
+          }
+
+          data.proyeccionesFinancieras.proyeccionesMensuales.push(proyeccionMensual);
+        });
 
         // Guardar datos de cada producto
         qsa('.product-card').forEach(card => {
@@ -1283,51 +3229,42 @@
             costosVariables: []
           };
 
-          // Guardar inversión inicial - SOLO FILAS CON DATOS REALES
+          // Guardar inversión inicial - TODAS las filas, incluso vacías para mantener estructura
           qsa('.inversion-items > div', card).forEach(row => {
             const conceptoInput = qs('input[type="text"]', row);
             const valorInput = qs('input[type="number"]', row);
             
             if (conceptoInput && valorInput) {
-              const concepto = conceptoInput.value.trim();
-              const valor = valorInput.value.trim();
-              
-              // Solo guardar si hay concepto O valor diferente de 0
-              if (concepto !== '' || (valor !== '' && valor !== '0')) {
-                producto.inversion.push({ concepto, valor: valor || '0' });
-              }
+              producto.inversion.push({ 
+                concepto: conceptoInput.value || '', 
+                valor: valorInput.value || '0' 
+              });
             }
           });
 
-          // Guardar costos fijos - SOLO FILAS CON DATOS REALES
+          // Guardar costos fijos - TODAS las filas
           qsa('.costos-fijos > div', card).forEach(row => {
             const conceptoInput = qs('input[type="text"]', row);
             const valorInput = qs('input[type="number"]', row);
             
             if (conceptoInput && valorInput) {
-              const concepto = conceptoInput.value.trim();
-              const valor = valorInput.value.trim();
-              
-              // Solo guardar si hay concepto O valor diferente de 0
-              if (concepto !== '' || (valor !== '' && valor !== '0')) {
-                producto.costosFijos.push({ concepto, valor: valor || '0' });
-              }
+              producto.costosFijos.push({ 
+                concepto: conceptoInput.value || '', 
+                valor: valorInput.value || '0' 
+              });
             }
           });
 
-          // Guardar costos variables - SOLO FILAS CON DATOS REALES
+          // Guardar costos variables - TODAS las filas
           qsa('.costos-variables > div', card).forEach(row => {
             const conceptoInput = qs('input[type="text"]', row);
             const valorInput = qs('input[type="number"]', row);
             
             if (conceptoInput && valorInput) {
-              const concepto = conceptoInput.value.trim();
-              const valor = valorInput.value.trim();
-              
-              // Solo guardar si hay concepto O valor diferente de 0
-              if (concepto !== '' || (valor !== '' && valor !== '0')) {
-                producto.costosVariables.push({ concepto, valor: valor || '0' });
-              }
+              producto.costosVariables.push({ 
+                concepto: conceptoInput.value || '', 
+                valor: valorInput.value || '0' 
+              });
             }
           });
 
@@ -1335,8 +3272,9 @@
         });
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        console.log('💾 Datos guardados exitosamente');
       } catch (error) {
-        console.warn('Error al guardar datos:', error);
+        console.warn('❌ Error al guardar datos:', error);
       }
     }
 
@@ -1398,20 +3336,49 @@
           if (config.beneficiosClave) qs('#beneficiosClave').value = config.beneficiosClave;
           if (config.customProfitGlobal) qs('#inputCustomProfitGlobal').value = config.customProfitGlobal;
           
-          // Restaurar estrategia activa
+          // Restaurar estrategia activa - MEJORADO
           qsa('.estrategia-btn').forEach(btn => btn.classList.remove('estrategia-activa','bg-blue-50','border-blue-300'));
           qs('#customStrategy')?.classList.remove('estrategia-activa');
           
-          if (config.customProfitGlobal && config.customProfitGlobal !== '') {
-            qs('#customStrategy')?.classList.add('estrategia-activa');
-          } else {
-            const activeBtn = qs(`.estrategia-btn[data-profit="${config.estrategiaActiva}"]`);
-            if (activeBtn) activeBtn.classList.add('estrategia-activa');
+          if (config.estrategiaActiva) {
+            if (typeof config.estrategiaActiva === 'object') {
+              // Nueva estructura con type y value
+              if (config.estrategiaActiva.type === 'custom') {
+                qs('#inputCustomProfitGlobal').value = config.estrategiaActiva.value;
+                qs('#customStrategy')?.classList.add('estrategia-activa');
+              } else {
+                const activeBtn = qs(`.estrategia-btn[data-profit="${config.estrategiaActiva.value}"]`);
+                if (activeBtn) activeBtn.classList.add('estrategia-activa');
+              }
+            } else {
+              // Compatibilidad con versión anterior
+              if (config.customProfitGlobal && config.customProfitGlobal !== '') {
+                qs('#customStrategy')?.classList.add('estrategia-activa');
+              } else {
+                const activeBtn = qs(`.estrategia-btn[data-profit="${config.estrategiaActiva}"]`);
+                if (activeBtn) activeBtn.classList.add('estrategia-activa');
+              }
+            }
           }
         }
 
         // Renderizar impuestos
         renderImpuestos();
+
+        // Restaurar datos de proyecciones financieras
+        if (data.proyeccionesFinancieras) {
+          const pf = data.proyeccionesFinancieras;
+          
+          // Restaurar TAM
+          if (pf.tam) qs('#tamValue').value = pf.tam;
+          
+          // Restaurar filtros SAM y SOM
+          samFilters = pf.samFilters || [];
+          somFilters = pf.somFilters || [];
+          renderSamFilters();
+          renderSomFilters();
+          calculateMarketSizes();
+        }
 
         // Restaurar productos
         if (data.productos && data.productos.length > 0) {
@@ -1435,103 +3402,82 @@
               if (ht.honorariosHora) qs('.honorarios-hora', card).value = ht.honorariosHora;
             }
 
-            // Restaurar inversión inicial - GARANTIZAR LIMPIEZA COMPLETA
+            // Restaurar inversión inicial - MEJORADO
             const inversionContainer = qs('.inversion-items', card);
-            if (inversionContainer) {
-              console.log(`📦 Inversión - Elementos antes de limpiar: ${inversionContainer.children.length}`);
-              
-              // LIMPIEZA FORZADA: Eliminar todos los elementos hijos uno por uno
+            if (inversionContainer && producto.inversion && producto.inversion.length > 0) {
+              // Limpiar contenedor
               while (inversionContainer.firstChild) {
                 inversionContainer.removeChild(inversionContainer.firstChild);
               }
               
-              console.log(`🧹 Inversión - Elementos después de limpiar: ${inversionContainer.children.length}`);
-              
-              // Solo restaurar si hay datos guardados
-              if (producto.inversion && producto.inversion.length > 0) {
-                console.log(`📥 Restaurando ${producto.inversion.length} elementos de inversión`);
-                producto.inversion.forEach(item => {
-                  const row = document.createElement('div');
-                  row.className = 'flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center';
-                  row.innerHTML = `
-                    <input type="text" value="${item.concepto}" placeholder="Describe el concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
-                    <div class="flex gap-2 items-center">
-                      <div class="relative w-24 sm:w-28">
-                        <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-                        <input type="number" value="${item.valor}" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
-                      </div>
-                      <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
+              // Restaurar elementos
+              producto.inversion.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center';
+                row.innerHTML = `
+                  <input type="text" value="${item.concepto || ''}" placeholder="Describe el concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
+                  <div class="flex gap-2 items-center">
+                    <div class="relative w-24 sm:w-28">
+                      <span class="absolute left-2 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                      <input type="number" value="${item.valor || '0'}" class="w-full pl-6 pr-2 py-2 border border-teal-400 rounded-lg text-xs sm:text-sm">
                     </div>
-                  `;
-                  inversionContainer.appendChild(row);
-                });
-              }
+                    <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white p-1 rounded shrink-0">🗑️</button>
+                  </div>
+                `;
+                inversionContainer.appendChild(row);
+              });
             }
 
-            // Restaurar costos fijos - GARANTIZAR LIMPIEZA COMPLETA
+            // Restaurar costos fijos - MEJORADO
             const fijosContainer = qs('.costos-fijos', card);
-            if (fijosContainer) {
-              console.log(`📦 Costos Fijos - Elementos antes de limpiar: ${fijosContainer.children.length}`);
-              
-              // LIMPIEZA FORZADA: Eliminar todos los elementos hijos uno por uno
+            if (fijosContainer && producto.costosFijos && producto.costosFijos.length > 0) {
+              // Limpiar contenedor
               while (fijosContainer.firstChild) {
                 fijosContainer.removeChild(fijosContainer.firstChild);
               }
               
-              console.log(`🧹 Costos Fijos - Elementos después de limpiar: ${fijosContainer.children.length}`);
-              
-              // Solo restaurar si hay datos guardados
-              if (producto.costosFijos && producto.costosFijos.length > 0) {
-                console.log(`📥 Restaurando ${producto.costosFijos.length} elementos de costos fijos`);
-                producto.costosFijos.forEach(item => {
-                  const row = document.createElement('div');
-                  row.className = 'flex flex-col sm:flex-row gap-2 sm:items-center';
-                  row.innerHTML = `
-                    <input type="text" value="${item.concepto}" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
-                    <div class="flex gap-2 items-center">
-                      <div class="relative w-24 sm:w-28">
-                        <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-                        <input type="number" value="${item.valor}" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
-                      </div>
-                      <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded shrink-0">🗑️</button>
+              // Restaurar elementos
+              producto.costosFijos.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex flex-col sm:flex-row gap-2 sm:items-center';
+                row.innerHTML = `
+                  <input type="text" value="${item.concepto || ''}" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
+                  <div class="flex gap-2 items-center">
+                    <div class="relative w-24 sm:w-28">
+                      <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                      <input type="number" value="${item.valor || '0'}" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
                     </div>
-                  `;
-                  fijosContainer.appendChild(row);
-                });
-              }
+                    <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded shrink-0">🗑️</button>
+                  </div>
+                `;
+                fijosContainer.appendChild(row);
+              });
             }
 
-            // Restaurar costos variables - GARANTIZAR LIMPIEZA COMPLETA
+            // Restaurar costos variables - MEJORADO
             const variablesContainer = qs('.costos-variables', card);
-            if (variablesContainer) {
-              console.log(`📦 Costos Variables - Elementos antes de limpiar: ${variablesContainer.children.length}`);
-              
-              // LIMPIEZA FORZADA: Eliminar todos los elementos hijos uno por uno
+            if (variablesContainer && producto.costosVariables && producto.costosVariables.length > 0) {
+              // Limpiar contenedor
               while (variablesContainer.firstChild) {
                 variablesContainer.removeChild(variablesContainer.firstChild);
               }
               
-              console.log(`🧹 Costos Variables - Elementos después de limpiar: ${variablesContainer.children.length}`);
-              
-              // Solo restaurar si hay datos guardados
-              if (producto.costosVariables && producto.costosVariables.length > 0) {
-                console.log(`📥 Restaurando ${producto.costosVariables.length} elementos de costos variables`);
-                producto.costosVariables.forEach(item => {
-                  const row = document.createElement('div');
-                  row.className = 'flex flex-col sm:flex-row gap-2 sm:items-center';
-                  row.innerHTML = `
-                    <input type="text" value="${item.concepto}" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
-                    <div class="flex gap-2 items-center">
-                      <div class="relative w-24 sm:w-28">
-                        <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
-                        <input type="number" value="${item.valor}" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
-                      </div>
-                      <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded shrink-0">🗑️</button>
+              // Restaurar elementos
+              producto.costosVariables.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex flex-col sm:flex-row gap-2 sm:items-center';
+                row.innerHTML = `
+                  <input type="text" value="${item.concepto || ''}" placeholder="Concepto" class="flex-1 p-2 border border-teal-400 rounded-lg text-xs">
+                  <div class="flex gap-2 items-center">
+                    <div class="relative w-24 sm:w-28">
+                      <span class="absolute left-1 top-2 text-teal-700 font-semibold text-xs moneda">${monedaActual}</span>
+                      <input type="number" value="${item.valor || '0'}" class="w-full pl-4 pr-1 py-2 border border-teal-400 rounded-lg text-xs">
                     </div>
-                  `;
-                  variablesContainer.appendChild(row);
-                });
-              }
+                    <button class="eliminar-item text-orange-600 hover:bg-orange-500 hover:text-white text-xs p-1 rounded shrink-0">🗑️</button>
+                  </div>
+                `;
+                variablesContainer.appendChild(row);
+              });
             }
 
             // Actualizar título del producto
@@ -1542,10 +3488,118 @@
           actualizarConteoProductos();
           
           // 🔧 CORRECCIÓN CRÍTICA: Actualizar contador global para evitar IDs duplicados
-          // Encontrar el ID más alto entre los productos restaurados
           const idsExistentes = data.productos.map(p => parseInt(p.id)).filter(id => !isNaN(id));
           const maxId = idsExistentes.length > 0 ? Math.max(...idsExistentes) : 0;
           contadorProductos = maxId; // El próximo producto será maxId + 1
+
+          // RESTAURACIÓN MEJORADA DE PROYECCIONES MENSUALES CON ID ÚNICO
+          if (data.proyeccionesFinancieras && data.proyeccionesFinancieras.proyeccionesMensuales) {
+            // Esperar a que se generen las tablas de escenarios con múltiples intentos
+            let intentosRestauracion = 0;
+            const maxIntentos = 5;
+            
+            function intentarRestaurarProyecciones() {
+              intentosRestauracion++;
+              console.log(`🔄 Intento ${intentosRestauracion} de restauración de proyecciones mensuales...`);
+              
+              // Verificar que existan las tablas de proyecciones
+              const monthlyTables = qsa('#monthlyProjectionsContainer table');
+              const productCards = qsa('.product-card');
+              
+              console.log(`📊 Tablas encontradas: ${monthlyTables.length}, Productos: ${productCards.length}`);
+              
+              if (monthlyTables.length === 0 && intentosRestauracion < maxIntentos) {
+                console.log(`⏳ Tablas no generadas aún, reintentando en 1 segundo...`);
+                setTimeout(intentarRestaurarProyecciones, 1000);
+                return;
+              }
+              
+              let proyeccionesRestauradas = 0;
+              let inputsEncontrados = 0;
+              let inputsNoEncontrados = 0;
+              
+              // Crear mapa de productos actuales por ID para búsqueda rápida
+              const productMap = new Map();
+              productCards.forEach((card, index) => {
+                const productId = card.getAttribute('data-product-id');
+                productMap.set(productId, { card, index });
+              });
+              
+              data.proyeccionesFinancieras.proyeccionesMensuales.forEach((proyeccion) => {
+                const productId = proyeccion.productId;
+                console.log(`📊 Restaurando proyección para producto ID: ${productId}`);
+                
+                // Buscar el producto actual por ID
+                const productInfo = productMap.get(productId);
+                if (!productInfo) {
+                  console.warn(`⚠️ Producto ID ${productId} no encontrado en DOM actual`);
+                  return;
+                }
+                
+                ['optimista', 'realista', 'pesimista'].forEach(scenarioKey => {
+                  const scenarioEn = scenarioKey === 'optimista' ? 'optimist' : scenarioKey === 'realista' ? 'realist' : 'pessimist';
+                  
+                  if (proyeccion[scenarioKey] && Array.isArray(proyeccion[scenarioKey])) {
+                    proyeccion[scenarioKey].forEach((value, monthIndex) => {
+                      // Estrategia principal: Buscar por ID único del producto
+                      let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`);
+                      
+                      // Fallback 1: Buscar por índice (compatibilidad)
+                      if (!input) {
+                        input = qs(`input[data-product="${productInfo.index}"][data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`);
+                      }
+                      
+                      // Fallback 2: Buscar en la tabla específica del producto
+                      if (!input && monthlyTables[productInfo.index]) {
+                        input = qs(`input[data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`, monthlyTables[productInfo.index]);
+                      }
+                      
+                      // Fallback 3: Buscar en el contenedor de proyecciones del producto
+                      if (!input) {
+                        const projectionContainer = qs(`[data-projection-product-id="${productId}"]`);
+                        if (projectionContainer) {
+                          input = qs(`input[data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`, projectionContainer);
+                        }
+                      }
+                      
+                      if (input) {
+                        input.value = value || '0';
+                        inputsEncontrados++;
+                        
+                        if (value !== '0') {
+                          console.log(`✅ Restaurado: Producto ID ${productId}, ${scenarioEn}, Mes ${monthIndex + 1}: ${value}`);
+                          proyeccionesRestauradas++;
+                        }
+                      } else {
+                        inputsNoEncontrados++;
+                        console.warn(`⚠️ No se encontró input para: Producto ID ${productId}, ${scenarioEn}, Mes ${monthIndex + 1}`);
+                      }
+                    });
+                  }
+                });
+              });
+              
+              console.log(`📊 Resumen de restauración:`);
+              console.log(`   - Inputs encontrados: ${inputsEncontrados}`);
+              console.log(`   - Inputs no encontrados: ${inputsNoEncontrados}`);
+              console.log(`   - Proyecciones con datos restauradas: ${proyeccionesRestauradas}`);
+              
+              // Actualizar proyecciones después de restaurar datos
+              updateProjections();
+              
+              if (inputsEncontrados > 0) {
+                console.log('✅ Proyecciones mensuales restauradas exitosamente');
+              } else if (intentosRestauracion < maxIntentos) {
+                console.log(`⚠️ No se encontraron inputs, reintentando...`);
+                setTimeout(intentarRestaurarProyecciones, 1000);
+              } else {
+                console.log('❌ No se pudieron restaurar las proyecciones mensuales después de varios intentos');
+              }
+            }
+            
+            // Iniciar proceso de restauración
+            setTimeout(intentarRestaurarProyecciones, 500);
+          }
         }
 
         // 🔓 REACTIVAR GUARDADO AUTOMÁTICO AL COMPLETAR RESTAURACIÓN
@@ -1565,22 +3619,121 @@
 
     // Guardar automáticamente cuando hay cambios
     function setupAutoSave() {
-      // Guardar en cambios de inputs
-      document.addEventListener('input', debounce(guardarDatos, 1000));
-      document.addEventListener('change', debounce(guardarDatos, 500));
+      // Guardar en cambios de inputs con debounce
+      document.addEventListener('input', debounce(guardarDatos, 1500));
+      document.addEventListener('change', debounce(guardarDatos, 800));
       
       // Guardar en clicks importantes (agregar/eliminar elementos)
       document.addEventListener('click', (e) => {
-        if (e.target.matches('.eliminar-item, .add-inversion, .add-fijo, .add-variable, .delete-btn, .estrategia-btn, #btnAgregarImpuesto, [data-remove-tax], #btnAddProduct')) {
-          setTimeout(guardarDatos, 100); // Pequeño delay para que se complete la acción
+        const importantSelectors = [
+          '.eliminar-item', '.add-inversion', '.add-fijo', '.add-variable', 
+          '.delete-btn', '.estrategia-btn', '#btnAgregarImpuesto', 
+          '[data-remove-tax]', '#btnAddProduct', '[data-remove-filter]',
+          '#confirmSamFilter', '#confirmSomFilter', '#toggleSamForm', '#toggleSomForm'
+        ];
+        
+        if (importantSelectors.some(selector => e.target.matches(selector) || e.target.closest(selector))) {
+          setTimeout(guardarDatos, 150); // Pequeño delay para que se complete la acción
         }
       });
+
+      // 🚀 SISTEMA DE GUARDADO INMEDIATO PARA PROYECCIONES MENSUALES
+      // Usar delegación de eventos para capturar inputs dinámicos sin perder eventos
+      document.addEventListener('input', (e) => {
+        if (e.target.matches('.monthly-input') || 
+            (e.target.matches('input[data-product-id][data-scenario][data-month]')) ||
+            (e.target.matches('input[data-product][data-scenario][data-month]'))) {
+          
+          const productId = e.target.getAttribute('data-product-id');
+          const productIndex = e.target.getAttribute('data-product'); // Fallback
+          const scenario = e.target.getAttribute('data-scenario');
+          const month = e.target.getAttribute('data-month');
+          const value = e.target.value;
+          
+          console.log(`📊 Cambio detectado en proyección mensual:`, {
+            productoId: productId,
+            productoIndex: productIndex,
+            escenario: scenario,
+            mes: parseInt(month) + 1,
+            valor: value
+          });
+          
+          // 🔄 ACTUALIZAR CÁLCULOS INMEDIATAMENTE
+          updateProjectionsChart();
+          updateScenarioSummary();
+          calculateProfitabilityAnalysis();
+          
+          // 🚀 GUARDADO INMEDIATO SIN DEBOUNCE para proyecciones
+          // Usar un debounce muy corto (100ms) para evitar múltiples guardados por tecla
+          clearTimeout(window.projectionSaveTimeout);
+          window.projectionSaveTimeout = setTimeout(() => {
+            console.log('💾 Guardado inmediato de proyección mensual ejecutado');
+            guardarDatos();
+          }, 100);
+        }
+      });
+      
+      // Guardar también en cambios de proyecciones mensuales con change event
+      document.addEventListener('change', (e) => {
+        if (e.target.matches('.monthly-input') || 
+            (e.target.matches('input[data-product-id][data-scenario][data-month]')) ||
+            (e.target.matches('input[data-product][data-scenario][data-month]'))) {
+          
+          const productId = e.target.getAttribute('data-product-id');
+          const productIndex = e.target.getAttribute('data-product'); // Fallback
+          const scenario = e.target.getAttribute('data-scenario');
+          const month = e.target.getAttribute('data-month');
+          const value = e.target.value;
+          
+          console.log(`📊 Cambio confirmado en proyección mensual:`, {
+            productoId: productId,
+            productoIndex: productIndex,
+            escenario: scenario,
+            mes: parseInt(month) + 1,
+            valor: value
+          });
+          
+          // 🔄 ACTUALIZAR CÁLCULOS INMEDIATAMENTE
+          updateProjectionsChart();
+          updateScenarioSummary();
+          calculateProfitabilityAnalysis();
+          
+          // 🚀 GUARDADO INMEDIATO al confirmar cambio
+          console.log('💾 Guardado inmediato por change event ejecutado');
+          guardarDatos();
+        }
+      });
+
+    // 🚀 FUNCIÓN PARA CONFIGURAR GUARDADO INMEDIATO EN NUEVOS INPUTS DE PROYECCIÓN
+    function setupImmediateProjectionSave() {
+      const projectionInputs = qsa('.monthly-input, input[data-product-id][data-scenario][data-month]');
+      console.log(`🚀 Configurando guardado inmediato para ${projectionInputs.length} inputs de proyección`);
+      
+      // Los eventos ya están configurados globalmente con delegación,
+      // pero podemos agregar atributos para identificar que están listos
+      projectionInputs.forEach(input => {
+        if (!input.hasAttribute('data-immediate-save-ready')) {
+          input.setAttribute('data-immediate-save-ready', 'true');
+        }
+      });
+    }
 
       // Guardar antes de cerrar la página
       window.addEventListener('beforeunload', guardarDatos);
       
-      // Guardar periódicamente (cada 30 segundos)
-      setInterval(guardarDatos, 30000);
+      // Guardar periódicamente (cada 45 segundos)
+      setInterval(() => {
+        if (autoSaveEnabled) {
+          guardarDatos();
+        }
+      }, 45000);
+      
+      // Guardar cuando la página pierde el foco (usuario cambia de pestaña)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && autoSaveEnabled) {
+          guardarDatos();
+        }
+      });
     }
 
     // Función debounce para evitar guardar demasiado frecuentemente
@@ -1604,6 +3757,7 @@
       renderImpuestos();
       initFechas();
       actualizarConteoProductos();
+      updateProjections(); // Inicializar proyecciones
     } else {
       // Si se restauraron datos, recalcular todo
       calcularInversion();
@@ -1611,10 +3765,11 @@
       calcularProductos();
       calcularEquilibrio();
       actualizarCotizacion();
+      updateProjections(); // Actualizar proyecciones con datos restaurados
     }
     
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98821f3355e8cc74',t:'MTc1OTM4NjMyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988446fff6e9cc74',t:'MTc1OTQwODkyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
