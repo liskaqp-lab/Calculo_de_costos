@@ -921,10 +921,10 @@
         contadorProductos = count;
         calcularInversion();
         calcularCostos();
-        calcularProductos();
+        calcularProductos(); // Ya incluye updateProjectionCalculations()
         calcularEquilibrio();
         actualizarCotizacion();
-        updateProjections(); // Actualizar proyecciones cuando se elimina producto
+        updateMonthlyProjections(); // RECONSTRUIR tablas cuando se elimina producto
       }
       closeDeleteModal();
     });
@@ -950,9 +950,9 @@
       qs('#productosCompletosContainer').appendChild(card);
       actualizarConteoProductos();
       renumerarTarjetas();
-      calcularProductos();
+      calcularProductos(); // Ya incluye updateProjectionCalculations()
       actualizarCotizacion();
-      updateProjections(); // Actualizar proyecciones cuando se agrega producto
+      updateMonthlyProjections(); // RECONSTRUIR tablas cuando se agrega producto
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
@@ -1218,6 +1218,9 @@
       // Recalcular equilibrio y cotización después de actualizar productos
       calcularEquilibrio();
       actualizarCotizacion();
+      
+      // 🔧 OPTIMIZACIÓN: Solo actualizar cálculos de proyecciones, no reconstruir tablas
+      updateProjectionCalculations();
     }
 
     function calcularEquilibrio() {
@@ -1505,6 +1508,10 @@
         setTimeout(() => {
           printWindow.print();
           printWindow.close();
+          
+          // 🔓 REACTIVAR GUARDADO AUTOMÁTICO después de imprimir
+          autoSaveEnabled = true;
+          console.log('🔓 Guardado automático REACTIVADO después de impresión');
         }, 250);
       };
     });
@@ -1672,15 +1679,22 @@
       qs('#somPercentage').textContent = `${somPercentage.toFixed(1)}%`;
     }
 
+    // 🔧 FUNCIÓN PRINCIPAL: Solo reconstruye tablas cuando cambia la estructura (agregar/eliminar productos)
     function updateMonthlyProjections() {
+      console.log('🏗️ updateMonthlyProjections: Reconstruyendo tablas de proyección...');
+      
+      // 🔒 DESACTIVAR GUARDADO AUTOMÁTICO durante reconstrucción
+      autoSaveEnabled = false;
+      console.log('🔒 Guardado automático DESACTIVADO durante reconstrucción');
+      
       const container = qs('#monthlyProjectionsContainer');
       const products = qsa('.product-card');
       
       if (products.length === 0) {
         container.innerHTML = '<p class="text-gray-500 text-center py-4">Agrega productos para ver las proyecciones mensuales</p>';
-        updateProjectionsChart();
-        updateScenarioSummary();
-        calculateProfitabilityAnalysis();
+        autoSaveEnabled = true;
+        console.log('🔓 Guardado automático REACTIVADO (sin productos)');
+        updateProjectionCalculations();
         return;
       }
 
@@ -1690,7 +1704,7 @@
 
       container.innerHTML = products.map((card, index) => {
         const productName = qs('.nombre-producto', card)?.value || `Producto ${index + 1}`;
-        const productId = card.getAttribute('data-product-id'); // ID único del producto
+        const productId = card.getAttribute('data-product-id');
         const price = calculateProductPrice(card);
         const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
         const color = productColors[index % productColors.length];
@@ -1716,9 +1730,9 @@
                     const scenarioNames = {optimist: 'Optimista', realist: 'Realista', pessimist: 'Pesimista'};
                     const scenarioIcons = {optimist: '🚀', realist: '📈', pessimist: '⚠️'};
                     const scenarioColors = {
-                      optimist: `${color}E6`, // Más intenso
-                      realist: `${color}B3`, // Medio
-                      pessimist: `${color}80`  // Más claro
+                      optimist: `${color}E6`,
+                      realist: `${color}B3`,
+                      pessimist: `${color}80`
                     };
                     
                     return `
@@ -1746,19 +1760,61 @@
         `;
       }).join('');
       
-      // 🔄 RESTAURAR DATOS DESPUÉS DE RECONSTRUIR
+      // 🔄 RESTAURAR DATOS INMEDIATAMENTE (delay mínimo)
       setTimeout(() => {
         restoreProjectionData(currentProjectionData);
         console.log('🔄 Datos de proyección restaurados después de reconstruir tablas');
         
-        // Configurar eventos inmediatos para nuevos inputs
-        setupImmediateProjectionSave();
+        // ✅ ACTUALIZAR TODOS LOS CÁLCULOS después de restaurar datos
+        updateProjectionCalculations();
         
-        // Actualizar TODOS los cálculos después de restaurar datos
-        updateProjectionsChart();
-        updateScenarioSummary();
-        calculateProfitabilityAnalysis();
-      }, 50);
+        // 🔓 REACTIVAR GUARDADO AUTOMÁTICO solo después de restaurar y calcular
+        autoSaveEnabled = true;
+        console.log('🔓 Guardado automático REACTIVADO después de restauración completa');
+        
+      }, 100); // Delay mínimo para asegurar que el DOM esté listo
+    }
+
+    // 🔧 FUNCIÓN OPTIMIZADA: Solo actualiza cálculos sin tocar el DOM
+    function updateProjectionCalculations() {
+      console.log('📊 updateProjectionCalculations: Actualizando solo cálculos...');
+      updateProjectionsChart();
+      updateScenarioSummary();
+      calculateProfitabilityAnalysis();
+      calculateFinancialIndicators();
+    }
+
+    // 🔧 FUNCIÓN LIGERA: Solo actualiza headers (nombres y precios) sin reconstruir tablas
+    function updateProjectionHeaders() {
+      console.log('🏷️ updateProjectionHeaders: Actualizando solo headers...');
+      const products = qsa('.product-card');
+      
+      products.forEach((card, index) => {
+        const productId = card.getAttribute('data-product-id');
+        const productName = qs('.nombre-producto', card)?.value || `Producto ${index + 1}`;
+        const price = calculateProductPrice(card);
+        const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+        
+        // Buscar y actualizar solo el header de este producto
+        const projectionContainer = qs(`[data-projection-product-id="${productId}"]`);
+        if (projectionContainer) {
+          const header = qs('.p-3', projectionContainer);
+          if (header) {
+            const headerContent = header.innerHTML;
+            const updatedContent = headerContent.replace(
+              /^[^-]+ - Proyección Mensual/,
+              `${productName} - Proyección Mensual`
+            ).replace(
+              /Precio: <span class="moneda">[^<]+<\/span> [0-9.,]+ \| Costo: <span class="moneda">[^<]+<\/span> [0-9.,]+/,
+              `Precio: <span class="moneda">${monedaActual}</span> ${price.toFixed(2)} | Costo: <span class="moneda">${monedaActual}</span> ${cost.toFixed(2)}`
+            );
+            header.innerHTML = updatedContent;
+          }
+        }
+      });
+      
+      // Solo actualizar cálculos después de cambiar headers
+      updateProjectionCalculations();
     }
 
     // 🔄 FUNCIÓN PARA PRESERVAR DATOS DE PROYECCIÓN ANTES DE RECONSTRUIR
@@ -2471,21 +2527,42 @@
       return yearsToBreakeven;
     }
 
+    // 🔧 FUNCIÓN LEGACY: Mantener compatibilidad pero optimizar
     function updateProjections() {
-      updateMonthlyProjections();
-      calculateFinancialIndicators();
+      // Solo reconstruir si no hay tablas o cambió el número de productos
+      const existingTables = qsa('#monthlyProjectionsContainer [data-projection-product-id]');
+      const currentProducts = qsa('.product-card');
+      
+      if (existingTables.length !== currentProducts.length) {
+        console.log('🔄 updateProjections: Reconstruyendo por cambio en número de productos');
+        updateMonthlyProjections();
+      } else {
+        console.log('📊 updateProjections: Solo actualizando cálculos');
+        updateProjectionCalculations();
+      }
     }
 
     function imprimirProyecciones() {
-      // Crear imagen de la gráfica antes de imprimir
+      console.log('🖨️ Iniciando proceso de impresión de proyecciones...');
+      
+      // 🔒 DESACTIVAR GUARDADO AUTOMÁTICO durante impresión
+      autoSaveEnabled = false;
+      console.log('🔒 Guardado automático DESACTIVADO durante impresión');
+      
+      // Actualizar todos los cálculos para asegurar datos correctos
+      updateProjectionCalculations();
+      console.log('📊 Cálculos actualizados para impresión');
+      
+      // Crear imagen de la gráfica después de actualizar
       const canvas = qs('#projectionsChart');
       let chartImageData = '';
       
       if (canvas) {
         try {
           chartImageData = canvas.toDataURL('image/png');
+          console.log('📈 Imagen de gráfica generada para impresión');
         } catch (error) {
-          console.warn('No se pudo generar imagen de la gráfica:', error);
+          console.warn('⚠️ No se pudo generar imagen de la gráfica:', error);
         }
       }
       
@@ -3060,6 +3137,10 @@
         setTimeout(() => {
           printWindow.print();
           printWindow.close();
+          
+          // 🔓 REACTIVAR GUARDADO AUTOMÁTICO después de imprimir
+          autoSaveEnabled = true;
+          console.log('🔓 Guardado automático REACTIVADO después de impresión');
         }, 250);
       };
     }
@@ -3070,13 +3151,15 @@
       if (t.matches('.inversion-items input[type="number"], .costos-fijos input[type="number"], .costos-variables input[type="number"]')) {
         calcularInversion(); 
         calcularCostos();
-        calcularProductos(); // Recalcular productos después de cambios en costos
-        updateProjections(); // Actualizar proyecciones
+        calcularProductos(); // Ya incluye updateProjectionCalculations()
       }
       if (t.matches('.unidades-mensuales, .horas-por-dia, .dias-por-mes, .honorarios-hora')) {
         calcularCostos(); // Recalcular costos primero (incluye honorarios)
-        calcularProductos(); // Luego productos
-        updateProjections(); // Actualizar proyecciones
+        calcularProductos(); // Ya incluye updateProjectionCalculations()
+      }
+      if (t.matches('.nombre-producto')) {
+        // Solo actualizar headers de proyecciones, no reconstruir tablas
+        updateProjectionHeaders();
       }
       if (t.id === 'beneficiosClave' || t.id === 'diasValidez' || t.id === 'fechaEmisionInput') {
         actualizarCotizacion();
@@ -3086,10 +3169,7 @@
       if (t.id === 'tamValue') {
         calculateMarketSizes();
       }
-      if (t.matches('.monthly-input')) {
-        updateScenarioSummary();
-        calculateFinancialIndicators();
-      }
+      // Los inputs de proyecciones mensuales se manejan en el sistema de guardado inmediato
     });
 
     function actualizarTituloProducto(input){
@@ -3492,114 +3572,8 @@
           const maxId = idsExistentes.length > 0 ? Math.max(...idsExistentes) : 0;
           contadorProductos = maxId; // El próximo producto será maxId + 1
 
-          // RESTAURACIÓN MEJORADA DE PROYECCIONES MENSUALES CON ID ÚNICO
-          if (data.proyeccionesFinancieras && data.proyeccionesFinancieras.proyeccionesMensuales) {
-            // Esperar a que se generen las tablas de escenarios con múltiples intentos
-            let intentosRestauracion = 0;
-            const maxIntentos = 5;
-            
-            function intentarRestaurarProyecciones() {
-              intentosRestauracion++;
-              console.log(`🔄 Intento ${intentosRestauracion} de restauración de proyecciones mensuales...`);
-              
-              // Verificar que existan las tablas de proyecciones
-              const monthlyTables = qsa('#monthlyProjectionsContainer table');
-              const productCards = qsa('.product-card');
-              
-              console.log(`📊 Tablas encontradas: ${monthlyTables.length}, Productos: ${productCards.length}`);
-              
-              if (monthlyTables.length === 0 && intentosRestauracion < maxIntentos) {
-                console.log(`⏳ Tablas no generadas aún, reintentando en 1 segundo...`);
-                setTimeout(intentarRestaurarProyecciones, 1000);
-                return;
-              }
-              
-              let proyeccionesRestauradas = 0;
-              let inputsEncontrados = 0;
-              let inputsNoEncontrados = 0;
-              
-              // Crear mapa de productos actuales por ID para búsqueda rápida
-              const productMap = new Map();
-              productCards.forEach((card, index) => {
-                const productId = card.getAttribute('data-product-id');
-                productMap.set(productId, { card, index });
-              });
-              
-              data.proyeccionesFinancieras.proyeccionesMensuales.forEach((proyeccion) => {
-                const productId = proyeccion.productId;
-                console.log(`📊 Restaurando proyección para producto ID: ${productId}`);
-                
-                // Buscar el producto actual por ID
-                const productInfo = productMap.get(productId);
-                if (!productInfo) {
-                  console.warn(`⚠️ Producto ID ${productId} no encontrado en DOM actual`);
-                  return;
-                }
-                
-                ['optimista', 'realista', 'pesimista'].forEach(scenarioKey => {
-                  const scenarioEn = scenarioKey === 'optimista' ? 'optimist' : scenarioKey === 'realista' ? 'realist' : 'pessimist';
-                  
-                  if (proyeccion[scenarioKey] && Array.isArray(proyeccion[scenarioKey])) {
-                    proyeccion[scenarioKey].forEach((value, monthIndex) => {
-                      // Estrategia principal: Buscar por ID único del producto
-                      let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`);
-                      
-                      // Fallback 1: Buscar por índice (compatibilidad)
-                      if (!input) {
-                        input = qs(`input[data-product="${productInfo.index}"][data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`);
-                      }
-                      
-                      // Fallback 2: Buscar en la tabla específica del producto
-                      if (!input && monthlyTables[productInfo.index]) {
-                        input = qs(`input[data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`, monthlyTables[productInfo.index]);
-                      }
-                      
-                      // Fallback 3: Buscar en el contenedor de proyecciones del producto
-                      if (!input) {
-                        const projectionContainer = qs(`[data-projection-product-id="${productId}"]`);
-                        if (projectionContainer) {
-                          input = qs(`input[data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`, projectionContainer);
-                        }
-                      }
-                      
-                      if (input) {
-                        input.value = value || '0';
-                        inputsEncontrados++;
-                        
-                        if (value !== '0') {
-                          console.log(`✅ Restaurado: Producto ID ${productId}, ${scenarioEn}, Mes ${monthIndex + 1}: ${value}`);
-                          proyeccionesRestauradas++;
-                        }
-                      } else {
-                        inputsNoEncontrados++;
-                        console.warn(`⚠️ No se encontró input para: Producto ID ${productId}, ${scenarioEn}, Mes ${monthIndex + 1}`);
-                      }
-                    });
-                  }
-                });
-              });
-              
-              console.log(`📊 Resumen de restauración:`);
-              console.log(`   - Inputs encontrados: ${inputsEncontrados}`);
-              console.log(`   - Inputs no encontrados: ${inputsNoEncontrados}`);
-              console.log(`   - Proyecciones con datos restauradas: ${proyeccionesRestauradas}`);
-              
-              // Actualizar proyecciones después de restaurar datos
-              updateProjections();
-              
-              if (inputsEncontrados > 0) {
-                console.log('✅ Proyecciones mensuales restauradas exitosamente');
-              } else if (intentosRestauracion < maxIntentos) {
-                console.log(`⚠️ No se encontraron inputs, reintentando...`);
-                setTimeout(intentarRestaurarProyecciones, 1000);
-              } else {
-                console.log('❌ No se pudieron restaurar las proyecciones mensuales después de varios intentos');
-              }
-            }
-            
-            // Iniciar proceso de restauración
-            setTimeout(intentarRestaurarProyecciones, 500);
-          }
+          // Guardar datos de proyecciones para restauración posterior
+          window.savedProjectionData = data.proyeccionesFinancieras;
         }
 
         // 🔓 REACTIVAR GUARDADO AUTOMÁTICO AL COMPLETAR RESTAURACIÓN
@@ -3757,19 +3731,97 @@
       renderImpuestos();
       initFechas();
       actualizarConteoProductos();
-      updateProjections(); // Inicializar proyecciones
+      updateMonthlyProjections(); // Crear tablas vacías
+      updateProjectionCalculations(); // Inicializar cálculos
     } else {
       // Si se restauraron datos, recalcular todo
       calcularInversion();
       calcularCostos();
-      calcularProductos();
+      calcularProductos(); // Ya incluye updateProjectionCalculations()
       calcularEquilibrio();
       actualizarCotizacion();
-      updateProjections(); // Actualizar proyecciones con datos restaurados
+      
+      // CRÍTICO: Asegurar que las proyecciones se reconstruyan y calculen correctamente
+      setTimeout(() => {
+        updateMonthlyProjections(); // Reconstruir tablas con productos restaurados
+        
+        // Restaurar datos de proyecciones después de crear tablas
+        setTimeout(() => {
+          restaurarProyeccionesFinancieras();
+          updateProjectionCalculations(); // Calcular después de restaurar datos
+        }, 200);
+      }, 100);
+    }
+    
+    // Función para restaurar proyecciones financieras
+    function restaurarProyeccionesFinancieras() {
+      const data = window.savedProjectionData;
+      if (!data || !data.proyeccionesMensuales) {
+        console.log('📊 No hay datos de proyecciones para restaurar');
+        return;
+      }
+      
+      console.log('🔄 Iniciando restauración de proyecciones financieras...');
+      
+      let proyeccionesRestauradas = 0;
+      let inputsEncontrados = 0;
+      let inputsNoEncontrados = 0;
+      
+      // Crear mapa de productos actuales por ID
+      const productMap = new Map();
+      const productCards = qsa('.product-card');
+      productCards.forEach((card, index) => {
+        const productId = card.getAttribute('data-product-id');
+        productMap.set(productId, { card, index });
+      });
+      
+      data.proyeccionesMensuales.forEach((proyeccion) => {
+        const productId = proyeccion.productId;
+        console.log(`📊 Restaurando proyección para producto ID: ${productId}`);
+        
+        const productInfo = productMap.get(productId);
+        if (!productInfo) {
+          console.warn(`⚠️ Producto ID ${productId} no encontrado`);
+          return;
+        }
+        
+        ['optimista', 'realista', 'pesimista'].forEach(scenarioKey => {
+          const scenarioEn = scenarioKey === 'optimista' ? 'optimist' : scenarioKey === 'realista' ? 'realist' : 'pessimist';
+          
+          if (proyeccion[scenarioKey] && Array.isArray(proyeccion[scenarioKey])) {
+            proyeccion[scenarioKey].forEach((value, monthIndex) => {
+              // Buscar input por ID único del producto
+              let input = qs(`input[data-product-id="${productId}"][data-scenario="${scenarioEn}"][data-month="${monthIndex}"]`);
+              
+              if (input) {
+                input.value = value || '0';
+                inputsEncontrados++;
+                
+                if (value !== '0') {
+                  console.log(`✅ Restaurado: Producto ID ${productId}, ${scenarioEn}, Mes ${monthIndex + 1}: ${value}`);
+                  proyeccionesRestauradas++;
+                }
+              } else {
+                inputsNoEncontrados++;
+                console.warn(`⚠️ Input no encontrado: Producto ID ${productId}, ${scenarioEn}, Mes ${monthIndex + 1}`);
+              }
+            });
+          }
+        });
+      });
+      
+      console.log(`📊 Restauración completada:`);
+      console.log(`   - Inputs encontrados: ${inputsEncontrados}`);
+      console.log(`   - Inputs no encontrados: ${inputsNoEncontrados}`);
+      console.log(`   - Proyecciones restauradas: ${proyeccionesRestauradas}`);
+      
+      if (proyeccionesRestauradas > 0) {
+        console.log('✅ Proyecciones financieras restauradas exitosamente');
+      }
     }
     
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988446fff6e9cc74',t:'MTc1OTQwODkyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98846da965f6a51e',t:'MTc1OTQxMDUwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
