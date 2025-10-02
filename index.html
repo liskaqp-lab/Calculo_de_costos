@@ -33,7 +33,7 @@
       <h1 class="text-4xl font-bold text-white drop-shadow">Calculadora de Precios Universal</h1>
       <p class="text-white/90 mt-2">Calcula precios automáticamente con estrategias de ganancia</p>
     </div>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/UUyvAW4BAiY?si=slIVx9EsYLpTr8mp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
     <!-- Configuración General -->
     <div class="bg-white rounded-2xl p-4 sm:p-8 card-shadow mb-8">
       <div class="flex items-center mb-6">
@@ -2311,13 +2311,15 @@
       
       scenarios.forEach(scenario => {
         let monthlyCashFlow = 0;
+        let productDiscountDetails = [];
         
         products.forEach((card, productIndex) => {
           const productId = card.getAttribute('data-product-id');
+          const productName = qs('.nombre-producto', card)?.value || `Producto ${productIndex + 1}`;
           const price = calculateProductPrice(card);
           const cost = parseFloat(qs('.costo-produccion', card)?.value) || 0;
           
-          // Calcular flujo de caja anual sumando todos los meses
+          // Calcular unidades anuales y promedio mensual para este escenario
           let annualUnits = 0;
           for (let month = 0; month < 12; month++) {
             // Búsqueda principal por ID único
@@ -2331,7 +2333,36 @@
             annualUnits += parseFloat(input?.value) || 0;
           }
           
-          monthlyCashFlow += (price - cost) * annualUnits / 12; // Promedio mensual
+          const monthlyUnits = annualUnits / 12;
+          const productMonthlyCashFlow = (price - cost) * monthlyUnits;
+          monthlyCashFlow += productMonthlyCashFlow;
+          
+          // Calcular descuento máximo manteniendo rentabilidad del 12%
+          const impRate = impuestosPersonalizados.reduce((s, i) => s + i.porcentaje, 0);
+          const minPriceWithoutTax = cost * 1.12; // 12% margen mínimo
+          const minTaxes = minPriceWithoutTax * impRate / 100;
+          const minFinalPrice = minPriceWithoutTax + minTaxes;
+          
+          const maxDiscount = Math.max(0, price - minFinalPrice);
+          const maxDiscountPercentage = price > 0 ? (maxDiscount / price) * 100 : 0;
+          
+          // Calcular ingresos mensuales y anuales del producto
+          const monthlyRevenue = price * monthlyUnits;
+          const annualRevenue = price * annualUnits;
+          
+          productDiscountDetails.push({
+            name: productName,
+            monthlyUnits: monthlyUnits,
+            annualUnits: annualUnits,
+            currentPrice: price,
+            cost: cost,
+            minPrice: minFinalPrice,
+            maxDiscount: maxDiscount,
+            maxDiscountPercentage: maxDiscountPercentage,
+            monthlyRevenue: monthlyRevenue,
+            annualRevenue: annualRevenue,
+            monthlyCashFlow: productMonthlyCashFlow
+          });
         });
         
         const annualCashFlow = monthlyCashFlow * 12;
@@ -2358,7 +2389,8 @@
           annualCashFlow,
           monthsToBreakeven,
           yearsToBreakeven,
-          isProfitable
+          isProfitable,
+          productDetails: productDiscountDetails
         });
       });
       
@@ -2390,6 +2422,52 @@
           (result.yearsToBreakeven <= 1 ? 'text-green-800' : 'text-yellow-800') : 
           'text-red-800';
         
+        // Generar detalle de descuentos por producto
+        let productDiscountHtml = '';
+        if (result.productDetails && result.productDetails.length > 0) {
+          productDiscountHtml = `
+            <div class="mt-3 pt-3 border-t border-gray-200">
+              <h6 class="text-xs font-semibold text-gray-700 mb-2">💸 Descuentos Máximos (Margen 12%)</h6>
+              <div class="space-y-1">
+          `;
+          
+          result.productDetails.forEach(product => {
+            const hasProjections = product.monthlyUnits > 0;
+            const discountColor = product.maxDiscountPercentage > 15 ? 'text-green-600' : 
+                                 product.maxDiscountPercentage > 5 ? 'text-yellow-600' : 'text-red-600';
+            
+            productDiscountHtml += `
+              <div class="text-xs bg-white rounded p-2 border border-gray-100">
+                <div class="flex justify-between items-start mb-1">
+                  <span class="font-medium text-gray-700 truncate" title="${product.name}">${product.name}</span>
+                  <span class="text-xs text-gray-500">${hasProjections ? `${product.monthlyUnits.toFixed(1)}/mes` : 'Sin proyección'}</span>
+                </div>
+                ${hasProjections ? `
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Descuento máx:</span>
+                    <span class="font-semibold ${discountColor}">
+                      <span class="moneda">${monedaActual}</span>${product.maxDiscount.toFixed(2)} (${product.maxDiscountPercentage.toFixed(1)}%)
+                    </span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Precio mín:</span>
+                    <span class="text-xs text-gray-500"><span class="moneda">${monedaActual}</span>${product.minPrice.toFixed(2)}</span>
+                  </div>
+                ` : `
+                  <div class="text-center">
+                    <span class="text-xs text-gray-400 italic">Agrega proyecciones mensuales</span>
+                  </div>
+                `}
+              </div>
+            `;
+          });
+          
+          productDiscountHtml += `
+              </div>
+            </div>
+          `;
+        }
+        
         html += `
           <div class="${statusClass} border rounded-lg p-4">
             <div class="flex items-center mb-3">
@@ -2419,6 +2497,7 @@
                 <p class="font-semibold ${statusColor}">${statusText}</p>
               </div>
             </div>
+            ${productDiscountHtml}
           </div>
         `;
       });
@@ -2516,8 +2595,16 @@
       qs('#totalInvestment').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalInvestment.toLocaleString()}`;
       
       // Calcular descuento promedio manteniendo margen del 12%
-      const averageDiscount = calculateAverageDiscountFor12PercentMargin();
-      qs('#discountRateDisplay').innerHTML = `<span class="moneda">${monedaActual}</span> ${averageDiscount.toFixed(2)}`;
+      const discountResult = calculateAverageDiscountFor12PercentMargin();
+      const discountElement = qs('#discountRateDisplay');
+      
+      if (discountResult.isProfitable) {
+        discountElement.innerHTML = `<span class="moneda">${monedaActual}</span> ${discountResult.value.toFixed(2)}`;
+        discountElement.className = 'text-lg sm:text-xl font-bold text-blue-600';
+      } else {
+        discountElement.innerHTML = `${discountResult.message}<br><small style="font-size: 0.7em; color: #dc2626;">Déficit: <span class="moneda">${monedaActual}</span> ${discountResult.value.toFixed(2)}</small>`;
+        discountElement.className = 'text-sm sm:text-base font-bold text-red-600';
+      }
       
       // Calcular años necesarios para alcanzar rentabilidad
       let yearsToProfit = calculateYearsToProfit();
@@ -2530,14 +2617,14 @@
     function calculateAverageDiscountFor12PercentMargin() {
       // Obtener el precio promedio del punto de equilibrio
       const precioPromedioElement = qs('#precioPromedioServicioDisplay');
-      if (!precioPromedioElement) return 0;
+      if (!precioPromedioElement) return { value: 0, isProfitable: false, message: 'Sin datos' };
       
       const precioPromedio = parseFloat(precioPromedioElement.textContent.replace(/[^\d.-]/g, '')) || 0;
-      if (precioPromedio <= 0) return 0;
+      if (precioPromedio <= 0) return { value: 0, isProfitable: false, message: 'Sin precio promedio' };
       
       // Calcular el costo promedio ponderado de todos los productos
       const products = qsa('.product-card');
-      if (products.length === 0) return 0;
+      if (products.length === 0) return { value: 0, isProfitable: false, message: 'Sin productos' };
       
       let totalCostosPonderados = 0;
       let totalUnidades = 0;
@@ -2551,7 +2638,7 @@
       });
       
       const costoPromedioPonderado = totalUnidades > 0 ? totalCostosPonderados / totalUnidades : 0;
-      if (costoPromedioPonderado <= 0) return 0;
+      if (costoPromedioPonderado <= 0) return { value: 0, isProfitable: false, message: 'Sin costos válidos' };
       
       // Calcular precio con margen TIR del 12%
       const impRate = impuestosPersonalizados.reduce((s, i) => s + i.porcentaje, 0);
@@ -2560,9 +2647,16 @@
       const precioFinalConMargen12 = precioConMargen12SinImpuestos + impuestosConMargen12;
       
       // El descuento promedio es la diferencia entre precio promedio actual y precio con 12% margen
-      const descuentoPromedio = Math.max(0, precioPromedio - precioFinalConMargen12);
+      const descuentoPromedio = precioPromedio - precioFinalConMargen12;
       
-      return descuentoPromedio;
+      // Determinar si es rentable (si el descuento es positivo o cero)
+      const isProfitable = descuentoPromedio >= 0;
+      
+      return {
+        value: Math.abs(descuentoPromedio), // Siempre mostrar valor absoluto
+        isProfitable: isProfitable,
+        message: isProfitable ? 'Descuento disponible' : 'Proyecto no rentable'
+      };
     }
 
     function calculateWeightedAverageTIR() {
@@ -4076,5 +4170,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9887458471d0cc74',t:'MTc1OTQ0MDMxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98876626c305571f',t:'MTc1OTQ0MTY1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
