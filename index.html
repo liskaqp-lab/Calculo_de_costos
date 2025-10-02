@@ -2615,47 +2615,49 @@
     }
 
     function calculateAverageDiscountFor12PercentMargin() {
-      // Obtener el precio promedio del punto de equilibrio
+      // Obtener datos directamente de la tarjeta Punto de Equilibrio
       const precioPromedioElement = qs('#precioPromedioServicioDisplay');
-      if (!precioPromedioElement) return { value: 0, isProfitable: false, message: 'Sin datos' };
+      const costoVariableElement = qs('#costoVariableServicioDisplay');
       
+      if (!precioPromedioElement || !costoVariableElement) {
+        return { value: 0, isProfitable: false, message: 'Sin datos de equilibrio' };
+      }
+      
+      // Extraer valores numéricos de los displays del punto de equilibrio
       const precioPromedio = parseFloat(precioPromedioElement.textContent.replace(/[^\d.-]/g, '')) || 0;
-      if (precioPromedio <= 0) return { value: 0, isProfitable: false, message: 'Sin precio promedio' };
+      const costoVariablePromedio = parseFloat(costoVariableElement.textContent.replace(/[^\d.-]/g, '')) || 0;
       
-      // Calcular el costo promedio ponderado de todos los productos
-      const products = qsa('.product-card');
-      if (products.length === 0) return { value: 0, isProfitable: false, message: 'Sin productos' };
+      if (precioPromedio <= 0) {
+        return { value: 0, isProfitable: false, message: 'Sin precio promedio válido' };
+      }
       
-      let totalCostosPonderados = 0;
-      let totalUnidades = 0;
+      if (costoVariablePromedio <= 0) {
+        return { value: 0, isProfitable: false, message: 'Sin costo variable válido' };
+      }
       
-      products.forEach(card => {
-        const costoProduccion = parseFloat(qs('.costo-produccion', card)?.value) || 0;
-        const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 1;
-        
-        totalCostosPonderados += costoProduccion * unidades;
-        totalUnidades += unidades;
-      });
-      
-      const costoPromedioPonderado = totalUnidades > 0 ? totalCostosPonderados / totalUnidades : 0;
-      if (costoPromedioPonderado <= 0) return { value: 0, isProfitable: false, message: 'Sin costos válidos' };
-      
-      // Calcular precio con margen TIR del 12%
+      // Calcular el precio mínimo necesario para mantener 12% de margen TIR
+      // Usar el costo variable promedio del punto de equilibrio como base
       const impRate = impuestosPersonalizados.reduce((s, i) => s + i.porcentaje, 0);
-      const precioConMargen12SinImpuestos = costoPromedioPonderado * 1.12; // 12% de margen sobre costo
-      const impuestosConMargen12 = precioConMargen12SinImpuestos * impRate / 100;
-      const precioFinalConMargen12 = precioConMargen12SinImpuestos + impuestosConMargen12;
       
-      // El descuento promedio es la diferencia entre precio promedio actual y precio con 12% margen
-      const descuentoPromedio = precioPromedio - precioFinalConMargen12;
+      // Precio mínimo sin impuestos = costo variable + 12% margen
+      const precioMinSinImpuestos = costoVariablePromedio * 1.12;
       
-      // Determinar si es rentable (si el descuento es positivo o cero)
-      const isProfitable = descuentoPromedio >= 0;
+      // Calcular impuestos sobre el precio mínimo
+      const impuestosMinimos = precioMinSinImpuestos * impRate / 100;
+      
+      // Precio final mínimo (con impuestos)
+      const precioMinFinal = precioMinSinImpuestos + impuestosMinimos;
+      
+      // El descuento disponible es la diferencia entre precio actual y precio mínimo
+      const descuentoDisponible = precioPromedio - precioMinFinal;
+      
+      // Determinar si es rentable (si hay descuento disponible)
+      const isProfitable = descuentoDisponible >= 0;
       
       return {
-        value: Math.abs(descuentoPromedio), // Siempre mostrar valor absoluto
+        value: Math.abs(descuentoDisponible),
         isProfitable: isProfitable,
-        message: isProfitable ? 'Descuento disponible' : 'Proyecto no rentable'
+        message: isProfitable ? 'Descuento disponible' : 'Margen insuficiente'
       };
     }
 
@@ -4170,5 +4172,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98876626c305571f',t:'MTc1OTQ0MTY1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98876f5771ad571f',t:'MTc1OTQ0MjAzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
