@@ -255,7 +255,7 @@
       </div>
 
       <div class="mb-6">
-        <label class="block text-sm font-medium text-amber-700 mb-2">💡 Beneficios Clave (opcional)</label>
+        <label class="block text-sm font-medium text-amber-700 mb-2">🎤 Comentarios (opcional)</label>
         <textarea id="beneficiosClave" rows="3" class="w-full p-3 border border-amber-200 rounded-lg focus:ring-2 focus:ring-amber-300" placeholder="Describe los beneficios..."></textarea>
       </div>
 
@@ -382,6 +382,10 @@
               </div>
               <button id="toggleSamForm" class="px-2 sm:px-3 py-1 sm:py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-xs shrink-0">+ Filtro</button>
             </div>
+            <div class="mb-4">
+              <label class="block text-xs sm:text-sm font-medium text-green-700 mb-2">Mercado disponible</label>
+              <p class="text-xs text-green-600 mb-3">Ejemplo: Personas con acceso a internet, edad 18-65 años</p>
+            </div>
             
             <!-- Formulario SAM -->
             <div id="samForm" class="hidden bg-white p-3 rounded-lg border border-green-300 mb-4">
@@ -421,6 +425,10 @@
                 </div>
               </div>
               <button id="toggleSomForm" class="px-2 sm:px-3 py-1 sm:py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-xs shrink-0">+ Filtro</button>
+            </div>
+            <div class="mb-4">
+              <label class="block text-xs sm:text-sm font-medium text-purple-700 mb-2">Mercado alcanzable</label>
+              <p class="text-xs text-purple-600 mb-3">Ejemplo: Dispuestos a pagar el precio, en tu zona geográfica</p>
             </div>
             
             <!-- Formulario SOM -->
@@ -577,6 +585,8 @@
         </div>
       </div>
 
+
+
       <!-- Botón de Imprimir -->
       <div class="text-center proyecciones-print-hide" style="margin-top: 24px;">
         <button id="btnImprimirProyecciones" class="px-6 sm:px-8 py-3 sm:py-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-bold text-sm sm:text-lg shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 mx-auto">
@@ -584,6 +594,23 @@
           <span>Imprimir Proyecciones</span>
         </button>
         <p class="text-gray-500 text-xs sm:text-sm mt-2">Genera un reporte completo de las proyecciones financieras</p>
+        
+        <!-- Advertencia de Rentabilidad -->
+        <div id="warningNoRentable" class="hidden bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-4 proyecciones-print-hide">
+          <div class="flex items-start">
+            <span class="text-2xl mr-3 shrink-0">⚠️</span>
+            <div>
+              <h4 class="font-semibold text-yellow-800 mb-2">Advertencia: Proyecto No Rentable</h4>
+              <p class="text-yellow-700 text-sm mb-2">
+                No es recomendable imprimir la proyección si el proyecto no es rentable. 
+                Ningún escenario genera flujos de caja positivos suficientes para recuperar la inversión inicial.
+              </p>
+              <p class="text-yellow-700 text-sm">
+                <strong>Acción requerida:</strong> Ajusta precios, reduce costos o aumenta las proyecciones de ventas antes de generar el reporte.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2228,9 +2255,17 @@
     function calculateProfitabilityAnalysis() {
       const products = qsa('.product-card');
       const container = qs('#profitabilityAnalysis');
+      const warningElement = qs('#warningNoRentable');
+      const printButton = qs('#btnImprimirProyecciones');
       
       if (products.length === 0) {
         container.innerHTML = '<p class="text-gray-500 text-center py-4">Agrega productos para ver el análisis de rentabilidad</p>';
+        // Ocultar advertencia y deshabilitar botón cuando no hay productos
+        if (warningElement) warningElement.classList.add('hidden');
+        if (printButton) {
+          printButton.disabled = false;
+          printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
         return;
       }
       
@@ -2254,6 +2289,12 @@
             </div>
           </div>
         `;
+        // Ocultar advertencia cuando no hay inversión
+        if (warningElement) warningElement.classList.add('hidden');
+        if (printButton) {
+          printButton.disabled = false;
+          printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
         return;
       }
       
@@ -2421,6 +2462,13 @@
               </div>
             </div>
           `;
+          
+          // Mostrar advertencia y deshabilitar botón de impresión cuando no es rentable
+          if (warningElement) warningElement.classList.remove('hidden');
+          if (printButton) {
+            printButton.disabled = true;
+            printButton.classList.add('opacity-50', 'cursor-not-allowed');
+          }
         }
       } else {
         html += `
@@ -2437,6 +2485,18 @@
             </div>
           </div>
         `;
+      }
+      
+      // Determinar si el proyecto es rentable (en cualquier plazo)
+      const isProjectProfitable = analysisResults.some(r => r.isProfitable);
+      
+      if (isProjectProfitable) {
+        // Ocultar advertencia y habilitar botón cuando es rentable
+        if (warningElement) warningElement.classList.add('hidden');
+        if (printButton) {
+          printButton.disabled = false;
+          printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
       }
       
       container.innerHTML = html;
@@ -2544,6 +2604,14 @@
 
     function imprimirProyecciones() {
       console.log('🖨️ Iniciando proceso de impresión de proyecciones...');
+      
+      // Verificar si el proyecto es rentable antes de imprimir
+      const printButton = qs('#btnImprimirProyecciones');
+      if (printButton && printButton.disabled) {
+        console.log('❌ Impresión cancelada: Proyecto no rentable');
+        alert('⚠️ No es posible imprimir la proyección porque el proyecto no es rentable. Ajusta los datos para generar flujos de caja positivos.');
+        return;
+      }
       
       // 🔒 DESACTIVAR GUARDADO AUTOMÁTICO durante impresión
       autoSaveEnabled = false;
@@ -3823,5 +3891,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98846da965f6a51e',t:'MTc1OTQxMDUwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98849f530340cc74',t:'MTc1OTQxMjUzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
