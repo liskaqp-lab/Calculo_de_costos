@@ -915,9 +915,10 @@
       const cards = qsa('.product-card');
       let totalFijosMensuales = 0;
       let totalInversion = 0;
-      let totalIngresos = 0;
+      let sumaPrecios = 0;
+      let sumaCostosVariablesUnitarios = 0;
       let totalUnidades = 0;
-      let totalCostosVariables = 0;
+      let productosValidos = 0;
 
       cards.forEach(card => {
         // Sumar costos fijos mensuales (incluyendo honorarios)
@@ -935,23 +936,26 @@
           totalInversion += parseFloat(i.value) || 0;
         });
 
-        // Calcular ingresos y costos variables por producto
+        // Calcular datos por producto para promedios ponderados
         const unidades = parseFloat(qs('.unidades-mensuales', card)?.value) || 1;
         const costoProduccion = parseFloat(qs('.costo-produccion', card)?.value) || 0;
         const profit = parseFloat(card.dataset.profit || '30') || 30;
         
-        // Precio sin impuestos (para el análisis de equilibrio)
-        const precioUnitario = costoProduccion * (1 + profit / 100);
+        // Precio de venta unitario (sin impuestos para análisis de equilibrio)
+        const precioVentaUnitario = costoProduccion * (1 + profit / 100);
         
-        totalIngresos += precioUnitario * unidades;
-        totalUnidades += unidades;
-
-        // Costos variables totales
+        // Costo variable unitario (solo costos variables, sin fijos ni amortización)
         let costosVariablesCard = 0;
         qsa('.costos-variables input[type="number"]', card).forEach(i => {
           costosVariablesCard += parseFloat(i.value) || 0;
         });
-        totalCostosVariables += costosVariablesCard * unidades;
+        const costoVariableUnitario = unidades > 0 ? costosVariablesCard / unidades : 0;
+
+        // Acumular para promedios ponderados por unidades
+        sumaPrecios += precioVentaUnitario * unidades;
+        sumaCostosVariablesUnitarios += costoVariableUnitario * unidades;
+        totalUnidades += unidades;
+        productosValidos++;
       });
 
       // Calcular amortización mensual de la inversión
@@ -960,21 +964,22 @@
       // Total de costos fijos mensuales (incluyendo amortización)
       const costosFijosTotales = totalFijosMensuales + amortizacionMensual;
       
-      // Promedios
-      const precioPromedio = totalUnidades > 0 ? totalIngresos / totalUnidades : 0;
-      const costoVariablePromedio = totalUnidades > 0 ? totalCostosVariables / totalUnidades : 0;
+      // Promedios ponderados por unidades producidas
+      const precioVentaPromedio = totalUnidades > 0 ? sumaPrecios / totalUnidades : 0;
+      const costoVariablePromedio = totalUnidades > 0 ? sumaCostosVariablesUnitarios / totalUnidades : 0;
 
       // Actualizar displays
       qs('#costosFijosEquilibrioDisplay').textContent = Math.round(costosFijosTotales).toLocaleString();
-      qs('#precioPromedioServicioDisplay').textContent = Math.round(precioPromedio).toLocaleString();
+      qs('#precioPromedioServicioDisplay').textContent = Math.round(precioVentaPromedio).toLocaleString();
       qs('#costoVariableServicioDisplay').textContent = Math.round(costoVariablePromedio).toLocaleString();
 
-      // Cálculo del punto de equilibrio
-      const margenContribucion = precioPromedio - costoVariablePromedio;
-      const unidadesEquilibrio = margenContribucion > 0 ? costosFijosTotales / margenContribucion : 0;
-      const ingresosMinimos = unidadesEquilibrio * precioPromedio;
+      // FÓRMULA CORRECTA DEL PUNTO DE EQUILIBRIO:
+      // PE = Costos Fijos Totales / (Precio de Venta Unitario - Costo Variable Unitario)
+      const margenContribucionUnitario = precioVentaPromedio - costoVariablePromedio;
+      const unidadesEquilibrio = margenContribucionUnitario > 0 ? costosFijosTotales / margenContribucionUnitario : 0;
+      const ingresosMinimos = unidadesEquilibrio * precioVentaPromedio;
 
-      qs('#margenContribucion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(margenContribucion).toLocaleString()}`;
+      qs('#margenContribucion').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(margenContribucionUnitario).toLocaleString()}`;
       qs('#serviciosEquilibrio').textContent = `${Math.ceil(unidadesEquilibrio)} unidades/mes`;
       qs('#ingresosMinimos').innerHTML = `<span class="moneda">${monedaActual}</span> ${Math.round(ingresosMinimos).toLocaleString()}`;
     }
@@ -1611,5 +1616,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9882095db400cc74',t:'MTc1OTM4NTQyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98821f3355e8cc74',t:'MTc1OTM4NjMyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
