@@ -2263,8 +2263,8 @@
         // Ocultar advertencia y deshabilitar botón cuando no hay productos
         if (warningElement) warningElement.classList.add('hidden');
         if (printButton) {
-          printButton.disabled = false;
-          printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+          printButton.disabled = true;
+          printButton.classList.add('opacity-50', 'cursor-not-allowed');
         }
         return;
       }
@@ -2289,11 +2289,11 @@
             </div>
           </div>
         `;
-        // Ocultar advertencia cuando no hay inversión
+        // Deshabilitar botón cuando faltan datos para calcular
         if (warningElement) warningElement.classList.add('hidden');
         if (printButton) {
-          printButton.disabled = false;
-          printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+          printButton.disabled = true;
+          printButton.classList.add('opacity-50', 'cursor-not-allowed');
         }
         return;
       }
@@ -2463,12 +2463,8 @@
             </div>
           `;
           
-          // Mostrar advertencia y deshabilitar botón de impresión cuando no es rentable
+          // Mostrar advertencia pero mantener botón habilitado
           if (warningElement) warningElement.classList.remove('hidden');
-          if (printButton) {
-            printButton.disabled = true;
-            printButton.classList.add('opacity-50', 'cursor-not-allowed');
-          }
         }
       } else {
         html += `
@@ -2490,13 +2486,15 @@
       // Determinar si el proyecto es rentable (en cualquier plazo)
       const isProjectProfitable = analysisResults.some(r => r.isProfitable);
       
+      // Siempre habilitar el botón cuando hay datos suficientes para calcular
+      if (printButton) {
+        printButton.disabled = false;
+        printButton.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+      
       if (isProjectProfitable) {
-        // Ocultar advertencia y habilitar botón cuando es rentable
+        // Ocultar advertencia cuando es rentable
         if (warningElement) warningElement.classList.add('hidden');
-        if (printButton) {
-          printButton.disabled = false;
-          printButton.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
       }
       
       container.innerHTML = html;
@@ -2605,11 +2603,11 @@
     function imprimirProyecciones() {
       console.log('🖨️ Iniciando proceso de impresión de proyecciones...');
       
-      // Verificar si el proyecto es rentable antes de imprimir
+      // Verificar si hay datos suficientes para imprimir
       const printButton = qs('#btnImprimirProyecciones');
       if (printButton && printButton.disabled) {
-        console.log('❌ Impresión cancelada: Proyecto no rentable');
-        alert('⚠️ No es posible imprimir la proyección porque el proyecto no es rentable. Ajusta los datos para generar flujos de caja positivos.');
+        console.log('❌ Impresión cancelada: Faltan datos para calcular');
+        alert('⚠️ No es posible imprimir la proyección. Agrega productos e inversión inicial para generar el reporte.');
         return;
       }
       
@@ -3891,5 +3889,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98849f530340cc74',t:'MTc1OTQxMjUzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9884ad5c43a71350',t:'MTc1OTQxMzExNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
