@@ -2513,9 +2513,9 @@
       
       qs('#totalInvestment').innerHTML = `<span class="moneda">${monedaActual}</span> ${totalInvestment.toLocaleString()}`;
       
-      // Tasa de descuento fija del 12%
-      const discountRate = 12;
-      qs('#discountRateDisplay').textContent = `${discountRate}%`;
+      // Calcular TIR promedio ponderada de todos los productos
+      const averageTIR = calculateWeightedAverageTIR();
+      qs('#discountRateDisplay').textContent = `${averageTIR.toFixed(1)}%`;
       
       // Calcular años necesarios para alcanzar rentabilidad
       let yearsToProfit = calculateYearsToProfit();
@@ -2523,6 +2523,153 @@
       
       // Actualizar análisis de rentabilidad
       calculateProfitabilityAnalysis();
+    }
+
+    function calculateWeightedAverageTIR() {
+      const products = qsa('.product-card');
+      if (products.length === 0) return 12; // Valor por defecto
+      
+      let totalWeightedTIR = 0;
+      let totalWeight = 0;
+      
+      products.forEach((card, productIndex) => {
+        const productTIR = calculateProductTIR(card, productIndex);
+        const productWeight = getProductWeight(card, productIndex);
+        
+        if (productTIR > 0 && productWeight > 0) {
+          totalWeightedTIR += productTIR * productWeight;
+          totalWeight += productWeight;
+        }
+      });
+      
+      return totalWeight > 0 ? totalWeightedTIR / totalWeight : 12;
+    }
+
+    function calculateProductTIR(card, productIndex) {
+      // 1. Obtener inversión inicial del producto
+      let productInvestment = 0;
+      qsa('.inversion-items input[type="number"]', card).forEach(input => {
+        productInvestment += parseFloat(input.value) || 0;
+      });
+      
+      if (productInvestment <= 0) return 0;
+      
+      // 2. Calcular flujos de caja netos mensuales basados en las proyecciones del escenario realista
+      const productId = card.getAttribute('data-product-id');
+      const price = calculateProductPrice(card);
+      const variableCostPerUnit = calculateProductVariableCost(card);
+      
+      // Obtener flujos mensuales reales de las tablas de proyección
+      const monthlyNetCashFlows = [];
+      
+      for (let month = 0; month < 12; month++) {
+        // Buscar unidades vendidas en el escenario realista desde las tablas de proyección
+        let input = qs(`input[data-product-id="${productId}"][data-scenario="realist"][data-month="${month}"]`);
+        if (!input) {
+          input = qs(`input[data-product="${productIndex}"][data-scenario="realist"][data-month="${month}"]`);
+        }
+        
+        const unitsProjected = parseFloat(input?.value) || 0;
+        
+        // Calcular flujo neto mensual: (Unidades × (Precio - Costo Variable))
+        const monthlyNetCashFlow = unitsProjected * (price - variableCostPerUnit);
+        monthlyNetCashFlows.push(monthlyNetCashFlow);
+      }
+      
+      // 3. Proyectar flujos anuales para 5 años con crecimiento conservador
+      const annualCashFlows = [];
+      const firstYearCashFlow = monthlyNetCashFlows.reduce((sum, flow) => sum + flow, 0);
+      
+      // Si no hay flujo positivo en el primer año, no hay TIR válida
+      if (firstYearCashFlow <= 0) return 0;
+      
+      // Proyectar 5 años con crecimiento conservador del 3% anual
+      const growthRate = 0.03;
+      for (let year = 0; year < 5; year++) {
+        const yearCashFlow = firstYearCashFlow * Math.pow(1 + growthRate, year);
+        annualCashFlows.push(yearCashFlow);
+      }
+      
+      // 4. Calcular TIR usando método de Newton-Raphson
+      return calculateIRR(productInvestment, annualCashFlows);
+    }
+
+    function calculateProductVariableCost(card) {
+      // Usar el costo total de producción por unidad (que ya incluye fijos, variables y amortización)
+      const costoTotalUnitario = parseFloat(qs('.costo-produccion', card)?.value) || 0;
+      
+      // Retornar costo total por unidad (no solo variables)
+      return costoTotalUnitario;
+    }
+
+    function getProductWeight(card, productIndex) {
+      // Peso basado en ingresos proyectados anuales del escenario realista
+      const productId = card.getAttribute('data-product-id');
+      const price = calculateProductPrice(card);
+      
+      let annualUnits = 0;
+      for (let month = 0; month < 12; month++) {
+        let input = qs(`input[data-product-id="${productId}"][data-scenario="realist"][data-month="${month}"]`);
+        if (!input) {
+          input = qs(`input[data-product="${productIndex}"][data-scenario="realist"][data-month="${month}"]`);
+        }
+        annualUnits += parseFloat(input?.value) || 0;
+      }
+      
+      return annualUnits * price; // Ingresos anuales como peso
+    }
+
+    function calculateIRR(initialInvestment, cashFlows) {
+      if (initialInvestment <= 0 || cashFlows.length === 0) return 0;
+      
+      // Verificar si hay flujos positivos
+      const totalCashFlow = cashFlows.reduce((sum, flow) => sum + flow, 0);
+      if (totalCashFlow <= initialInvestment) return 0; // No hay suficiente flujo para recuperar inversión
+      
+      // Método de Newton-Raphson para encontrar TIR
+      let rate = 0.1; // Estimación inicial del 10%
+      const maxIterations = 100;
+      const tolerance = 0.0001;
+      
+      for (let i = 0; i < maxIterations; i++) {
+        let npv = -initialInvestment;
+        let dnpv = 0;
+        
+        // Calcular NPV y su derivada
+        for (let year = 0; year < cashFlows.length; year++) {
+          const power = year + 1;
+          const denominator = Math.pow(1 + rate, power);
+          
+          npv += cashFlows[year] / denominator;
+          dnpv -= (power * cashFlows[year]) / Math.pow(1 + rate, power + 1);
+        }
+        
+        // Verificar convergencia
+        if (Math.abs(npv) < tolerance) {
+          return Math.max(0, Math.min(200, rate * 100)); // Convertir a porcentaje y limitar
+        }
+        
+        // Actualizar tasa usando Newton-Raphson
+        if (Math.abs(dnpv) > tolerance) {
+          const newRate = rate - npv / dnpv;
+          
+          // Limitar la tasa a un rango razonable (-50% a 200%)
+          rate = Math.max(-0.5, Math.min(2.0, newRate));
+        } else {
+          break;
+        }
+      }
+      
+      // Si no converge, usar estimación simple basada en payback period
+      const averageAnnualCashFlow = totalCashFlow / cashFlows.length;
+      if (averageAnnualCashFlow > 0) {
+        const paybackYears = initialInvestment / averageAnnualCashFlow;
+        // Aproximar TIR basada en payback: TIR ≈ 1/payback para paybacks cortos
+        const estimatedTIR = paybackYears > 0 ? (1 / paybackYears) * 100 : 0;
+        return Math.max(0, Math.min(100, estimatedTIR));
+      }
+      
+      return 0;
     }
 
     function calculateYearsToProfit() {
@@ -3889,5 +4036,5 @@
     // Configurar guardado automático
     setupAutoSave();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9884ad5c43a71350',t:'MTc1OTQxMzExNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98868def640f7458',t:'MTc1OTQzMjc5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
