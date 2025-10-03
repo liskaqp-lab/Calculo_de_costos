@@ -24,9 +24,202 @@
     .btn-130.estrategia-activa { background: #faf5ff; border-color: #8b5cf6; }
       /* Estado seleccionado para "Personalizado" */
     #customStrategy.estrategia-activa { background: #fffbeb; border-color: #f59e0b; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25); }
+
+    /* Estilos para el menú de instrucciones */
+    #instructionsMenu {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    #instructionsMenu .bg-gray-50\/80 {
+      cursor: grab;
+      user-select: none;
+    }
+    
+    #instructionsMenu .bg-gray-50\/80:active {
+      cursor: grabbing;
+    }
+    
+    /* Estados del menú - SIN ANIMACIONES */
+    #instructionsMenu {
+      cursor: default;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 320px;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      overflow: visible;
+    }
+    
+    #instructionsContent {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      max-height: none;
+      overflow: visible;
+    }
+    
+    #instructionsContent.collapsed {
+      display: none;
+    }
+    
+    /* Estados del header cuando está colapsado - REDONDO */
+    #instructionsMenu.collapsed {
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 50% !important;
+      overflow: hidden !important;
+      background: white !important;
+      border: 2px solid #e5e7eb !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    #instructionsMenu.collapsed #instructionsHeader {
+      border-bottom: none;
+      border-radius: 50% !important;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      background: white !important;
+      display: flex !important;
+    }
+    
+    #instructionsMenu.collapsed #headerContent {
+      display: none;
+    }
+    
+    #instructionsMenu.collapsed #toggleInstructionsBtn {
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #3b82f6 !important;
+      color: white !important;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+    
+    #instructionsMenu.collapsed #toggleInstructionsBtn:hover {
+      background: #2563eb !important;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Responsive para el menú - MEJORADO PARA MÓVILES */
+    @media (max-width: 480px) {
+      #instructionsMenu {
+        width: 280px !important;
+        top: 8px !important;
+        right: 8px !important;
+        font-size: 14px;
+      }
+      
+      #instructionsMenu.collapsed {
+        width: 45px !important;
+        height: 45px !important;
+      }
+      
+      #instructionsMenu.collapsed #instructionsHeader {
+        width: 45px;
+        height: 45px;
+      }
+      
+      #instructionsMenu.collapsed #toggleInstructionsBtn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+      }
+      
+      #instructionsVideo {
+        height: 160px;
+      }
+      
+      .header-content h3 {
+        font-size: 14px;
+      }
+      
+      .content-text {
+        font-size: 12px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      #instructionsMenu {
+        width: 300px !important;
+        top: 10px !important;
+        right: 10px !important;
+      }
+      
+      #instructionsVideo {
+        height: 170px;
+      }
+    }
+    
+    @media (max-width: 1200px) {
+      #instructionsMenu {
+        width: 300px !important;
+      }
+      
+      #instructionsVideo {
+        height: 180px;
+      }
+    }
+
+
   </style>
 </head>
 <body class="gradient-bg min-h-screen">
+  <!-- Menú de Instrucciones -->
+  <div id="instructionsMenu" class="fixed top-4 right-4 z-50 bg-white rounded-2xl shadow-2xl border border-blue-200" style="width: 320px;">
+    <!-- Header del menú -->
+    <div id="instructionsHeader" class="flex items-center justify-between p-3 sm:p-4 border-b border-blue-200 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-2xl">
+      <div id="headerContent" class="flex items-center header-content">
+        <span class="text-base sm:text-lg mr-2 sm:mr-3">📚</span>
+        <h3 class="text-sm sm:text-base font-semibold">Instrucciones</h3>
+      </div>
+      <button id="toggleInstructionsBtn" class="text-white hover:bg-white/20 rounded-lg p-1 sm:p-2 font-bold text-base sm:text-lg">
+        <span id="toggleIcon">-</span>
+      </button>
+    </div>
+    
+    <!-- Contenido del menú -->
+    <div id="instructionsContent" class="p-3 sm:p-4">
+      <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 content-text">Aprende a usar la calculadora con este video tutorial:</p>
+      
+      <!-- Video de YouTube -->
+      <div class="relative rounded-lg overflow-hidden shadow-md">
+        <iframe 
+          id="instructionsVideo"
+          width="100%" 
+          height="200" 
+          src="https://www.youtube.com/embed/--hRkglyZrQ?si=31Zys3KLTd6oDKog" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      
+      <div class="mt-3 sm:mt-4 text-xs text-gray-500 content-text">
+        <p class="mb-1 sm:mb-2">💡 <strong>Tip:</strong> Puedes arrastrar este menú desde el header para moverlo.</p>
+        <p>🔄 El menú permanece siempre visible para tu comodidad.</p>
+      </div>
+    </div>
+  </div>
+
   <div class="container mx-auto px-4 py-8 max-w-6xl">
     <!-- Header -->
     <div class="text-center mb-8">
@@ -3563,7 +3756,8 @@
             diasValidez: qs('#diasValidez')?.value || '',
             beneficiosClave: qs('#beneficiosClave')?.value || '',
             customProfitGlobal: qs('#inputCustomProfitGlobal')?.value || '',
-            estrategiaActiva: getActiveStrategy()
+            estrategiaActiva: getActiveStrategy(),
+            menuInstruccionesExpandido: !qs('#instructionsMenu')?.classList.contains('collapsed')
           },
           productos: []
         };
@@ -3776,6 +3970,26 @@
           if (config.diasValidez) qs('#diasValidez').value = config.diasValidez;
           if (config.beneficiosClave) qs('#beneficiosClave').value = config.beneficiosClave;
           if (config.customProfitGlobal) qs('#inputCustomProfitGlobal').value = config.customProfitGlobal;
+          
+          // Restaurar estado del menú de instrucciones
+          if (config.hasOwnProperty('menuInstruccionesExpandido')) {
+            const menu = qs('#instructionsMenu');
+            const content = qs('#instructionsContent');
+            const toggleIcon = qs('#toggleIcon');
+            
+            if (config.menuInstruccionesExpandido) {
+              // Menú expandido
+              content?.classList.remove('collapsed');
+              menu?.classList.remove('collapsed');
+              if (toggleIcon) toggleIcon.textContent = '-';
+            } else {
+              // Menú colapsado
+              content?.classList.add('collapsed');
+              menu?.classList.add('collapsed');
+              if (toggleIcon) toggleIcon.textContent = '+';
+            }
+            console.log(`📚 Estado del menú restaurado: ${config.menuInstruccionesExpandido ? 'expandido' : 'colapsado'}`);
+          }
           
           // Restaurar estrategia activa - MEJORADO
           qsa('.estrategia-btn').forEach(btn => btn.classList.remove('estrategia-activa','bg-blue-50','border-blue-300'));
@@ -4084,6 +4298,104 @@
       };
     }
 
+    // Funcionalidad del menú de instrucciones
+    function setupInstructionsMenu() {
+      const menu = qs('#instructionsMenu');
+      const content = qs('#instructionsContent');
+      const toggleBtn = qs('#toggleInstructionsBtn');
+      const toggleIcon = qs('#toggleIcon');
+      
+      if (!menu || !content || !toggleBtn || !toggleIcon) return;
+      
+      let isExpanded = true;
+
+      // Función para alternar el menú
+      function toggleMenu() {
+        isExpanded = !isExpanded;
+        
+        if (isExpanded) {
+          content.classList.remove('collapsed');
+          menu.classList.remove('collapsed');
+          toggleIcon.textContent = '-';
+        } else {
+          content.classList.add('collapsed');
+          menu.classList.add('collapsed');
+          toggleIcon.textContent = '+';
+        }
+      }
+
+      // Event listener para el botón de toggle
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+        // Guardar estado inmediatamente después del cambio
+        setTimeout(guardarDatos, 100);
+      });
+
+      // Hacer el menú arrastrable desde el header (excluyendo el botón)
+      let isDragging = false;
+      let currentX = 0;
+      let currentY = 0;
+      let initialX = 0;
+      let initialY = 0;
+      let xOffset = 0;
+      let yOffset = 0;
+
+      const header = menu.querySelector('.bg-gradient-to-r');
+      if (!header) return;
+      
+      header.addEventListener('mousedown', dragStart);
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', dragEnd);
+
+      function dragStart(e) {
+        // No iniciar arrastre si se hace clic en el botón de toggle
+        if (e.target === toggleBtn || toggleBtn.contains(e.target)) {
+          return;
+        }
+
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+
+        if (e.target === header || header.contains(e.target)) {
+          isDragging = true;
+          header.style.cursor = 'grabbing';
+        }
+      }
+
+      function drag(e) {
+        if (isDragging) {
+          e.preventDefault();
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+
+          xOffset = currentX;
+          yOffset = currentY;
+
+          // Limitar el movimiento dentro de la ventana
+          const rect = menu.getBoundingClientRect();
+          const maxX = window.innerWidth - rect.width;
+          const maxY = window.innerHeight - rect.height;
+          
+          xOffset = Math.max(0, Math.min(xOffset, maxX));
+          yOffset = Math.max(0, Math.min(yOffset, maxY));
+
+          menu.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+        }
+      }
+
+      function dragEnd() {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+        header.style.cursor = 'grab';
+      }
+
+      // El menú siempre está visible, solo se adapta su tamaño
+
+      console.log('📚 Menú de instrucciones configurado con botón de toggle');
+    }
+
     // Boot
     const datosRestaurados = cargarDatos();
     
@@ -4183,6 +4495,9 @@
     
     // Configurar guardado automático
     setupAutoSave();
+    
+    // Configurar menú de instrucciones
+    setupInstructionsMenu();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98880798471ccc74',t:'MTc1OTQ0ODI2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9888c36a5768cc74',t:'MTc1OTQ1NTk2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
