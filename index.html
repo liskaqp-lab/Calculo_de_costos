@@ -3980,12 +3980,12 @@
               // Menú expandido
               content?.classList.remove('collapsed');
               menu?.classList.remove('collapsed');
-              if (toggleIcon) toggleIcon.textContent = '-';
+              if (toggleIcon) toggleIcon.textContent = '📘';
             } else {
               // Menú colapsado
               content?.classList.add('collapsed');
               menu?.classList.add('collapsed');
-              if (toggleIcon) toggleIcon.textContent = '+';
+              if (toggleIcon) toggleIcon.textContent = '📖';
             }
             console.log(`📚 Estado del menú restaurado: ${config.menuInstruccionesExpandido ? 'expandido' : 'colapsado'}`);
           }
