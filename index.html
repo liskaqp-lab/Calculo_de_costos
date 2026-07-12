@@ -7,45 +7,283 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2257%22 font-size=%2280%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🧮</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root {
+            --color-base-dark: #1c1e1b;
+            --color-indigo: #626bb1;
+            --color-teal: #5ac4c0;
+            --color-orange: #f16922;
+            --color-amber: #f2b748;
+        }
+
         body {
             box-sizing: border-box;
+            color: var(--color-base-dark);
         }
         
-        .section-bg-estructura { background-color: #fef7f0; }
-        .section-bg-productos { background-color: #f0f9ff; }
-        .section-bg-cotizacion { background-color: #f7fee7; }
-        .section-bg-proyecciones { background-color: #fdf4ff; }
+        .section-bg-estructura { background-color: #fff4ea; }
+        .section-bg-productos { background-color: #eaf9f8; }
+        .section-bg-cotizacion { background-color: #fff8e9; }
+        .section-bg-proyecciones { background-color: #eef0fb; }
         
-        .nav-bg-estructura { background-color: #fef2e8; }
-        .nav-bg-productos { background-color: #e0f2fe; }
-        .nav-bg-cotizacion { background-color: #ecfccb; }
-        .nav-bg-proyecciones { background-color: #fae8ff; }
+        .nav-bg-estructura { background-color: #ffd9bf; }
+        .nav-bg-productos { background-color: #bceceb; }
+        .nav-bg-cotizacion { background-color: #f8dfa0; }
+        .nav-bg-proyecciones { background-color: #c6cced; }
         
         .active-estructura { 
-            background-color: #fed7aa; 
-            box-shadow: 0 4px 15px rgba(251, 146, 60, 0.3);
+            background-color: var(--color-orange);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(241, 105, 34, 0.35);
         }
         .active-productos { 
-            background-color: #7dd3fc; 
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            background-color: var(--color-teal);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(90, 196, 192, 0.35);
         }
         .active-cotizacion { 
-            background-color: #bef264; 
-            box-shadow: 0 4px 15px rgba(132, 204, 22, 0.3);
+            background-color: var(--color-amber);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(242, 183, 72, 0.35);
         }
         .active-proyecciones { 
-            background-color: #d8b4fe; 
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            background-color: var(--color-indigo);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(98, 107, 177, 0.35);
+        }
+
+        @media (min-width: 768px) {
+            .nav-btn.active-estructura,
+            .nav-btn.active-productos,
+            .nav-btn.active-proyecciones {
+                color: #ffffff !important;
+            }
         }
         
-        .float-bg-estructura { background-color: #fed7aa; }
-        .float-bg-productos { background-color: #7dd3fc; }
-        .float-bg-cotizacion { background-color: #bef264; }
-        .float-bg-proyecciones { background-color: #d8b4fe; }
+        .float-bg-estructura { background-color: var(--color-orange); color: #ffffff; }
+        .float-bg-productos { background-color: var(--color-teal); color: #ffffff; }
+        .float-bg-cotizacion { background-color: var(--color-amber); color: #ffffff; }
+        .float-bg-proyecciones { background-color: var(--color-indigo); color: #ffffff; }
         
         .mobile-active {
             background-color: white !important;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Popup themes by section */
+        .popup-theme-estructura {
+            background-color: #fff4ea;
+            border: 1px solid #f7b891;
+        }
+        .popup-theme-estructura h3,
+        .popup-theme-estructura label,
+        .popup-theme-estructura .text-gray-700,
+        .popup-theme-estructura .text-gray-800 {
+            color: #c6541a !important;
+        }
+        .popup-theme-estructura input,
+        .popup-theme-estructura select,
+        .popup-theme-estructura textarea {
+            background-color: #fff1e6 !important;
+            border-color: #f7b891 !important;
+            color: var(--color-base-dark) !important;
+        }
+        .popup-theme-estructura .bg-gray-300 {
+            background-color: #ffd2b3 !important;
+            color: #c6541a !important;
+        }
+        .popup-theme-estructura .hover\:bg-gray-400:hover {
+            background-color: #f7b891 !important;
+        }
+
+        .popup-theme-productos {
+            background-color: #eaf9f8;
+            border: 1px solid #9adfdc;
+        }
+        .popup-theme-productos h3,
+        .popup-theme-productos h4,
+        .popup-theme-productos label,
+        .popup-theme-productos .text-gray-700,
+        .popup-theme-productos .text-gray-800 {
+            color: #2f8f8b !important;
+        }
+        .popup-theme-productos input,
+        .popup-theme-productos select,
+        .popup-theme-productos textarea,
+        .popup-theme-productos #project-description {
+            border-color: #9adfdc !important;
+        }
+        .popup-theme-productos .bg-gray-50 {
+            background-color: #e7f8f7 !important;
+        }
+        .popup-theme-productos .border-gray-300,
+        .popup-theme-productos .border-gray-200 {
+            border-color: #9adfdc !important;
+        }
+        .popup-theme-productos .bg-gray-300 {
+            background-color: #cbeeed !important;
+            color: #2f8f8b !important;
+        }
+        .popup-theme-productos .hover\:bg-gray-400:hover {
+            background-color: #9adfdc !important;
+        }
+        .popup-theme-productos .bg-blue-50 {
+            background-color: #e7f8f7 !important;
+        }
+        .popup-theme-productos .bg-blue-75,
+        .popup-theme-productos .bg-blue-100,
+        .popup-theme-productos .bg-blue-200 {
+            background-color: #cbeeed !important;
+        }
+        .popup-theme-productos .border-blue-100,
+        .popup-theme-productos .border-blue-200,
+        .popup-theme-productos .border-blue-300 {
+            border-color: #9adfdc !important;
+        }
+        .popup-theme-productos .text-blue-600,
+        .popup-theme-productos .text-blue-700,
+        .popup-theme-productos .text-blue-800 {
+            color: #2f8f8b !important;
+        }
+        .popup-theme-productos .bg-blue-500 {
+            background-color: var(--color-teal) !important;
+            color: #ffffff !important;
+        }
+        .popup-theme-productos .hover\:bg-blue-600:hover {
+            background-color: #46b1ad !important;
+        }
+        .popup-theme-productos .quote-margin-card {
+            background-color: #fff6e2 !important;
+            border-color: #f2d186 !important;
+        }
+        .popup-theme-productos .quote-margin-card-title,
+        .popup-theme-productos .quote-margin-card .text-gray-700,
+        .popup-theme-productos .quote-margin-card .text-gray-800 {
+            color: #be7f1e !important;
+        }
+
+        .popup-theme-proyecciones {
+            background-color: #eef0fb;
+            border: 1px solid #c6ccec;
+        }
+        .popup-theme-proyecciones h3,
+        .popup-theme-proyecciones h4,
+        .popup-theme-proyecciones label,
+        .popup-theme-proyecciones .text-gray-700,
+        .popup-theme-proyecciones .text-gray-800 {
+            color: #626bb1 !important;
+        }
+        .popup-theme-proyecciones input,
+        .popup-theme-proyecciones select,
+        .popup-theme-proyecciones textarea {
+            border-color: #c6ccec !important;
+        }
+        .popup-theme-proyecciones .bg-gray-300 {
+            background-color: #d8dcf3 !important;
+            color: #515aa0 !important;
+        }
+        .popup-theme-proyecciones .hover\:bg-gray-400:hover {
+            background-color: #c6ccec !important;
+        }
+
+        /* Pricing strategy colors (exception in quote info) */
+        .pricing-color-card {
+            background-color: #fff6e2 !important;
+            border-color: #f2d186 !important;
+            border-width: 2px;
+            box-shadow: 0 4px 12px rgba(242, 183, 72, 0.18);
+            transition: all 0.2s ease;
+        }
+        .pricing-color-card .pricing-title,
+        .pricing-color-card .pricing-value,
+        .pricing-color-card .pricing-heart,
+        .pricing-color-card .pricing-custom-symbol {
+            color: #be7f1e !important;
+        }
+        .pricing-color-card #custom-percentage {
+            color: #be7f1e !important;
+        }
+        .pricing-color-card .pricing-custom-input {
+            background-color: #fff6e2 !important;
+            border: 1px solid #f2d186 !important;
+            color: #be7f1e !important;
+        }
+        .pricing-color-card .pricing-custom-input:focus {
+            border-color: #df9d2f !important;
+            box-shadow: 0 0 0 2px rgba(242, 183, 72, 0.25) !important;
+        }
+        .pricing-color-card .pricing-heart {
+            filter: grayscale(1) saturate(0);
+            opacity: 0.85;
+        }
+        .pricing-color-card.pricing-selected {
+            box-shadow: 0 8px 20px rgba(28, 30, 27, 0.12);
+            transform: translateY(-1px);
+        }
+        .pricing-color-card.pricing-selected .pricing-heart {
+            filter: none;
+            opacity: 1;
+        }
+        .pricing-color-card.pricing-selected-minimum {
+            background: linear-gradient(180deg, #dff3d7 0%, #eef9ea 100%);
+            border-color: #79cb5a;
+        }
+        .pricing-color-card.pricing-selected-minimum .pricing-title,
+        .pricing-color-card.pricing-selected-minimum .pricing-value,
+        .pricing-color-card.pricing-selected-minimum .pricing-custom-symbol {
+            color: #2d7f20 !important;
+        }
+        .pricing-color-card.pricing-selected-minimum .pricing-custom-input {
+            background: #eef9ea !important;
+            border-color: #79cb5a !important;
+            color: #2d7f20 !important;
+        }
+        .pricing-color-card.pricing-selected-regular {
+            background: linear-gradient(180deg, #d5e0ff 0%, #edf3ff 100%);
+            border-color: #5e83ff;
+        }
+        .pricing-color-card.pricing-selected-regular .pricing-title,
+        .pricing-color-card.pricing-selected-regular .pricing-value,
+        .pricing-color-card.pricing-selected-regular .pricing-custom-symbol {
+            color: #2954d1 !important;
+        }
+        .pricing-color-card.pricing-selected-regular .pricing-custom-input {
+            background: #edf3ff !important;
+            border-color: #5e83ff !important;
+            color: #2954d1 !important;
+        }
+        .pricing-color-card.pricing-selected-ideal {
+            background: linear-gradient(180deg, #e5cfff 0%, #f4e9ff 100%);
+            border-color: #9a4cff;
+        }
+        .pricing-color-card.pricing-selected-ideal .pricing-title,
+        .pricing-color-card.pricing-selected-ideal .pricing-value,
+        .pricing-color-card.pricing-selected-ideal .pricing-custom-symbol {
+            color: #7a23d5 !important;
+        }
+        .pricing-color-card.pricing-selected-ideal .pricing-custom-input {
+            background: #f4e9ff !important;
+            border-color: #9a4cff !important;
+            color: #7a23d5 !important;
+        }
+        .pricing-color-card.pricing-selected-custom {
+            background: linear-gradient(180deg, #ffe6a8 0%, #fff5dd 100%);
+            border-color: #f2b748;
+        }
+        .pricing-color-card.pricing-selected-custom .pricing-title,
+        .pricing-color-card.pricing-selected-custom .pricing-value,
+        .pricing-color-card.pricing-selected-custom .pricing-custom-symbol {
+            color: #be7f1e !important;
+        }
+        .pricing-color-card.pricing-selected-custom #custom-percentage {
+            color: #be7f1e !important;
+        }
+        .pricing-color-card.pricing-selected-custom .pricing-custom-input {
+            background: #fff5dd !important;
+            border-color: #f2b748 !important;
+            color: #be7f1e !important;
+        }
+        .pricing-color-card:hover {
+            filter: brightness(0.98);
         }
         
         .transition-all {
@@ -56,6 +294,71 @@
             backdrop-filter: blur(8px);
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+        /* Estructura: predominio naranja */
+        #section-estructura .bg-orange-50 { background-color: #fff1e6 !important; }
+        #section-estructura .bg-orange-100 { background-color: #ffe0cc !important; }
+        #section-estructura .bg-orange-200 { background-color: #ffd2b3 !important; }
+        #section-estructura .border-orange-100,
+        #section-estructura .border-orange-200,
+        #section-estructura .border-orange-300 { border-color: #f7b891 !important; }
+        #section-estructura .text-orange-700,
+        #section-estructura .text-orange-800 { color: #c6541a !important; }
+        #section-estructura .bg-orange-500 { background-color: var(--color-orange) !important; }
+        #section-estructura .bg-orange-500:hover,
+        #section-estructura .hover\:bg-orange-600:hover { background-color: #cb591c !important; }
+
+        /* Productos: predominio teal */
+        #section-productos .bg-blue-50 { background-color: #e7f8f7 !important; }
+        #section-productos .bg-blue-75,
+        #section-productos .bg-blue-100,
+        #section-productos .bg-blue-200 { background-color: #cbeeed !important; }
+        #section-productos .border-blue-100,
+        #section-productos .border-blue-200,
+        #section-productos .border-blue-300 { border-color: #9adfdc !important; }
+        #section-productos .text-blue-600,
+        #section-productos .text-blue-700,
+        #section-productos .text-blue-800 { color: #2f8f8b !important; }
+        #section-productos .bg-blue-500 { background-color: var(--color-teal) !important; }
+        #section-productos .bg-blue-500:hover,
+        #section-productos .hover\:bg-blue-600:hover { background-color: #46b1ad !important; }
+
+        /* Cotizacion: predominio ambar */
+        #section-cotizacion .bg-lime-50 { background-color: #fff6e2 !important; }
+        #section-cotizacion .bg-lime-100,
+        #section-cotizacion .bg-lime-200 { background-color: #fbe5b2 !important; }
+        #section-cotizacion .bg-lime-300 { background-color: #f2d186 !important; }
+        #section-cotizacion .border-lime-100,
+        #section-cotizacion .border-lime-200,
+        #section-cotizacion .border-lime-300,
+        #section-cotizacion .border-lime-400 { border-color: #f2d186 !important; }
+        #section-cotizacion .text-lime-600,
+        #section-cotizacion .text-lime-700,
+        #section-cotizacion .text-lime-800 { color: #be7f1e !important; }
+        #section-cotizacion .bg-lime-500 { background-color: var(--color-amber) !important; }
+        #section-cotizacion .bg-lime-500:hover,
+        #section-cotizacion .hover\:bg-lime-600:hover { background-color: #df9d2f !important; }
+        #section-cotizacion .quote-toolbar-btn {
+            box-shadow: 0 2px 8px rgba(242, 183, 72, 0.22);
+        }
+        #section-cotizacion .quote-toolbar-btn:hover {
+            box-shadow: 0 3px 10px rgba(223, 157, 47, 0.35);
+        }
+
+        /* Proyecciones: predominio indigo (sin tocar colores originales de TAM/SAM/SOM) */
+        #section-proyecciones .bg-indigo-50,
+        #section-proyecciones .bg-indigo-100,
+        #section-proyecciones .bg-gray-50 { background-color: #eef0fb !important; }
+        #section-proyecciones .border-indigo-200,
+        #section-proyecciones .border-indigo-600 { border-color: #c6ccec !important; }
+        #section-proyecciones .text-indigo-800,
+        #section-proyecciones .text-indigo-900,
+        #section-proyecciones .text-blue-800 { color: var(--color-indigo) !important; }
+        #section-proyecciones .bg-indigo-600,
+        #section-proyecciones .bg-indigo-700,
+        #section-proyecciones .bg-blue-500 { background-color: var(--color-indigo) !important; }
+        #section-proyecciones .hover\:bg-indigo-700:hover,
+        #section-proyecciones .hover\:bg-blue-600:hover { background-color: #515aa0 !important; }
         
         /* Rich text editor styles */
         #project-description[contenteditable="true"]:empty:before {
@@ -98,7 +401,7 @@
     <!-- Header -->
     <header class="text-center py-8 px-4">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Calculadora de Precios Universal</h1>
-        <p class="text-lg text-gray-600">Calcula precios automáticamente y proyecta con estrategias de ganancia.<br>(Esta es una previsualización, aún se está desarrollando.)</p>
+        <p class="text-lg text-gray-600">Calcula precios automáticamente y proyecta con estrategias de ganancia.</p>
     </header>
 
     <!-- Desktop Navigation -->
@@ -378,19 +681,58 @@
                         <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Productos o Servicios</h2>
                     </div>
                     
-                    <!-- Projects Grid -->
-                    <div id="projects-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-                        <!-- Projects will be added here dynamically -->
-                    </div>
-                    
-                    <!-- Add Service and Product Buttons -->
-                    <div class="flex justify-center space-x-4">
-                        <button onclick="openProjectPopup()" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all">
-                            + Agregar servicio
-                        </button>
-                        <button onclick="openProjectPopup('product')" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all">
-                            + Agregar producto
-                        </button>
+                    <!-- Products and Services Cards -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <!-- Products Card -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 text-center">📦 Productos</h3>
+
+                            <div class="bg-white border border-blue-200 rounded-lg overflow-hidden mb-4">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full w-full" id="products-table">
+                                        <thead class="bg-blue-75">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left text-sm font-medium text-gray-700 border-b border-blue-200">Nombre del producto</th>
+                                                <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Cantidad de unidades</th>
+                                                <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Costo unitario</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="products-table-body">
+                                            <!-- Product rows will be added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <button onclick="openProjectPopup('product')" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all">
+                                + Agregar producto
+                            </button>
+                        </div>
+
+                        <!-- Services Card -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 text-center">🛠️ Servicios</h3>
+
+                            <div class="bg-white border border-blue-200 rounded-lg overflow-hidden mb-4">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full w-full" id="services-table">
+                                        <thead class="bg-blue-75">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left text-sm font-medium text-gray-700 border-b border-blue-200">Nombre del servicio</th>
+                                                <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Costo del servicio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="services-table-body">
+                                            <!-- Service rows will be added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <button onclick="openProjectPopup('service')" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all">
+                                + Agregar servicio
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -402,89 +744,21 @@
                         <div class="text-5xl sm:text-6xl mb-4">🧾</div>
                         <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Cotización</h2>
                     </div>
-                    
-                    <!-- Información de cotización Card -->
+
+                    <!-- Quote Header Settings -->
                     <div class="bg-lime-50 border border-lime-100 rounded-xl p-4 sm:p-6 mb-6">
-                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6 text-center">📋 Información de cotización</h3>
-                        
-                        <!-- Basic Info Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Título de la cotización</label>
                                 <input type="text" id="quote-title" onchange="updateQuoteDisplay()" oninput="updateQuoteDisplay()" class="w-full px-4 py-3 bg-lime-50 border border-lime-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-300 focus:border-lime-300" placeholder="Ej: Cotización de servicios web">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de Emisión</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de emisión</label>
                                 <input type="date" id="quote-date" onchange="updateQuoteDisplay()" class="w-full px-4 py-3 bg-lime-50 border border-lime-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-300 focus:border-lime-300">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Días de Validez (opcional)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Días de validez (opcional)</label>
                                 <input type="number" id="quote-validity" onchange="updateQuoteDisplay()" oninput="updateQuoteDisplay()" class="w-full px-4 py-3 bg-lime-50 border border-lime-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-300 focus:border-lime-300" placeholder="30" min="1">
-                            </div>
-                        </div>
-                        
-                        <!-- Pricing Strategy Buttons -->
-                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                            <button onclick="selectPricingStrategy('minimum', 10)" id="pricing-minimum" class="pricing-strategy-btn bg-white border-2 border-lime-200 rounded-lg p-4 text-center transition-all hover:bg-lime-100">
-                                <div class="text-4xl mb-2">💚</div>
-                                <div class="text-sm font-medium text-gray-700 mb-1">Mínimo no negociable</div>
-                                <div class="text-lg font-bold text-gray-800">10%</div>
-                            </button>
-                            <button onclick="selectPricingStrategy('regular', 30)" id="pricing-regular" class="pricing-strategy-btn bg-white border-2 border-lime-200 rounded-lg p-4 text-center transition-all hover:bg-lime-100">
-                                <div class="text-4xl mb-2">💙</div>
-                                <div class="text-sm font-medium text-gray-700 mb-1">Precio regular</div>
-                                <div class="text-lg font-bold text-gray-800">30%</div>
-                            </button>
-                            <button onclick="selectPricingStrategy('ideal', 130)" id="pricing-ideal" class="pricing-strategy-btn bg-white border-2 border-lime-200 rounded-lg p-4 text-center transition-all hover:bg-lime-100">
-                                <div class="text-4xl mb-2">💜</div>
-                                <div class="text-sm font-medium text-gray-700 mb-1">Precio ideal</div>
-                                <div class="text-lg font-bold text-gray-800">130%</div>
-                            </button>
-                            <div class="bg-white border-2 border-lime-200 rounded-lg p-4 text-center">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Personalizado</label>
-                                <div class="relative">
-                                    <input type="number" id="custom-percentage" onchange="selectPricingStrategy('custom', this.value)" oninput="selectPricingStrategy('custom', this.value)" class="w-full px-3 py-2 pr-8 bg-lime-50 border border-lime-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-300 focus:border-lime-300 text-center" placeholder="0" min="0" step="0.1">
-                                    <div class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">%</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Comments Section -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2 text-left">🎤 Comentarios (opcional)</label>
-                            
-                            <!-- Text Editor Toolbar -->
-                            <div class="border border-lime-300 rounded-t-lg bg-lime-50 p-2 flex flex-wrap gap-1">
-                                <button type="button" onclick="formatQuoteText('bold')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Negrita">
-                                    <strong>B</strong>
-                                </button>
-                                <button type="button" onclick="formatQuoteText('italic')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Cursiva">
-                                    <em>I</em>
-                                </button>
-                                <button type="button" onclick="formatQuoteText('underline')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Subrayado">
-                                    <u>U</u>
-                                </button>
-                                <div class="w-px h-6 bg-lime-300 mx-1"></div>
-                                <button type="button" onclick="formatQuoteText('insertUnorderedList')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Lista con viñetas">
-                                    • Lista
-                                </button>
-                                <button type="button" onclick="formatQuoteText('insertOrderedList')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Lista numerada">
-                                    1. Lista
-                                </button>
-                                <div class="w-px h-6 bg-lime-300 mx-1"></div>
-                                <button type="button" onclick="formatQuoteText('justifyLeft')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Alinear izquierda">
-                                    ⬅
-                                </button>
-                                <button type="button" onclick="formatQuoteText('justifyCenter')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Centrar">
-                                    ↔
-                                </button>
-                                <button type="button" onclick="formatQuoteText('justifyRight')" class="px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Alinear derecha">
-                                    ➡
-                                </button>
-                            </div>
-                            
-                            <!-- Rich Text Editor -->
-                            <div id="quote-comments" contenteditable="true" onblur="updateQuoteDisplay()" oninput="updateQuoteDisplay()" class="w-full min-h-[120px] px-4 py-3 border border-lime-300 border-t-0 rounded-b-lg focus:outline-none focus:ring-2 focus:ring-lime-300 focus:border-lime-300 bg-white" style="max-height: 200px; overflow-y: auto;" data-placeholder="Ingrese comentarios adicionales sobre la cotización...">
                             </div>
                         </div>
                     </div>
@@ -495,34 +769,96 @@
                             <h3 id="display-quote-title" class="text-xl font-bold text-gray-800 mb-2">Cotización</h3>
                             <div id="display-quote-date" class="text-lg font-semibold text-gray-700 mb-1"></div>
                             <div id="display-quote-validity" class="text-base text-gray-600 mb-4"></div>
-                            <div id="display-quote-comments" class="text-gray-700" style="text-align: left;"></div>
                         </div>
                         
-                        <!-- Quote Table -->
-                        <div class="bg-white border border-lime-200 rounded-lg overflow-hidden">
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full w-full" id="quote-table">
-                                    <thead class="bg-lime-100">
-                                        <tr>
-                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Producto/Servicio</th>
-                                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Cantidad</th>
-                                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Precio Unitario</th>
-                                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Subtotal</th>
-                                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Descripción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="quote-table-body">
-                                        <!-- Quote items will be added here -->
-                                    </tbody>
-                                    <tfoot class="bg-lime-50">
-                                        <tr>
-                                            <td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 border-t border-lime-200">Total:</td>
-                                            <td id="quote-total" class="px-4 py-3 text-center font-bold text-lg text-gray-800 border-t border-lime-200">Q 0.00</td>
-                                            <td class="border-t border-lime-200"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                        <!-- Quote Tables -->
+                        <div class="space-y-4">
+                            <div class="bg-white border border-lime-200 rounded-lg overflow-hidden">
+                                <div class="bg-lime-100 px-4 py-3 border-b border-lime-200">
+                                    <h4 class="text-sm font-semibold text-gray-700">📦 Productos</h4>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full w-full" id="quote-products-table">
+                                        <thead class="bg-lime-50">
+                                            <tr>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Producto</th>
+                                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Cantidad</th>
+                                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Precio Unitario</th>
+                                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="quote-products-table-body">
+                                            <!-- Product quote rows will be added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+
+                            <div class="bg-white border border-lime-200 rounded-lg overflow-hidden">
+                                <div class="bg-lime-100 px-4 py-3 border-b border-lime-200">
+                                    <h4 class="text-sm font-semibold text-gray-700">🛠️ Servicios</h4>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full w-full" id="quote-services-table">
+                                        <thead class="bg-lime-50">
+                                            <tr>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Servicio</th>
+                                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Costo del servicio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="quote-services-table-body">
+                                            <!-- Service quote rows will be added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="bg-lime-50 border border-lime-200 rounded-lg p-4 text-right">
+                                <span class="font-semibold text-gray-700 mr-2">Total:</span>
+                                <span id="quote-total" class="font-bold text-lg text-gray-800">Q 0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="mt-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2 text-left">🎤 Comentarios (opcional)</label>
+                            
+                            <!-- Text Editor Toolbar -->
+                            <div class="border border-lime-300 rounded-t-lg bg-lime-50 p-2 flex flex-wrap gap-1">
+                                <button type="button" onclick="formatQuoteText('bold')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Negrita">
+                                    <strong>B</strong>
+                                </button>
+                                <button type="button" onclick="formatQuoteText('italic')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Cursiva">
+                                    <em>I</em>
+                                </button>
+                                <button type="button" onclick="formatQuoteText('underline')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Subrayado">
+                                    <u>U</u>
+                                </button>
+                                <div class="w-px h-6 bg-lime-300 mx-1"></div>
+                                <button type="button" onclick="formatQuoteText('insertUnorderedList')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Lista con viñetas">
+                                    • Lista
+                                </button>
+                                <button type="button" onclick="formatQuoteText('insertOrderedList')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Lista numerada">
+                                    1. Lista
+                                </button>
+                                <div class="w-px h-6 bg-lime-300 mx-1"></div>
+                                <button type="button" onclick="formatQuoteText('justifyLeft')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Alinear izquierda">
+                                    ⬅
+                                </button>
+                                <button type="button" onclick="formatQuoteText('justifyCenter')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Centrar">
+                                    ↔
+                                </button>
+                                <button type="button" onclick="formatQuoteText('justifyRight')" class="quote-toolbar-btn px-2 py-1 text-sm bg-white border border-lime-200 rounded hover:bg-lime-100 transition-all" title="Alinear derecha">
+                                    ➡
+                                </button>
+                            </div>
+                            
+                            <!-- Rich Text Editor -->
+                            <div id="quote-comments" contenteditable="true" onblur="updateQuoteDisplay()" oninput="updateQuoteDisplay()" class="w-full min-h-[120px] px-4 py-3 border border-lime-300 border-t-0 rounded-b-lg focus:outline-none focus:ring-2 focus:ring-lime-300 focus:border-lime-300 bg-white" style="max-height: 200px; overflow-y: auto;" data-placeholder="Ingrese comentarios adicionales sobre la cotización...">
+                            </div>
+
+                            <!-- Comments Preview -->
+                            <div id="display-quote-comments" class="text-gray-700 mt-4 bg-white border border-lime-200 rounded-lg p-4" style="text-align: left;"></div>
                         </div>
                     </div>
                     
@@ -542,8 +878,182 @@
                         <div class="text-5xl sm:text-6xl mb-4">📈</div>
                         <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Proyecciones</h2>
                     </div>
-                    <div class="text-center text-gray-500">
-                        <p>Esta sección estará disponible proximamente.</p>
+
+                    <!-- Estimacion de Mercado -->
+                    <div class="mb-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">🎯 Estimacion de Mercado</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 border border-blue-200">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                                        <span class="text-white text-sm sm:text-lg">🌍</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm sm:text-lg font-semibold text-blue-800">TAM</h4>
+                                        <p class="text-xs sm:text-sm text-blue-600">Total Addressable Market</p>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-xs sm:text-sm font-medium text-blue-700 mb-2">Tamano total del mercado</label>
+                                    <input type="number" id="tamValue" placeholder="Ej. 17000000" min="0" class="w-full p-2 sm:p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateMarketSizes()">
+                                </div>
+                                <div class="bg-blue-100 p-2 sm:p-3 rounded-lg">
+                                    <p class="text-xs sm:text-sm text-blue-800 font-semibold">TAM: <span id="tamDisplay">0</span></p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-6 border border-green-200">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                                            <span class="text-white text-sm sm:text-lg">🎯</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm sm:text-lg font-semibold text-green-800">SAM</h4>
+                                            <p class="text-xs sm:text-sm text-green-600">Serviceable Available Market</p>
+                                        </div>
+                                    </div>
+                                    <button onclick="toggleSamForm()" class="px-2 sm:px-3 py-1 sm:py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-xs shrink-0">+ Filtro</button>
+                                </div>
+
+                                <div id="samForm" class="hidden bg-white p-3 rounded-lg border border-green-300 mb-4">
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-xs font-medium text-green-800 mb-1">Nombre del filtro</label>
+                                            <input type="text" id="samFilterName" placeholder="Ej. Con acceso a internet" class="w-full p-2 border border-green-300 rounded text-xs">
+                                        </div>
+                                        <div class="flex gap-2 items-end">
+                                            <div class="flex-1">
+                                                <label class="block text-xs font-medium text-green-800 mb-1">Porcentaje (%)</label>
+                                                <input type="number" id="samFilterPercentage" placeholder="0" min="0" max="100" class="w-full p-2 border border-green-300 rounded text-xs">
+                                            </div>
+                                            <button onclick="confirmSamFilter()" class="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-xs">✓</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="samFilters" class="space-y-2 mb-4"></div>
+
+                                <div class="bg-green-100 p-2 sm:p-3 rounded-lg">
+                                    <p class="text-xs sm:text-sm text-green-800 font-semibold">SAM: <span id="samDisplay">0</span></p>
+                                    <p class="text-xs text-green-600">Reduccion: <span id="samReduction">0%</span></p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-4 sm:p-6 border border-purple-200">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                                            <span class="text-white text-sm sm:text-lg">🏆</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm sm:text-lg font-semibold text-purple-800">SOM</h4>
+                                            <p class="text-xs sm:text-sm text-purple-600">Serviceable Obtainable Market</p>
+                                        </div>
+                                    </div>
+                                    <button onclick="toggleSomForm()" class="px-2 sm:px-3 py-1 sm:py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-xs shrink-0">+ Filtro</button>
+                                </div>
+
+                                <div id="somForm" class="hidden bg-white p-3 rounded-lg border border-purple-300 mb-4">
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-xs font-medium text-purple-800 mb-1">Nombre del filtro</label>
+                                            <input type="text" id="somFilterName" placeholder="Ej. Dispuestos a pagar" class="w-full p-2 border border-purple-300 rounded text-xs">
+                                        </div>
+                                        <div class="flex gap-2 items-end">
+                                            <div class="flex-1">
+                                                <label class="block text-xs font-medium text-purple-800 mb-1">Porcentaje (%)</label>
+                                                <input type="number" id="somFilterPercentage" placeholder="0" min="0" max="100" class="w-full p-2 border border-purple-300 rounded text-xs">
+                                            </div>
+                                            <button onclick="confirmSomFilter()" class="px-3 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 text-xs">✓</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="somFilters" class="space-y-2 mb-4"></div>
+
+                                <div class="bg-purple-100 p-2 sm:p-3 rounded-lg">
+                                    <p class="text-xs sm:text-sm text-purple-800 font-semibold">SOM: <span id="somDisplay">0</span></p>
+                                    <p class="text-xs text-purple-600">Del SAM: <span id="somPercentage">0%</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">📅 Proyeccion Mensual</h3>
+                        <div id="monthlyProjectionsContainer"></div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">📊 Grafica de Escenarios</h3>
+                        <div class="bg-gray-50 rounded-xl p-4 sm:p-6">
+                            <canvas id="projectionsChart" width="800" height="400" class="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-sm"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">💰 Resumen por Escenario</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <h5 class="font-semibold text-green-800 mb-2">🚀 Optimista</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-green-700">Unidades:</span><span id="optimistUnits" class="font-bold text-green-800">0</span></div>
+                                    <div class="flex justify-between"><span class="text-green-700">Ingresos:</span><span id="optimistRevenue" class="font-bold text-green-800">Q 0.00</span></div>
+                                    <div class="flex justify-between"><span class="text-green-700">Costos:</span><span id="optimistCosts" class="font-bold text-red-600">Q 0.00</span></div>
+                                    <div class="flex justify-between border-t border-green-300 pt-2"><span class="text-green-700">Utilidad:</span><span id="optimistProfit" class="font-bold text-green-800">Q 0.00</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                <h5 class="font-semibold text-blue-800 mb-2">📈 Realista</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-blue-700">Unidades:</span><span id="realistUnits" class="font-bold text-blue-800">0</span></div>
+                                    <div class="flex justify-between"><span class="text-blue-700">Ingresos:</span><span id="realistRevenue" class="font-bold text-blue-800">Q 0.00</span></div>
+                                    <div class="flex justify-between"><span class="text-blue-700">Costos:</span><span id="realistCosts" class="font-bold text-red-600">Q 0.00</span></div>
+                                    <div class="flex justify-between border-t border-blue-300 pt-2"><span class="text-blue-700">Utilidad:</span><span id="realistProfit" class="font-bold text-blue-800">Q 0.00</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                                <h5 class="font-semibold text-orange-800 mb-2">⚠️ Pesimista</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between"><span class="text-orange-700">Unidades:</span><span id="pessimistUnits" class="font-bold text-orange-800">0</span></div>
+                                    <div class="flex justify-between"><span class="text-orange-700">Ingresos:</span><span id="pessimistRevenue" class="font-bold text-orange-800">Q 0.00</span></div>
+                                    <div class="flex justify-between"><span class="text-orange-700">Costos:</span><span id="pessimistCosts" class="font-bold text-red-600">Q 0.00</span></div>
+                                    <div class="flex justify-between border-t border-orange-300 pt-2"><span class="text-orange-700">Utilidad:</span><span id="pessimistProfit" class="font-bold text-orange-800">Q 0.00</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">💎 Indicadores Financieros</h3>
+                        <div class="bg-gray-50 rounded-xl p-4 sm:p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-lg border text-center">
+                                    <p class="text-xs sm:text-sm text-gray-600 mb-1">Inversion Inicial Total</p>
+                                    <p id="totalInvestment" class="text-lg sm:text-xl font-bold text-red-600">Q 0.00</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border text-center">
+                                    <p class="text-xs sm:text-sm text-gray-600 mb-1">Descuento Promedio (Margen 12%)</p>
+                                    <p id="discountRateDisplay" class="text-lg sm:text-xl font-bold text-blue-600">Q 0.00</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg border text-center">
+                                    <p class="text-xs sm:text-sm text-gray-600 mb-1">Anos para Rentabilidad</p>
+                                    <p id="yearsToProfit" class="text-lg sm:text-xl font-bold text-green-600">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-indigo-800 mb-4">⚡ Analisis de Rentabilidad</h3>
+                        <div id="profitabilityAnalysis" class="bg-gray-50 rounded-xl p-4 sm:p-6 text-gray-600">Sin datos para analizar.</div>
+                    </div>
+
+                    <div class="text-center" style="margin-top: 24px;">
+                        <button onclick="imprimirProyecciones()" class="px-6 sm:px-8 py-3 sm:py-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-bold text-sm sm:text-lg shadow-lg">
+                            🖨️ Imprimir Proyecciones
+                        </button>
                     </div>
                 </div>
             </section>
@@ -567,7 +1077,7 @@
     <!-- Popup Overlays -->
     <div id="popup-manual" class="fixed inset-0 z-50 hidden popup-overlay">
         <div class="flex items-center justify-center min-h-full p-4">
-            <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full p-6">
+            <div id="manual-popup-card" class="popup-theme-proyecciones bg-white rounded-lg shadow-xl max-w-4xl w-full p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold text-gray-800">📖 Manual de Uso</h3>
                     <button onclick="togglePopup('manual')" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
@@ -584,7 +1094,7 @@
     <!-- Tax Add/Edit Popup -->
     <div id="popup-tax" class="fixed inset-0 z-50 hidden popup-overlay">
         <div class="flex items-center justify-center min-h-full p-4">
-            <div id="tax-popup-content" class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div id="tax-popup-content" class="popup-theme-estructura bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                 <div class="mb-6">
                     <h3 id="tax-popup-title" class="text-xl font-bold text-gray-800 text-center">🧾 Configuración del impuesto</h3>
                 </div>
@@ -616,7 +1126,7 @@
     <!-- Fixed Cost Add/Edit Popup -->
     <div id="popup-fixed-cost" class="fixed inset-0 z-50 hidden popup-overlay">
         <div class="flex items-center justify-center min-h-full p-4">
-            <div id="fixed-cost-popup-content" class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div id="fixed-cost-popup-content" class="popup-theme-estructura bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                 <div class="mb-6">
                     <h3 id="fixed-cost-popup-title" class="text-xl font-bold text-gray-800 text-center">📆 Configuración de costo fijo</h3>
                 </div>
@@ -648,7 +1158,7 @@
     <!-- Investment Add/Edit Popup -->
     <div id="popup-investment" class="fixed inset-0 z-50 hidden popup-overlay">
         <div class="flex items-center justify-center min-h-full p-4">
-            <div id="investment-popup-content" class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div id="investment-popup-content" class="popup-theme-estructura bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                 <div class="mb-6">
                     <h3 id="investment-popup-title" class="text-xl font-bold text-gray-800 text-center">🏗️ Edición de inversión inicial</h3>
                 </div>
@@ -685,10 +1195,10 @@
         </div>
     </div>
 
-    <!-- Project Add/Edit Popup -->
-    <div id="popup-project" class="fixed inset-0 z-50 hidden popup-overlay">
-        <div class="flex items-center justify-center min-h-full p-2 sm:p-4">
-            <div id="project-popup-content" class="bg-white rounded-lg shadow-xl w-full max-w-[95vw] sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl p-4 sm:p-6 max-h-[95vh] overflow-y-auto">
+    <!-- Service Add/Edit Popup -->
+    <div id="popup-service" class="fixed inset-0 z-50 hidden popup-overlay">
+        <div id="popup-service-container" class="flex items-center justify-center min-h-full p-2 sm:p-4">
+            <div id="project-popup-content" class="popup-theme-productos bg-white rounded-lg shadow-xl w-full max-w-[95vw] sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl p-4 sm:p-6 max-h-[95vh] overflow-y-auto">
                 <div class="mb-6">
                     <h3 id="project-popup-title" class="text-xl font-bold text-gray-800 text-center">Proyecto 1</h3>
                 </div>
@@ -702,7 +1212,7 @@
                             <input type="text" id="project-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Ej: Diseño web">
                         </div>
                         <div id="hours-field" class="hidden">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas de duración</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas invertidas</label>
                             <input type="number" id="project-hours" onchange="calculateProjectCosts()" oninput="calculateProjectCosts()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="40" min="0" step="0.5">
                         </div>
                     </div>
@@ -811,6 +1321,38 @@
                             <div id="suggested-price" class="text-lg font-bold text-blue-800">Q 0.00</div>
                         </div>
                     </div>
+
+                    <!-- Quotation Settings -->
+                    <div class="quote-margin-card bg-lime-50 border border-lime-100 rounded-xl p-4 sm:p-6">
+                        <h4 class="quote-margin-card-title text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6 text-center">📋 Margen de ganancia</h4>
+
+                        <!-- Pricing Strategy Buttons -->
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button onclick="selectPricingStrategy('minimum', 10)" id="pricing-minimum" data-strategy="minimum" class="pricing-strategy-btn pricing-color-card border-2 rounded-lg p-4 text-center">
+                                <div class="pricing-heart text-4xl mb-2">💚</div>
+                                <div class="pricing-title text-sm font-medium mb-1">Mínimo no negociable</div>
+                                <div class="pricing-value text-lg font-bold">10%</div>
+                            </button>
+                            <button onclick="selectPricingStrategy('regular', 30)" id="pricing-regular" data-strategy="regular" class="pricing-strategy-btn pricing-color-card border-2 rounded-lg p-4 text-center">
+                                <div class="pricing-heart text-4xl mb-2">💙</div>
+                                <div class="pricing-title text-sm font-medium mb-1">Precio regular</div>
+                                <div class="pricing-value text-lg font-bold">30%</div>
+                            </button>
+                            <button onclick="selectPricingStrategy('ideal', 130)" id="pricing-ideal" data-strategy="ideal" class="pricing-strategy-btn pricing-color-card border-2 rounded-lg p-4 text-center">
+                                <div class="pricing-heart text-4xl mb-2">💜</div>
+                                <div class="pricing-title text-sm font-medium mb-1">Precio ideal</div>
+                                <div class="pricing-value text-lg font-bold">130%</div>
+                            </button>
+                            <div id="pricing-custom-card" data-strategy="custom" onclick="selectPricingStrategy('custom', document.getElementById('custom-percentage').value || 0)" class="pricing-color-card border-2 rounded-lg p-4 text-center cursor-pointer">
+                                <div class="pricing-heart text-4xl mb-2">💛</div>
+                                <label class="pricing-title block text-sm font-medium mb-2">Precio personalizado</label>
+                                <div class="relative">
+                                    <input type="number" id="custom-percentage" onchange="selectPricingStrategy('custom', this.value)" oninput="selectPricingStrategy('custom', this.value)" class="pricing-custom-input w-full px-3 py-2 pr-8 rounded-lg text-center focus:outline-none" placeholder="0" min="0" step="0.1">
+                                    <div class="pricing-custom-symbol absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Description -->
@@ -878,10 +1420,36 @@
         </div>
     </div>
 
+    <!-- Product Add/Edit Popup -->
+    <div id="popup-product" class="fixed inset-0 z-50 hidden popup-overlay">
+        <div id="popup-product-container" class="flex items-center justify-center min-h-full p-2 sm:p-4">
+        </div>
+    </div>
+
+    <!-- Projection Inputs Popup -->
+    <div id="popup-projection-inputs" class="fixed inset-0 z-50 hidden popup-overlay">
+        <div class="flex items-center justify-center min-h-full p-2 sm:p-4">
+            <div class="popup-theme-proyecciones bg-white rounded-lg shadow-xl w-full max-w-4xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="projection-popup-title" class="text-lg sm:text-xl font-bold text-gray-800">Proyeccion Mensual</h3>
+                    <button onclick="closeProjectionInputsPopup()" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">&times;</button>
+                </div>
+                <div id="projection-popup-content" class="space-y-4">
+                    <!-- Projection table will be injected here -->
+                </div>
+                <div class="mt-5 text-right">
+                    <button onclick="closeProjectionInputsPopup()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-lg transition-all">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Delete Project Confirmation Popup -->
     <div id="popup-delete-project" class="fixed inset-0 z-50 hidden popup-overlay">
         <div class="flex items-center justify-center min-h-full p-4">
-            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="popup-theme-productos bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                 <div class="text-center mb-6">
                     <div class="text-6xl mb-4">⚠️</div>
                     <h3 class="text-xl font-bold text-gray-800 mb-2">¿Deseas eliminar este proyecto?</h3>
@@ -914,6 +1482,10 @@
         let currentProjectType = 'service'; // 'service' or 'product'
         let currentProjectRawMaterials = [];
         let currentProjectEquipment = [];
+        let currentProjectionPopupProjectId = null;
+        let samFilters = [];
+        let somFilters = [];
+        const projectionColors = ['#3B82F6', '#10B981', '#F59E0B'];
 
         // Unified data management system
         const appData = {
@@ -936,7 +1508,13 @@
                 comments: '',
                 pricingStrategy: 'regular',
                 customPercentage: 30,
-                items: []
+                items: {}
+            },
+            projections: {
+                tamValue: '',
+                samFilters: [],
+                somFilters: [],
+                monthlyValues: {}
             }
         };
 
@@ -964,7 +1542,13 @@
                     comments: '',
                     pricingStrategy: 'regular',
                     customPercentage: 30,
-                    items: []
+                    items: {}
+                };
+                appData.projections = data.projections || {
+                    tamValue: '',
+                    samFilters: [],
+                    somFilters: [],
+                    monthlyValues: {}
                 };
                 
                 taxes = appData.taxes; // Keep backward compatibility
@@ -972,6 +1556,8 @@
                 investments = appData.investments;
                 rawMaterials = appData.rawMaterials;
                 projects = appData.projects;
+                samFilters = appData.projections.samFilters || [];
+                somFilters = appData.projections.somFilters || [];
                 
                 // Update UI elements
                 const currencySelect = document.getElementById('currency-select');
@@ -984,6 +1570,17 @@
                 dailyHoursInput.value = appData.honorarios.dailyHours;
                 hourlyRateInput.value = appData.honorarios.hourlyRate;
                 
+                renderTaxes();
+                renderFixedCosts();
+                renderInvestments();
+                renderRawMaterials();
+                renderProjects();
+                updateCurrencySymbols();
+                calculateHonorarios();
+                loadQuotationData();
+            } else {
+                samFilters = [];
+                somFilters = [];
                 renderTaxes();
                 renderFixedCosts();
                 renderInvestments();
@@ -1026,6 +1623,15 @@
             if (quoteValidity) appData.quotation.validity = quoteValidity.value;
             if (quoteComments) appData.quotation.comments = quoteComments.innerHTML;
             if (customPercentage) appData.quotation.customPercentage = parseFloat(customPercentage.value) || 30;
+
+            const tamValue = document.getElementById('tamValue');
+            appData.projections.tamValue = tamValue ? tamValue.value : '';
+            appData.projections.samFilters = samFilters;
+            appData.projections.somFilters = somFilters;
+            appData.projections.monthlyValues = {
+                ...(appData.projections.monthlyValues || {}),
+                ...collectProjectionInputValues()
+            };
             
             localStorage.setItem('calculadora-data', JSON.stringify(appData));
         }
@@ -1038,6 +1644,7 @@
         }
 
         function saveBusinessYears() {
+            updateProjectionsSection();
             saveAllData();
         }
 
@@ -1088,6 +1695,10 @@
             // Re-render all lists to update currency symbols
             renderFixedCosts();
             renderInvestments();
+            renderRawMaterials();
+            renderProjects();
+            renderQuoteTable();
+            updateProjectionCalculations();
         }
 
         // Get business years with default value of 1
@@ -1146,7 +1757,7 @@
             updateTotalFixedCosts();
             
             // Update project calculations if popup is open
-            if (!document.getElementById('popup-project').classList.contains('hidden')) {
+            if (isProjectPopupOpen()) {
                 calculateFixedCostPerHour();
                 calculateProjectCosts();
             }
@@ -1271,7 +1882,7 @@
             saveAllData();
             
             // Update project calculations if popup is open
-            if (!document.getElementById('popup-project').classList.contains('hidden')) {
+            if (isProjectPopupOpen()) {
                 calculateProjectCosts();
             }
         }
@@ -1481,6 +2092,20 @@
         }
 
         function togglePopup(type) {
+            if (type === 'manual') {
+                const manualCard = document.getElementById('manual-popup-card');
+                if (manualCard) {
+                    manualCard.classList.remove('popup-theme-estructura', 'popup-theme-productos', 'popup-theme-proyecciones');
+                    const manualThemeBySection = {
+                        estructura: 'popup-theme-estructura',
+                        productos: 'popup-theme-productos',
+                        cotizacion: 'popup-theme-productos',
+                        proyecciones: 'popup-theme-proyecciones'
+                    };
+                    manualCard.classList.add(manualThemeBySection[currentSection] || 'popup-theme-estructura');
+                }
+            }
+
             const popup = document.getElementById(`popup-${type}`);
             popup.classList.toggle('hidden');
         }
@@ -1693,7 +2318,7 @@
             }, 0);
             
             // Update project calculations if popup is open
-            if (!document.getElementById('popup-project').classList.contains('hidden')) {
+            if (isProjectPopupOpen()) {
                 renderEquipmentChecklist();
                 calculateProjectCosts();
             }
@@ -1845,6 +2470,34 @@
             editor.innerHTML = content || '';
         }
 
+        function isProjectPopupOpen() {
+            const servicePopup = document.getElementById('popup-service');
+            const productPopup = document.getElementById('popup-product');
+            return !servicePopup.classList.contains('hidden') || !productPopup.classList.contains('hidden');
+        }
+
+        function setActiveProjectPopup(projectType) {
+            const content = document.getElementById('project-popup-content');
+            const servicePopup = document.getElementById('popup-service');
+            const productPopup = document.getElementById('popup-product');
+            const serviceContainer = document.getElementById('popup-service-container');
+            const productContainer = document.getElementById('popup-product-container');
+
+            if (projectType === 'product') {
+                if (content.parentElement !== productContainer) {
+                    productContainer.appendChild(content);
+                }
+                servicePopup.classList.add('hidden');
+                productPopup.classList.remove('hidden');
+            } else {
+                if (content.parentElement !== serviceContainer) {
+                    serviceContainer.appendChild(content);
+                }
+                productPopup.classList.add('hidden');
+                servicePopup.classList.remove('hidden');
+            }
+        }
+
         // Show placeholder when editor is empty
         function updateDescriptionPlaceholder() {
             const editor = document.getElementById('project-description');
@@ -1887,6 +2540,9 @@
             if (projectId === 'product') {
                 currentProjectType = 'product';
                 editingProjectId = null;
+            } else if (projectId === 'service') {
+                currentProjectType = 'service';
+                editingProjectId = null;
             } else if (typeof projectId === 'string' && projectId !== 'product') {
                 // Editing existing project
                 editingProjectId = projectId;
@@ -1898,7 +2554,6 @@
                 editingProjectId = projectId;
             }
 
-            const popup = document.getElementById('popup-project');
             const title = document.getElementById('project-popup-title');
             const actionBtn = document.getElementById('project-action-btn');
             const nameInput = document.getElementById('project-name');
@@ -1919,10 +2574,8 @@
                 projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-3 gap-6';
             } else {
                 rawMaterialsCard.classList.add('hidden');
-                hoursField.classList.add('hidden'); // Always hide hours field for services too
+                hoursField.classList.remove('hidden');
                 nameLabel.textContent = 'Nombre del servicio';
-                // Set hours to 0 for services too since we're removing the field
-                hoursInput.value = '0';
                 // Keep 2 columns for services
                 projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-2 gap-6';
             }
@@ -1944,7 +2597,7 @@
                 title.textContent = `${currentProjectType === 'product' ? 'Producto' : 'Servicio'} ${projectNumber}`;
                 actionBtn.textContent = 'Agregar';
                 nameInput.value = '';
-                hoursInput.value = '';
+                hoursInput.value = currentProjectType === 'product' ? '0' : '';
                 setDescriptionContent('');
                 updateDescriptionPlaceholder();
                 currentProjectVariableCosts = [];
@@ -1957,12 +2610,14 @@
             renderVariableCosts();
             calculateFixedCostPerHour();
             calculateProjectCosts();
-            popup.classList.remove('hidden');
+            setActiveProjectPopup(currentProjectType);
         }
 
         function closeProjectPopup() {
-            const popup = document.getElementById('popup-project');
-            popup.classList.add('hidden');
+            const servicePopup = document.getElementById('popup-service');
+            const productPopup = document.getElementById('popup-product');
+            servicePopup.classList.add('hidden');
+            productPopup.classList.add('hidden');
             editingProjectId = null;
             currentProjectVariableCosts = [];
             currentProjectRawMaterials = [];
@@ -2377,9 +3032,13 @@
             const hours = parseFloat(hoursInput.value) || 0;
             const description = getDescriptionContent();
 
-            // Validation - only check name since hours are always 0 now
+            // Validation
             if (!name) {
                 return; // Don't save if name is empty
+            }
+
+            if (currentProjectType === 'service' && hours <= 0) {
+                return; // Service requires invested hours
             }
 
             // Get selected equipment
@@ -2457,53 +3116,70 @@
         }
 
         function renderProjects() {
-            const grid = document.getElementById('projects-grid');
-            grid.innerHTML = '';
-
+            const productsTableBody = document.getElementById('products-table-body');
+            const servicesTableBody = document.getElementById('services-table-body');
             const currencySymbol = getCurrencySymbol();
-            
-            // Define colors for different projects
-            const projectColors = [
-                'bg-blue-100 border-blue-200',
-                'bg-green-100 border-green-200',
-                'bg-purple-100 border-purple-200',
-                'bg-yellow-100 border-yellow-200',
-                'bg-pink-100 border-pink-200',
-                'bg-indigo-100 border-indigo-200'
-            ];
+
+            productsTableBody.innerHTML = '';
+            servicesTableBody.innerHTML = '';
+
+            const products = [];
+            const services = [];
 
             projects.forEach((project, index) => {
-                const colorClass = projectColors[index % projectColors.length];
-                const projectCard = document.createElement('div');
-                projectCard.className = `${colorClass} border rounded-lg p-4`;
-                
-                // Add type indicator
-                const typeIcon = project.type === 'product' ? '📦' : '🛠️';
-                const typeLabel = project.type === 'product' ? 'Producto' : 'Servicio';
-                
-                projectCard.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <div class="flex items-center mb-1">
-                                <span class="text-lg mr-2">${typeIcon}</span>
-                                <span class="text-xs font-medium text-gray-600 bg-white px-2 py-1 rounded-full">${typeLabel}</span>
-                            </div>
-                            <h4 class="text-lg font-medium text-gray-800">${project.name}</h4>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="openProjectPopup('${project.id}')" class="text-blue-600 hover:text-blue-800 text-lg transition-all">
-                                ✏️
-                            </button>
-                            <button onclick="openDeleteProjectPopup('${project.id}')" class="text-red-600 hover:text-red-800 text-lg transition-all">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                    <div class="text-2xl font-bold text-gray-800 mb-1">${currencySymbol} ${project.calculations.suggestedPrice.toFixed(2)}</div>
-                    <div class="text-sm text-gray-600">${project.hours} horas • ${project.description.replace(/<[^>]*>/g, '').substring(0, 50)}${project.description.replace(/<[^>]*>/g, '').length > 50 ? '...' : ''}</div>
-                `;
-                grid.appendChild(projectCard);
+                const item = {
+                    ...project,
+                    quantity: getQuoteQuantity(project.id, index),
+                    cost: project.calculations?.suggestedPrice || 0
+                };
+
+                if (project.type === 'product') {
+                    products.push(item);
+                } else {
+                    services.push(item);
+                }
             });
+
+            if (products.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.className = 'bg-white';
+                emptyRow.innerHTML = `
+                    <td colspan="3" class="px-3 py-4 text-center text-sm text-gray-500 border-b border-blue-100">Sin productos registrados</td>
+                `;
+                productsTableBody.appendChild(emptyRow);
+            } else {
+                products.forEach((product, index) => {
+                    const row = document.createElement('tr');
+                    row.className = index % 2 === 0 ? 'bg-white' : 'bg-blue-25';
+                    row.innerHTML = `
+                        <td class="px-3 py-2 text-sm text-gray-700 border-b border-blue-100">${product.name}</td>
+                        <td class="px-3 py-2 text-sm text-center text-gray-700 border-b border-blue-100">${product.quantity}</td>
+                        <td class="px-3 py-2 text-sm text-center font-medium text-gray-800 border-b border-blue-100">${currencySymbol} ${product.cost.toFixed(2)}</td>
+                    `;
+                    productsTableBody.appendChild(row);
+                });
+            }
+
+            if (services.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.className = 'bg-white';
+                emptyRow.innerHTML = `
+                    <td colspan="2" class="px-3 py-4 text-center text-sm text-gray-500 border-b border-blue-100">Sin servicios registrados</td>
+                `;
+                servicesTableBody.appendChild(emptyRow);
+            } else {
+                services.forEach((service, index) => {
+                    const row = document.createElement('tr');
+                    row.className = index % 2 === 0 ? 'bg-white' : 'bg-blue-25';
+                    row.innerHTML = `
+                        <td class="px-3 py-2 text-sm text-gray-700 border-b border-blue-100">${service.name}</td>
+                        <td class="px-3 py-2 text-sm text-center font-medium text-gray-800 border-b border-blue-100">${currencySymbol} ${service.cost.toFixed(2)}</td>
+                    `;
+                    servicesTableBody.appendChild(row);
+                });
+            }
+
+            updateProjectionsSection();
         }
 
         function openDeleteProjectPopup(projectId) {
@@ -2521,6 +3197,18 @@
         function confirmDeleteProject() {
             if (deletingProjectId) {
                 projects = projects.filter(p => p.id !== deletingProjectId);
+
+                if (!Array.isArray(appData.quotation.items)) {
+                    delete appData.quotation.items[deletingProjectId];
+                }
+
+                const monthlyValues = appData.projections.monthlyValues || {};
+                Object.keys(monthlyValues).forEach(key => {
+                    if (key.startsWith(`${deletingProjectId}_`)) {
+                        delete monthlyValues[key];
+                    }
+                });
+
                 saveAllData();
                 renderProjects();
                 closeDeleteProjectPopup();
@@ -2537,12 +3225,14 @@
                     editingFixedCostId = null;
                 } else if (e.target.id === 'popup-investment') {
                     editingInvestmentId = null;
-                } else if (e.target.id === 'popup-project') {
+                } else if (e.target.id === 'popup-service' || e.target.id === 'popup-product') {
                     editingProjectId = null;
                     currentProjectVariableCosts = [];
                     currentProjectRawMaterials = [];
                     currentProjectEquipment = [];
                     currentProjectType = 'service';
+                } else if (e.target.id === 'popup-projection-inputs') {
+                    currentProjectionPopupProjectId = null;
                 } else if (e.target.id === 'popup-delete-project') {
                     deletingProjectId = null;
                 }
@@ -2609,6 +3299,35 @@
             renderQuoteTable();
         }
 
+        function ensureQuotationItemsMap() {
+            if (Array.isArray(appData.quotation.items)) {
+                const mappedItems = {};
+                projects.forEach((project, index) => {
+                    mappedItems[project.id] = {
+                        quantity: parseInt(appData.quotation.items[index]?.quantity || 1, 10)
+                    };
+                });
+                appData.quotation.items = mappedItems;
+            }
+
+            if (!appData.quotation.items || Array.isArray(appData.quotation.items)) {
+                appData.quotation.items = {};
+            }
+        }
+
+        function getQuoteQuantity(projectId, fallbackIndex = 0) {
+            if (Array.isArray(appData.quotation.items)) {
+                return parseInt(appData.quotation.items[fallbackIndex]?.quantity || 1, 10);
+            }
+
+            return parseInt(appData.quotation.items?.[projectId]?.quantity || 1, 10);
+        }
+
+        function setQuoteQuantity(projectId, fallbackIndex, quantity) {
+            ensureQuotationItemsMap();
+            appData.quotation.items[projectId] = { quantity };
+        }
+
         function selectPricingStrategy(strategy, percentage) {
             selectedPricingStrategy = strategy;
             currentPricingPercentage = parseFloat(percentage) || 0;
@@ -2620,28 +3339,37 @@
             
             updatePricingStrategyButtons();
             renderQuoteTable();
+            updateProjectionCalculations();
             saveAllData();
         }
 
         function updatePricingStrategyButtons() {
-            // Reset all buttons
+            const selectedClasses = [
+                'pricing-selected',
+                'pricing-selected-minimum',
+                'pricing-selected-regular',
+                'pricing-selected-ideal',
+                'pricing-selected-custom'
+            ];
+
             document.querySelectorAll('.pricing-strategy-btn').forEach(btn => {
-                btn.classList.remove('bg-lime-200', 'border-lime-400', 'shadow-lg');
-                btn.classList.add('bg-white', 'border-lime-200');
+                btn.classList.remove(...selectedClasses);
             });
-            
-            // Highlight selected button
+
             const selectedBtn = document.getElementById(`pricing-${selectedPricingStrategy}`);
             if (selectedBtn) {
-                selectedBtn.classList.remove('bg-white', 'border-lime-200');
-                selectedBtn.classList.add('bg-lime-200', 'border-lime-400', 'shadow-lg');
+                selectedBtn.classList.add('pricing-selected', `pricing-selected-${selectedPricingStrategy}`);
             }
-            
-            // Handle custom selection
+
+            const customContainer = document.getElementById('pricing-custom-card');
+            if (customContainer) {
+                customContainer.classList.remove(...selectedClasses);
+            }
+
             if (selectedPricingStrategy === 'custom') {
-                const customContainer = document.getElementById('custom-percentage').parentElement.parentElement;
-                customContainer.classList.remove('bg-white', 'border-lime-200');
-                customContainer.classList.add('bg-lime-200', 'border-lime-400', 'shadow-lg');
+                if (customContainer) {
+                    customContainer.classList.add('pricing-selected', 'pricing-selected-custom');
+                }
             }
         }
 
@@ -2697,66 +3425,76 @@
         }
 
         function renderQuoteTable() {
-            const tbody = document.getElementById('quote-table-body');
-            tbody.innerHTML = '';
-            
+            const productsTbody = document.getElementById('quote-products-table-body');
+            const servicesTbody = document.getElementById('quote-services-table-body');
+            productsTbody.innerHTML = '';
+            servicesTbody.innerHTML = '';
+
             const currencySymbol = getCurrencySymbol();
             let total = 0;
-            
+
             projects.forEach((project, index) => {
                 const basePrice = project.calculations.suggestedPrice;
                 const markup = currentPricingPercentage / 100;
                 const unitPrice = basePrice * (1 + markup);
-                const quantity = appData.quotation.items[index]?.quantity || 1;
+                const quantity = getQuoteQuantity(project.id, index);
                 const subtotal = unitPrice * quantity;
-                total += subtotal;
-                
-                const row = document.createElement('tr');
-                row.className = index % 2 === 0 ? 'bg-white' : 'bg-lime-25';
-                
-                // Clean description text (remove HTML tags)
-                const cleanDescription = project.description.replace(/<[^>]*>/g, '').substring(0, 100);
-                
-                row.innerHTML = `
-                    <td class="px-4 py-3 border-b border-lime-100">
-                        <div class="font-medium text-gray-800">${project.name}</div>
-                        <div class="text-sm text-gray-600">${project.type === 'product' ? 'Producto' : 'Servicio'}</div>
-                    </td>
-                    <td class="px-4 py-3 border-b border-lime-100 text-center">
-                        <input type="number" 
-                               value="${quantity}" 
-                               min="1" 
-                               step="1"
-                               onchange="updateQuoteItemQuantity(${index}, this.value)"
-                               class="w-20 px-2 py-1 text-center border border-lime-300 rounded focus:outline-none focus:ring-1 focus:ring-lime-500">
-                    </td>
-                    <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">
-                        ${currencySymbol} ${unitPrice.toFixed(2)}
-                    </td>
-                    <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">
-                        ${currencySymbol} ${subtotal.toFixed(2)}
-                    </td>
-                    <td class="px-4 py-3 border-b border-lime-100 text-sm text-gray-600">
-                        ${cleanDescription}${cleanDescription.length >= 100 ? '...' : ''}
-                    </td>
-                `;
-                tbody.appendChild(row);
+
+                if (project.type === 'product') {
+                    total += subtotal;
+                    const row = document.createElement('tr');
+                    row.className = productsTbody.children.length % 2 === 0 ? 'bg-white' : 'bg-lime-25';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 border-b border-lime-100 text-sm text-gray-700">${project.name}</td>
+                        <td class="px-4 py-3 border-b border-lime-100 text-center">
+                            <input type="number"
+                                   value="${quantity}"
+                                   min="1"
+                                   step="1"
+                                   onchange="updateQuoteItemQuantity('${project.id}', ${index}, this.value)"
+                                   class="w-20 px-2 py-1 text-center border border-lime-300 rounded focus:outline-none focus:ring-1 focus:ring-lime-500">
+                        </td>
+                        <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">${currencySymbol} ${unitPrice.toFixed(2)}</td>
+                        <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">${currencySymbol} ${subtotal.toFixed(2)}</td>
+                    `;
+                    productsTbody.appendChild(row);
+                } else {
+                    total += unitPrice;
+                    const row = document.createElement('tr');
+                    row.className = servicesTbody.children.length % 2 === 0 ? 'bg-white' : 'bg-lime-25';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 border-b border-lime-100 text-sm text-gray-700">${project.name}</td>
+                        <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">${currencySymbol} ${unitPrice.toFixed(2)}</td>
+                    `;
+                    servicesTbody.appendChild(row);
+                }
             });
-            
+
+            if (productsTbody.children.length === 0) {
+                const emptyProductsRow = document.createElement('tr');
+                emptyProductsRow.className = 'bg-white';
+                emptyProductsRow.innerHTML = '<td colspan="4" class="px-4 py-3 text-center text-sm text-gray-500 border-b border-lime-100">Sin productos en la cotizacion</td>';
+                productsTbody.appendChild(emptyProductsRow);
+            }
+
+            if (servicesTbody.children.length === 0) {
+                const emptyServicesRow = document.createElement('tr');
+                emptyServicesRow.className = 'bg-white';
+                emptyServicesRow.innerHTML = '<td colspan="2" class="px-4 py-3 text-center text-sm text-gray-500 border-b border-lime-100">Sin servicios en la cotizacion</td>';
+                servicesTbody.appendChild(emptyServicesRow);
+            }
+
             // Update total
             document.getElementById('quote-total').textContent = `${currencySymbol} ${total.toFixed(2)}`;
         }
 
-        function updateQuoteItemQuantity(projectIndex, quantity) {
+        function updateQuoteItemQuantity(projectId, projectIndex, quantity) {
             const qty = parseInt(quantity) || 1;
-            
-            // Ensure quotation items array exists and has enough elements
-            while (appData.quotation.items.length <= projectIndex) {
-                appData.quotation.items.push({ quantity: 1 });
-            }
-            
-            appData.quotation.items[projectIndex].quantity = qty;
+
+            setQuoteQuantity(projectId, projectIndex, qty);
             renderQuoteTable();
+            updateMonthlyProjections();
+            updateProjectionCalculations();
             saveAllData();
         }
 
@@ -2766,68 +3504,84 @@
             const validity = document.getElementById('display-quote-validity').textContent;
             const comments = document.getElementById('display-quote-comments').innerHTML;
             
-            // Create a clean table for printing (without input fields)
-            const tbody = document.getElementById('quote-table-body');
             const currencySymbol = getCurrencySymbol();
             let total = 0;
-            let printTableRows = '';
+            let productRows = '';
+            let serviceRows = '';
+            let productRowIndex = 0;
+            let serviceRowIndex = 0;
             
             projects.forEach((project, index) => {
                 const basePrice = project.calculations.suggestedPrice;
                 const markup = currentPricingPercentage / 100;
                 const unitPrice = basePrice * (1 + markup);
-                const quantity = appData.quotation.items[index]?.quantity || 1;
+                const quantity = getQuoteQuantity(project.id, index);
                 const subtotal = unitPrice * quantity;
-                total += subtotal;
-                
-                const cleanDescription = project.description.replace(/<[^>]*>/g, '').substring(0, 100);
-                const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-lime-25';
-                
-                printTableRows += `
-                    <tr class="${rowClass}">
-                        <td class="px-4 py-3 border-b border-lime-100">
-                            <div class="font-medium text-gray-800">${project.name}</div>
-                            <div class="text-sm text-gray-600">${project.type === 'product' ? 'Producto' : 'Servicio'}</div>
-                        </td>
-                        <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">
-                            ${quantity}
-                        </td>
-                        <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">
-                            ${currencySymbol} ${unitPrice.toFixed(2)}
-                        </td>
-                        <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">
-                            ${currencySymbol} ${subtotal.toFixed(2)}
-                        </td>
-                        <td class="px-4 py-3 border-b border-lime-100 text-sm text-gray-600">
-                            ${cleanDescription}${cleanDescription.length >= 100 ? '...' : ''}
-                        </td>
-                    </tr>
-                `;
+
+                if (project.type === 'product') {
+                    total += subtotal;
+                    const rowClass = productRowIndex % 2 === 0 ? 'bg-white' : 'bg-lime-25';
+                    productRowIndex++;
+                    productRows += `
+                        <tr class="${rowClass}">
+                            <td class="px-4 py-3 border-b border-lime-100">${project.name}</td>
+                            <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">${quantity}</td>
+                            <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">${currencySymbol} ${unitPrice.toFixed(2)}</td>
+                            <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">${currencySymbol} ${subtotal.toFixed(2)}</td>
+                        </tr>
+                    `;
+                } else {
+                    total += unitPrice;
+                    const rowClass = serviceRowIndex % 2 === 0 ? 'bg-white' : 'bg-lime-25';
+                    serviceRowIndex++;
+                    serviceRows += `
+                        <tr class="${rowClass}">
+                            <td class="px-4 py-3 border-b border-lime-100">${project.name}</td>
+                            <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">${currencySymbol} ${unitPrice.toFixed(2)}</td>
+                        </tr>
+                    `;
+                }
             });
             
-            const tableHTML = `
+            const productTableHTML = productRowIndex > 0 ? `
+                <h3 style="margin-top: 20px; color: #365314;">📦 Productos</h3>
                 <table class="min-w-full w-full">
                     <thead class="bg-lime-100">
                         <tr>
-                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Producto/Servicio</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Producto</th>
                             <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Cantidad</th>
                             <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Precio Unitario</th>
                             <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Subtotal</th>
-                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Descripción</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${printTableRows}
+                        ${productRows}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="px-4 py-3 text-right font-semibold text-gray-700 border-t border-lime-200">Total:</td>
-                            <td class="px-4 py-3 text-center font-bold text-lg text-gray-800 border-t border-lime-200">${currencySymbol} ${total.toFixed(2)}</td>
-                            <td class="border-t border-lime-200"></td>
-                        </tr>
-                    </tfoot>
                 </table>
-            `;
+            ` : '';
+
+            const serviceTableHTML = serviceRowIndex > 0 ? `
+                <h3 style="margin-top: 20px; color: #365314;">🛠️ Servicios</h3>
+                <table class="min-w-full w-full">
+                    <thead class="bg-lime-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Servicio</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Costo del servicio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${serviceRows}
+                    </tbody>
+                </table>
+            ` : '';
+
+            const totalHTML = (productRowIndex > 0 || serviceRowIndex > 0) ? `
+                <div style="margin-top: 20px; text-align: right; font-size: 18px; font-weight: 700; color: #365314;">
+                    Total: ${currencySymbol} ${total.toFixed(2)}
+                </div>
+            ` : '';
+
+            const tableHTML = `${productTableHTML}${serviceTableHTML}${totalHTML}`;
             
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
@@ -3073,10 +3827,626 @@
             };
         }
 
+        function collectProjectionInputValues() {
+            const values = {};
+            const inputs = document.querySelectorAll('.projection-input');
+            inputs.forEach(input => {
+                const key = input.getAttribute('data-key');
+                if (key) {
+                    values[key] = input.value;
+                }
+            });
+            return values;
+        }
+
+        function getProjectionValueKey(projectId, scenario, year, month) {
+            return `${projectId}_${scenario}_Y${year}_M${month}`;
+        }
+
+        function getDefaultProjectionUnits(baseUnits, scenario) {
+            if (scenario === 'optimist') return Math.round(baseUnits * 1.2);
+            if (scenario === 'pessimist') return Math.round(baseUnits * 0.7);
+            return Math.round(baseUnits);
+        }
+
+        function getProjectionValue(projectId, scenario, year, month, fallbackValue = 0) {
+            const key = getProjectionValueKey(projectId, scenario, year, month);
+            const rawValue = appData.projections?.monthlyValues?.[key];
+            const parsed = parseFloat(rawValue);
+
+            if (Number.isFinite(parsed)) {
+                return parsed;
+            }
+
+            // Legacy compatibility with old key format: project_scenario_month
+            if (year === 1) {
+                const legacyKey = `${projectId}_${scenario}_${month}`;
+                const legacyRaw = appData.projections?.monthlyValues?.[legacyKey];
+                const legacyParsed = parseFloat(legacyRaw);
+                if (Number.isFinite(legacyParsed)) {
+                    return legacyParsed;
+                }
+            }
+
+            return fallbackValue;
+        }
+
+        function setProjectionValue(projectId, scenario, year, month, value) {
+            if (!appData.projections.monthlyValues) {
+                appData.projections.monthlyValues = {};
+            }
+            const key = getProjectionValueKey(projectId, scenario, year, month);
+            appData.projections.monthlyValues[key] = value;
+        }
+
+        function getProjectPrice(project) {
+            const basePrice = project.calculations?.suggestedPrice || 0;
+            const markup = (currentPricingPercentage || 0) / 100;
+            return basePrice * (1 + markup);
+        }
+
+        function getProjectBaseUnits(project, index) {
+            if (project.type === 'product') {
+                return getQuoteQuantity(project.id, index);
+            }
+            return 1;
+        }
+
+        function updateProjectionsSection() {
+            if (!document.getElementById('monthlyProjectionsContainer')) {
+                return;
+            }
+
+            renderSamFilters();
+            renderSomFilters();
+
+            const tamInput = document.getElementById('tamValue');
+            if (tamInput && appData.projections.tamValue && tamInput.value !== appData.projections.tamValue) {
+                tamInput.value = appData.projections.tamValue;
+            }
+
+            updateMonthlyProjections();
+            calculateMarketSizes();
+            updateProjectionCalculations();
+        }
+
+        function toggleSamForm() {
+            const form = document.getElementById('samForm');
+            form.classList.toggle('hidden');
+        }
+
+        function toggleSomForm() {
+            const form = document.getElementById('somForm');
+            form.classList.toggle('hidden');
+        }
+
+        function confirmSamFilter() {
+            const nameInput = document.getElementById('samFilterName');
+            const percentageInput = document.getElementById('samFilterPercentage');
+            const name = nameInput.value.trim();
+            const percentage = parseFloat(percentageInput.value);
+
+            if (!name || isNaN(percentage) || percentage <= 0 || percentage > 100) {
+                return;
+            }
+
+            samFilters.push({ id: generateId(), name, percentage });
+            nameInput.value = '';
+            percentageInput.value = '';
+            toggleSamForm();
+            renderSamFilters();
+            calculateMarketSizes();
+            saveAllData();
+        }
+
+        function confirmSomFilter() {
+            const nameInput = document.getElementById('somFilterName');
+            const percentageInput = document.getElementById('somFilterPercentage');
+            const name = nameInput.value.trim();
+            const percentage = parseFloat(percentageInput.value);
+
+            if (!name || isNaN(percentage) || percentage <= 0 || percentage > 100) {
+                return;
+            }
+
+            somFilters.push({ id: generateId(), name, percentage });
+            nameInput.value = '';
+            percentageInput.value = '';
+            toggleSomForm();
+            renderSomFilters();
+            calculateMarketSizes();
+            saveAllData();
+        }
+
+        function removeSamFilter(filterId) {
+            samFilters = samFilters.filter(filter => filter.id !== filterId);
+            renderSamFilters();
+            calculateMarketSizes();
+            saveAllData();
+        }
+
+        function removeSomFilter(filterId) {
+            somFilters = somFilters.filter(filter => filter.id !== filterId);
+            renderSomFilters();
+            calculateMarketSizes();
+            saveAllData();
+        }
+
+        function renderSamFilters() {
+            const container = document.getElementById('samFilters');
+            if (!container) return;
+
+            container.innerHTML = samFilters.map(filter => `
+                <div class="flex gap-2 items-center bg-white p-2 rounded border border-green-200">
+                    <div class="flex-1 text-xs text-green-800">${filter.name}: ${filter.percentage}%</div>
+                    <button onclick="removeSamFilter('${filter.id}')" class="text-red-600 hover:text-red-700 text-xs">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function renderSomFilters() {
+            const container = document.getElementById('somFilters');
+            if (!container) return;
+
+            container.innerHTML = somFilters.map(filter => `
+                <div class="flex gap-2 items-center bg-white p-2 rounded border border-purple-200">
+                    <div class="flex-1 text-xs text-purple-800">${filter.name}: ${filter.percentage}%</div>
+                    <button onclick="removeSomFilter('${filter.id}')" class="text-red-600 hover:text-red-700 text-xs">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function calculateMarketSizes() {
+            const tam = parseFloat(document.getElementById('tamValue')?.value) || 0;
+            let sam = tam;
+            let som = 0;
+            let samReduction = 0;
+
+            samFilters.forEach(filter => {
+                sam = sam * (filter.percentage / 100);
+                samReduction += filter.percentage;
+            });
+
+            som = sam;
+            somFilters.forEach(filter => {
+                som = som * (filter.percentage / 100);
+            });
+
+            document.getElementById('tamDisplay').textContent = Math.round(tam).toLocaleString('es-ES');
+            document.getElementById('samDisplay').textContent = Math.round(sam).toLocaleString('es-ES');
+            document.getElementById('samReduction').textContent = `${samReduction.toFixed(1)}%`;
+            document.getElementById('somDisplay').textContent = Math.round(som).toLocaleString('es-ES');
+            document.getElementById('somPercentage').textContent = `${sam > 0 ? ((som / sam) * 100).toFixed(1) : 0}%`;
+
+            saveAllData();
+        }
+
+        function updateMonthlyProjections() {
+            const container = document.getElementById('monthlyProjectionsContainer');
+            if (!container) return;
+
+            if (projects.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">Agrega productos o servicios para ver las proyecciones mensuales.</p>';
+                return;
+            }
+
+            const totalYears = getBusinessYears();
+            const productProjects = projects.filter(project => project.type === 'product');
+            const serviceProjects = projects.filter(project => project.type === 'service');
+
+            const renderProjectionCard = (project, index) => {
+                const projectId = project.id;
+                const projectTypeLabel = project.type === 'product' ? 'Producto' : 'Servicio';
+                const price = getProjectPrice(project);
+                const cost = project.calculations?.totalProjectCost || 0;
+
+                return `
+                    <div class="w-full md:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.67rem)] bg-white border border-indigo-200 rounded-lg p-3" data-projection-project-id="${projectId}">
+                        <div class="mb-2 text-sm font-semibold text-indigo-800">${project.name} (${projectTypeLabel})</div>
+                        <div class="text-xs text-gray-600 mb-3">Precio: ${getCurrencySymbol()} ${price.toFixed(2)} | Costo base: ${getCurrencySymbol()} ${cost.toFixed(2)} | Periodo: ${totalYears} ano${totalYears > 1 ? 's' : ''}</div>
+                        <div class="rounded-lg border border-indigo-200 bg-white p-2 cursor-pointer" onclick="openProjectionInputsPopup('${projectId}')" title="Haz clic para editar los valores mensuales">
+                            <canvas id="product-projection-chart-${projectId}" width="760" height="240" class="w-full rounded"></canvas>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Haz clic en la grafica para editar valores de este ${project.type === 'product' ? 'producto' : 'servicio'}.</div>
+                    </div>
+                `;
+            };
+
+            const productsHtml = productProjects.length > 0
+                ? `<div class="flex flex-wrap gap-4">${productProjects.map(project => renderProjectionCard(project, projects.findIndex(item => item.id === project.id))).join('')}</div>`
+                : '<p class="text-sm text-gray-500">No hay productos registrados.</p>';
+
+            const servicesHtml = serviceProjects.length > 0
+                ? `<div class="flex flex-wrap gap-4">${serviceProjects.map(project => renderProjectionCard(project, projects.findIndex(item => item.id === project.id))).join('')}</div>`
+                : '<p class="text-sm text-gray-500">No hay servicios registrados.</p>';
+
+            container.innerHTML = `
+                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-5">
+                    <div class="text-sm sm:text-base font-semibold text-indigo-900 mb-3">Productos</div>
+                    ${productsHtml}
+                </div>
+                <div class="bg-cyan-50 border border-cyan-200 rounded-xl p-4">
+                    <div class="text-sm sm:text-base font-semibold text-cyan-900 mb-3">Servicios</div>
+                    ${servicesHtml}
+                </div>
+            `;
+
+            // Draw charts after DOM insertion
+            projects.forEach((project, index) => {
+                drawProductProjectionChart(project, index);
+            });
+        }
+
+        function getScenarioMetrics(scenario) {
+            let units = 0;
+            let revenue = 0;
+            let costs = 0;
+            const totalYears = getBusinessYears();
+
+            projects.forEach((project, index) => {
+                const projectId = project.id;
+                const price = getProjectPrice(project);
+                const baseCost = project.calculations?.totalProjectCost || 0;
+                const baseUnits = getProjectBaseUnits(project, index);
+
+                for (let year = 1; year <= totalYears; year++) {
+                    for (let month = 1; month <= 12; month++) {
+                        const fallback = getDefaultProjectionUnits(baseUnits, scenario);
+                        const monthlyUnits = getProjectionValue(projectId, scenario, year, month, fallback);
+                        units += monthlyUnits;
+                        revenue += monthlyUnits * price;
+                        costs += monthlyUnits * baseCost;
+                    }
+                }
+            });
+
+            return {
+                units,
+                revenue,
+                costs,
+                profit: revenue - costs
+            };
+        }
+
+        function updateScenarioSummary() {
+            const currency = getCurrencySymbol();
+            const optimistic = getScenarioMetrics('optimist');
+            const realist = getScenarioMetrics('realist');
+            const pessimist = getScenarioMetrics('pessimist');
+
+            document.getElementById('optimistUnits').textContent = optimistic.units.toLocaleString('es-ES');
+            document.getElementById('optimistRevenue').textContent = `${currency} ${optimistic.revenue.toFixed(2)}`;
+            document.getElementById('optimistCosts').textContent = `${currency} ${optimistic.costs.toFixed(2)}`;
+            document.getElementById('optimistProfit').textContent = `${currency} ${optimistic.profit.toFixed(2)}`;
+
+            document.getElementById('realistUnits').textContent = realist.units.toLocaleString('es-ES');
+            document.getElementById('realistRevenue').textContent = `${currency} ${realist.revenue.toFixed(2)}`;
+            document.getElementById('realistCosts').textContent = `${currency} ${realist.costs.toFixed(2)}`;
+            document.getElementById('realistProfit').textContent = `${currency} ${realist.profit.toFixed(2)}`;
+
+            document.getElementById('pessimistUnits').textContent = pessimist.units.toLocaleString('es-ES');
+            document.getElementById('pessimistRevenue').textContent = `${currency} ${pessimist.revenue.toFixed(2)}`;
+            document.getElementById('pessimistCosts').textContent = `${currency} ${pessimist.costs.toFixed(2)}`;
+            document.getElementById('pessimistProfit').textContent = `${currency} ${pessimist.profit.toFixed(2)}`;
+        }
+
+        function updateProjectionsChart() {
+            const canvas = document.getElementById('projectionsChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const scenarios = ['optimist', 'realist', 'pessimist'];
+            const labels = ['Optimista', 'Realista', 'Pesimista'];
+            const totalYears = getBusinessYears();
+            const totalMonths = totalYears * 12;
+
+            // Summary behavior of all products: total monthly units by scenario
+            const monthlyBehaviorSeries = scenarios.map(scenario => {
+                const monthValues = [];
+                for (let monthIndex = 0; monthIndex < totalMonths; monthIndex++) {
+                    const year = Math.floor(monthIndex / 12) + 1;
+                    const month = (monthIndex % 12) + 1;
+                    let monthUnitsTotal = 0;
+                    projects.forEach((project, index) => {
+                        const baseUnits = getProjectBaseUnits(project, index);
+                        const fallback = getDefaultProjectionUnits(baseUnits, scenario);
+                        const units = getProjectionValue(project.id, scenario, year, month, fallback);
+                        monthUnitsTotal += units;
+                    });
+                    monthValues.push(monthUnitsTotal);
+                }
+                return monthValues;
+            });
+
+            const maxValue = Math.max(1, ...monthlyBehaviorSeries.flat());
+            const padding = 40;
+            const chartWidth = canvas.width - (padding * 2);
+            const chartHeight = canvas.height - (padding * 2);
+
+            ctx.strokeStyle = '#D1D5DB';
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+
+            monthlyBehaviorSeries.forEach((series, seriesIndex) => {
+                ctx.strokeStyle = projectionColors[seriesIndex];
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                series.forEach((value, i) => {
+                    const x = padding + (i / Math.max(totalMonths - 1, 1)) * chartWidth;
+                    const y = canvas.height - padding - (value / maxValue) * chartHeight;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+
+                ctx.fillStyle = projectionColors[seriesIndex];
+                ctx.fillRect(padding + (seriesIndex * 120), 10, 12, 12);
+                ctx.fillStyle = '#374151';
+                ctx.font = '12px sans-serif';
+                ctx.fillText(labels[seriesIndex], padding + (seriesIndex * 120) + 18, 20);
+            });
+
+            // Year markers on X axis
+            ctx.fillStyle = '#6B7280';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            for (let year = 1; year <= totalYears; year++) {
+                const monthIndex = (year - 1) * 12;
+                const x = padding + (monthIndex / Math.max(totalMonths - 1, 1)) * chartWidth;
+                ctx.fillText(`Ano ${year}`, x, canvas.height - 12);
+            }
+            ctx.textAlign = 'left';
+        }
+
+        function drawProductProjectionChart(project, index) {
+            const canvas = document.getElementById(`product-projection-chart-${project.id}`);
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const baseUnits = getProjectBaseUnits(project, index);
+            const scenarios = ['optimist', 'realist', 'pessimist'];
+            const labels = ['Optimista', 'Realista', 'Pesimista'];
+            const totalYears = getBusinessYears();
+            const totalMonths = totalYears * 12;
+
+            const series = scenarios.map(scenario => {
+                return Array.from({ length: totalMonths }, (_, monthIndex) => {
+                    const year = Math.floor(monthIndex / 12) + 1;
+                    const month = (monthIndex % 12) + 1;
+                    const fallback = getDefaultProjectionUnits(baseUnits, scenario);
+                    return getProjectionValue(project.id, scenario, year, month, fallback);
+                });
+            });
+
+            const maxValue = Math.max(1, ...series.flat());
+            const padding = 34;
+            const chartWidth = canvas.width - (padding * 2);
+            const chartHeight = canvas.height - (padding * 2);
+
+            ctx.strokeStyle = '#D1D5DB';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+
+            series.forEach((values, seriesIndex) => {
+                ctx.strokeStyle = projectionColors[seriesIndex];
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                values.forEach((value, valueIndex) => {
+                    const x = padding + (valueIndex / Math.max(totalMonths - 1, 1)) * chartWidth;
+                    const y = canvas.height - padding - (value / maxValue) * chartHeight;
+                    if (valueIndex === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+
+                ctx.fillStyle = projectionColors[seriesIndex];
+                ctx.fillRect(padding + (seriesIndex * 100), 8, 10, 10);
+                ctx.fillStyle = '#374151';
+                ctx.font = '11px sans-serif';
+                ctx.fillText(labels[seriesIndex], padding + (seriesIndex * 100) + 14, 17);
+            });
+        }
+
+        function openProjectionInputsPopup(projectId) {
+            currentProjectionPopupProjectId = projectId;
+            const popup = document.getElementById('popup-projection-inputs');
+            popup.classList.remove('hidden');
+            renderProjectionInputsPopup();
+        }
+
+        function closeProjectionInputsPopup() {
+            const popup = document.getElementById('popup-projection-inputs');
+            popup.classList.add('hidden');
+            currentProjectionPopupProjectId = null;
+        }
+
+        function renderProjectionInputsPopup() {
+            if (!currentProjectionPopupProjectId) return;
+
+            const project = projects.find(item => item.id === currentProjectionPopupProjectId);
+            if (!project) return;
+
+            const projectIndex = projects.findIndex(item => item.id === currentProjectionPopupProjectId);
+            const baseUnits = getProjectBaseUnits(project, projectIndex);
+            const totalYears = getBusinessYears();
+            const title = document.getElementById('projection-popup-title');
+            const content = document.getElementById('projection-popup-content');
+
+            title.textContent = `Proyecciones Mensuales - ${project.name} (${totalYears} ano${totalYears > 1 ? 's' : ''})`;
+
+            const tablesByYear = Array.from({ length: totalYears }, (_, yearIndex) => {
+                const year = yearIndex + 1;
+                const rows = Array.from({ length: 12 }, (_, monthIndex) => {
+                    const month = monthIndex + 1;
+                    const optimistic = getProjectionValue(project.id, 'optimist', year, month, getDefaultProjectionUnits(baseUnits, 'optimist'));
+                    const realist = getProjectionValue(project.id, 'realist', year, month, getDefaultProjectionUnits(baseUnits, 'realist'));
+                    const pessimist = getProjectionValue(project.id, 'pessimist', year, month, getDefaultProjectionUnits(baseUnits, 'pessimist'));
+
+                    return `
+                        <tr>
+                            <td class="px-2 py-1 text-xs border border-gray-200">${month}</td>
+                            <td class="px-2 py-1 border border-gray-200"><input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, 'optimist', year, month)}" type="number" min="0" value="${optimistic}" oninput="updateProjectionPopupValue('${project.id}', 'optimist', ${year}, ${month}, this.value)"></td>
+                            <td class="px-2 py-1 border border-gray-200"><input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, 'realist', year, month)}" type="number" min="0" value="${realist}" oninput="updateProjectionPopupValue('${project.id}', 'realist', ${year}, ${month}, this.value)"></td>
+                            <td class="px-2 py-1 border border-gray-200"><input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, 'pessimist', year, month)}" type="number" min="0" value="${pessimist}" oninput="updateProjectionPopupValue('${project.id}', 'pessimist', ${year}, ${month}, this.value)"></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-5">
+                        <div class="text-sm font-semibold text-indigo-700 mb-2">Ano ${year}</div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-[520px] w-full text-xs">
+                                <thead>
+                                    <tr class="bg-indigo-50">
+                                        <th class="px-2 py-1 border border-gray-200">Mes</th>
+                                        <th class="px-2 py-1 border border-gray-200">Optimista</th>
+                                        <th class="px-2 py-1 border border-gray-200">Realista</th>
+                                        <th class="px-2 py-1 border border-gray-200">Pesimista</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="text-xs text-gray-600">Ingresa los valores de unidades por escenario para este ${project.type === 'product' ? 'producto' : 'servicio'}.</div>
+                ${tablesByYear}
+            `;
+        }
+
+        function updateProjectionPopupValue(projectId, scenario, year, month, rawValue) {
+            const value = Math.max(0, parseFloat(rawValue) || 0);
+            setProjectionValue(projectId, scenario, year, month, value);
+            updateProjectionCalculations();
+        }
+
+        function calculateYearsToProfit() {
+            const realist = getScenarioMetrics('realist');
+            const totalInvestment = investments.reduce((sum, inv) => sum + (inv.value || 0), 0);
+            const totalMonths = getBusinessYears() * 12;
+
+            if (totalInvestment <= 0 || realist.profit <= 0) {
+                return '-';
+            }
+
+            const monthlyProfit = realist.profit / Math.max(totalMonths, 1);
+            if (monthlyProfit <= 0) {
+                return '-';
+            }
+
+            const years = Math.ceil(totalInvestment / monthlyProfit / 12);
+            return `${years} ano${years > 1 ? 's' : ''}`;
+        }
+
+        function calculateFinancialIndicators() {
+            const currency = getCurrencySymbol();
+            const totalInvestment = investments.reduce((sum, inv) => sum + (inv.value || 0), 0);
+            const realist = getScenarioMetrics('realist');
+
+            document.getElementById('totalInvestment').textContent = `${currency} ${totalInvestment.toFixed(2)}`;
+
+            const avgPrice = projects.length > 0
+                ? projects.reduce((sum, project) => sum + getProjectPrice(project), 0) / projects.length
+                : 0;
+            const discount = avgPrice * 0.12;
+            document.getElementById('discountRateDisplay').textContent = `${currency} ${discount.toFixed(2)}`;
+
+            document.getElementById('yearsToProfit').textContent = calculateYearsToProfit();
+
+            const profitabilityElement = document.getElementById('profitabilityAnalysis');
+            if (projects.length === 0) {
+                profitabilityElement.textContent = 'Sin datos para analizar.';
+                return;
+            }
+
+            profitabilityElement.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-white rounded-lg border p-3">
+                        <div class="font-semibold text-green-700 mb-1">Escenario Optimista</div>
+                        <div>Utilidad anual: ${currency} ${getScenarioMetrics('optimist').profit.toFixed(2)}</div>
+                    </div>
+                    <div class="bg-white rounded-lg border p-3">
+                        <div class="font-semibold text-blue-700 mb-1">Escenario Realista</div>
+                        <div>Utilidad anual: ${currency} ${realist.profit.toFixed(2)}</div>
+                    </div>
+                    <div class="bg-white rounded-lg border p-3">
+                        <div class="font-semibold text-orange-700 mb-1">Escenario Pesimista</div>
+                        <div>Utilidad anual: ${currency} ${getScenarioMetrics('pessimist').profit.toFixed(2)}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateProjectionCalculations() {
+            appData.projections.monthlyValues = {
+                ...(appData.projections.monthlyValues || {}),
+                ...collectProjectionInputValues()
+            };
+            updateScenarioSummary();
+            updateProjectionsChart();
+            calculateFinancialIndicators();
+            projects.forEach((project, index) => {
+                drawProductProjectionChart(project, index);
+            });
+            saveAllData();
+        }
+
+        function imprimirProyecciones() {
+            const section = document.getElementById('section-proyecciones');
+            if (!section) return;
+
+            const title = 'Proyecciones Financieras';
+            const printWindow = window.open('', '_blank');
+            const content = section.innerHTML;
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>${title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; color: #1f2937; }
+                        h1 { margin-bottom: 20px; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+                        th, td { border: 1px solid #d1d5db; padding: 6px; font-size: 12px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${title}</h1>
+                    ${content}
+                </body>
+                </html>
+            `);
+
+            printWindow.document.close();
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        }
+
         // Load all data when page loads
         window.addEventListener('load', function() {
             loadAllData();
+            updateProjectionsSection();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98e153b5a7e1cc7a',t:'MTc2MDM4NDYxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98dd1efbf281d8b3',t:'MTc2MDM0MDUxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
