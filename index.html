@@ -1201,6 +1201,13 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2" id="project-name-label">Nombre del proyecto</label>
                             <input type="text" id="project-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Ej: Diseño web">
                         </div>
+                        <div id="service-duration-field" class="hidden flex-1 min-w-0">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Duración del servicio</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" id="service-duration-months" onchange="saveCurrentProjectDraft()" oninput="saveCurrentProjectDraft()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Meses" min="0" step="1">
+                                <input type="number" id="service-duration-days" onchange="saveCurrentProjectDraft()" oninput="saveCurrentProjectDraft()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Días" min="0" step="1">
+                            </div>
+                        </div>
                         <div class="flex-1 min-w-0">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Color para grafica de ventas</label>
                             <div class="flex items-center gap-3">
@@ -1211,9 +1218,9 @@
                     </div>
 
                     <!-- Equipment, Raw Materials and Variable Costs -->
-                    <div id="project-cards-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div id="project-cards-container" class="flex flex-col lg:flex-row gap-6">
                         <!-- Equipment Card -->
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex flex-col">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex flex-col flex-1 min-w-0">
                             <h4 class="text-lg font-medium text-gray-700 mb-4 text-center">🏗️ Equipo a utilizar</h4>
                             <div class="bg-white border border-blue-200 rounded-lg p-3 mb-4">
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Horas de producción</label>
@@ -1230,7 +1237,7 @@
                         </div>
 
                         <!-- Raw Materials Card (for products only) -->
-                        <div id="raw-materials-card" class="bg-blue-50 border border-blue-200 rounded-lg p-4 hidden flex flex-col">
+                        <div id="raw-materials-card" class="bg-blue-50 border border-blue-200 rounded-lg p-4 hidden flex flex-col flex-1 min-w-0">
                             <h4 class="text-lg font-medium text-gray-700 mb-4 text-center">🥕 Materia prima</h4>
                             <div class="bg-white border border-blue-200 rounded-lg p-3 mb-4">
                                 <label class="block text-xs font-medium text-gray-700 mb-1">Unidades producidas</label>
@@ -1247,7 +1254,7 @@
                         </div>
 
                         <!-- Variable Costs Card -->
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex flex-col">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex flex-col flex-1 min-w-0">
                             <h4 class="text-lg font-medium text-gray-700 mb-4 text-center">🎭 Costos variables</h4>
                             
                             <!-- Variable Costs Table -->
@@ -2733,12 +2740,14 @@
             }
 
             const nameInput = document.getElementById('project-name');
+            const serviceDurationMonthsInput = document.getElementById('service-duration-months');
+            const serviceDurationDaysInput = document.getElementById('service-duration-days');
             const productionHoursLimitInput = document.getElementById('production-hours-limit');
             const producedUnitsLimitInput = document.getElementById('produced-units-limit');
             const editor = document.getElementById('project-description');
             const chartColorInput = document.getElementById('project-chart-color');
 
-            if (!nameInput || !productionHoursLimitInput || !producedUnitsLimitInput || !editor || !chartColorInput) {
+            if (!nameInput || !serviceDurationMonthsInput || !serviceDurationDaysInput || !productionHoursLimitInput || !producedUnitsLimitInput || !editor || !chartColorInput) {
                 return;
             }
 
@@ -2750,6 +2759,8 @@
 
             const draft = {
                 name: nameInput.value || '',
+                durationMonths: serviceDurationMonthsInput.value || '',
+                durationDays: serviceDurationDaysInput.value || '',
                 hours: currentProjectType === 'service' ? (productionHoursLimitInput.value || '') : '',
                 productionHoursLimit: productionHoursLimitInput.value || '',
                 producedUnitsLimit: producedUnitsLimitInput.value || '',
@@ -2763,6 +2774,8 @@
             const defaultColor = getDefaultProjectColor(currentProjectType);
 
             const hasContent = draft.name.trim() !== ''
+                || draft.durationMonths !== ''
+                || draft.durationDays !== ''
                 || draft.hours !== ''
                 || draft.productionHoursLimit !== ''
                 || draft.producedUnitsLimit !== ''
@@ -2832,11 +2845,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             const editor = document.getElementById('project-description');
             const projectNameInput = document.getElementById('project-name');
+            const serviceDurationMonthsInput = document.getElementById('service-duration-months');
+            const serviceDurationDaysInput = document.getElementById('service-duration-days');
             const productionHoursLimitInput = document.getElementById('production-hours-limit');
             const producedUnitsLimitInput = document.getElementById('produced-units-limit');
             const projectColorInput = document.getElementById('project-chart-color');
 
-            [projectNameInput, productionHoursLimitInput, producedUnitsLimitInput, projectColorInput].forEach(input => {
+            [projectNameInput, serviceDurationMonthsInput, serviceDurationDaysInput, productionHoursLimitInput, producedUnitsLimitInput, projectColorInput].forEach(input => {
                 if (input) {
                     input.addEventListener('input', saveCurrentProjectDraft);
                     input.addEventListener('change', saveCurrentProjectDraft);
@@ -2897,9 +2912,12 @@
             const title = document.getElementById('project-popup-title');
             const actionBtn = document.getElementById('project-action-btn');
             const nameInput = document.getElementById('project-name');
+            const serviceDurationMonthsInput = document.getElementById('service-duration-months');
+            const serviceDurationDaysInput = document.getElementById('service-duration-days');
             const productionHoursLimitInput = document.getElementById('production-hours-limit');
             const producedUnitsLimitInput = document.getElementById('produced-units-limit');
             const rawMaterialsCard = document.getElementById('raw-materials-card');
+            const serviceDurationField = document.getElementById('service-duration-field');
             const nameLabel = document.getElementById('project-name-label');
             const chartColorInput = document.getElementById('project-chart-color');
 
@@ -2907,14 +2925,16 @@
             const projectCardsContainer = document.getElementById('project-cards-container');
             if (currentProjectType === 'product') {
                 rawMaterialsCard.classList.remove('hidden');
+                serviceDurationField.classList.add('hidden');
                 nameLabel.textContent = 'Nombre del producto';
                 // Change to 3 columns for products
                 projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-3 gap-6';
             } else {
                 rawMaterialsCard.classList.add('hidden');
+                serviceDurationField.classList.remove('hidden');
                 nameLabel.textContent = 'Nombre del servicio';
                 // Keep 2 columns for services
-                projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-2 gap-6';
+                projectCardsContainer.className = 'flex flex-col lg:flex-row gap-6';
             }
 
             if (editingProjectId) {
@@ -2924,6 +2944,8 @@
                 title.textContent = `${project.type === 'product' ? 'Producto' : 'Servicio'} ${sequence}`;
                 actionBtn.textContent = 'Guardar';
                 nameInput.value = project.name;
+                serviceDurationMonthsInput.value = project.durationMonths || '';
+                serviceDurationDaysInput.value = project.durationDays || '';
                 productionHoursLimitInput.value = project.productionHoursLimit || project.hours || '';
                 producedUnitsLimitInput.value = project.producedUnitsLimit || '';
                 chartColorInput.value = getProjectColor(project);
@@ -2941,6 +2963,8 @@
 
                 if (draft) {
                     nameInput.value = draft.name || '';
+                    serviceDurationMonthsInput.value = draft.durationMonths || '';
+                    serviceDurationDaysInput.value = draft.durationDays || '';
                     productionHoursLimitInput.value = draft.productionHoursLimit || '';
                     producedUnitsLimitInput.value = draft.producedUnitsLimit || '';
                     chartColorInput.value = normalizeHexColor(draft.chartColor, getDefaultProjectColor(currentProjectType));
@@ -2954,6 +2978,8 @@
                     currentProjectEquipment = [...(draft.equipment || [])];
                 } else {
                     nameInput.value = '';
+                    serviceDurationMonthsInput.value = '';
+                    serviceDurationDaysInput.value = '';
                     productionHoursLimitInput.value = '';
                     producedUnitsLimitInput.value = '';
                     chartColorInput.value = getDefaultProjectColor(currentProjectType);
@@ -3492,11 +3518,15 @@
 
         function saveProject() {
             const nameInput = document.getElementById('project-name');
+            const serviceDurationMonthsInput = document.getElementById('service-duration-months');
+            const serviceDurationDaysInput = document.getElementById('service-duration-days');
             const productionHoursLimitInput = document.getElementById('production-hours-limit');
             const producedUnitsLimitInput = document.getElementById('produced-units-limit');
             const chartColorInput = document.getElementById('project-chart-color');
             
             const name = nameInput.value.trim();
+            const serviceDurationMonths = parseFloat(serviceDurationMonthsInput.value) || 0;
+            const serviceDurationDays = parseFloat(serviceDurationDaysInput.value) || 0;
             const productionHoursLimit = parseFloat(productionHoursLimitInput.value) || 0;
             const producedUnitsLimit = parseFloat(producedUnitsLimitInput.value) || 0;
             const chartColor = normalizeHexColor(chartColorInput.value, getDefaultProjectColor(currentProjectType));
@@ -3554,6 +3584,8 @@
                     ...projects[projectIndex],
                     name: name,
                     type: currentProjectType,
+                    durationMonths: currentProjectType === 'service' ? serviceDurationMonths : 0,
+                    durationDays: currentProjectType === 'service' ? serviceDurationDays : 0,
                     hours: hours,
                     productionHoursLimit: productionHoursLimit,
                     producedUnitsLimit: producedUnitsLimit,
@@ -3581,6 +3613,8 @@
                     id: generateId(),
                     name: name,
                     type: currentProjectType,
+                    durationMonths: currentProjectType === 'service' ? serviceDurationMonths : 0,
+                    durationDays: currentProjectType === 'service' ? serviceDurationDays : 0,
                     hours: hours,
                     productionHoursLimit: productionHoursLimit,
                     producedUnitsLimit: producedUnitsLimit,
