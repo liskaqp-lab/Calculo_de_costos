@@ -31,31 +31,32 @@
         .nav-bg-proyecciones { background-color: #c6cced; }
         
         .active-estructura { 
-            background-color: var(--color-orange);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(241, 105, 34, 0.35);
+            background-color: #ffffff;
+            color: var(--color-base-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .active-productos { 
-            background-color: var(--color-teal);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(90, 196, 192, 0.35);
+            background-color: #ffffff;
+            color: var(--color-base-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .active-cotizacion { 
-            background-color: var(--color-amber);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(242, 183, 72, 0.35);
+            background-color: #ffffff;
+            color: var(--color-base-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .active-proyecciones { 
-            background-color: var(--color-indigo);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(98, 107, 177, 0.35);
+            background-color: #ffffff;
+            color: var(--color-base-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         @media (min-width: 768px) {
             .nav-btn.active-estructura,
             .nav-btn.active-productos,
+            .nav-btn.active-cotizacion,
             .nav-btn.active-proyecciones {
-                color: #ffffff !important;
+                color: var(--color-base-dark) !important;
             }
         }
         
@@ -503,14 +504,26 @@
                             <!-- Impuestos Card -->
                             <div class="bg-white border border-orange-200 rounded-lg p-3 sm:p-4">
                                 <h4 class="text-base sm:text-lg font-medium text-gray-700 mb-2 sm:mb-3 text-center">🧾 Impuestos</h4>
-                                <div id="impuestos-container" class="space-y-2 mb-4">
-                                    <!-- Los impuestos se agregarán aquí dinámicamente -->
+                                <div class="bg-orange-50 border border-orange-200 rounded-lg overflow-hidden mb-4">
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full w-full" id="taxes-table">
+                                            <thead class="bg-orange-75">
+                                                <tr>
+                                                    <th class="px-3 py-2 text-left text-sm font-medium text-gray-700 border-b border-orange-200">Nombre</th>
+                                                    <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-orange-200">Porcentaje</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="taxes-table-body">
+                                                <!-- Tax rows will be added here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div id="total-impuestos" class="bg-orange-200 border border-orange-300 rounded-lg p-3 mb-4 text-center">
                                     <div class="text-sm font-medium text-gray-700">Total de Impuestos</div>
                                     <div id="total-percentage" class="text-lg font-bold text-orange-800">0%</div>
                                 </div>
-                                <button onclick="openTaxPopup()" class="w-full bg-orange-100 hover:bg-orange-200 text-orange-700 font-medium py-2 px-4 rounded-lg transition-all">
+                                <button type="button" onclick="addTaxRow()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-all">
                                     + Agregar impuesto
                                 </button>
                             </div>
@@ -608,6 +621,39 @@
                             <!-- Right Column - Fixed costs -->
                             <div class="lg:w-[37%]">
                                 <div class="bg-white border border-orange-200 rounded-lg p-4 sm:p-6 flex flex-col h-full">
+                                    <!-- Honorarios Configuration -->
+                                    <div class="space-y-3">
+                                        <h5 class="text-md font-medium text-gray-700 text-center">⌚ Configuración de Honorarios</h5>
+
+                                        <div class="bg-orange-50 border border-orange-200 rounded-lg overflow-hidden">
+                                            <div class="overflow-x-auto">
+                                                <table class="min-w-full w-full" id="honorarios-table">
+                                                    <thead class="bg-orange-75">
+                                                        <tr>
+                                                            <th class="px-3 py-2 text-left text-sm font-medium text-gray-700 border-b border-orange-200">Empleado</th>
+                                                            <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-orange-200">Horas diarias</th>
+                                                            <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-orange-200">Cobro por hora</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="honorarios-table-body">
+                                                        <!-- Honorarios rows will be added here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="bg-white border-t border-orange-200 p-3">
+                                                <button onclick="addHonorarioRow()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg transition-all">
+                                                    + Agregar empleado
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Divider -->
+                                    <div class="flex justify-center my-4">
+                                        <div class="w-4/5 h-px bg-orange-300"></div>
+                                    </div>
+
                                     <h4 class="text-base sm:text-lg font-medium text-gray-700 mb-3 sm:mb-4 text-center">📆 Costos fijos mensuales</h4>
                                     
                                     <!-- Fixed Costs Table -->
@@ -636,35 +682,9 @@
                                     </div>
                                     
                                     <!-- Total Fixed Costs -->
-                                    <div class="bg-orange-200 border border-orange-300 rounded-lg p-3 mb-4 text-center">
+                                    <div class="bg-orange-200 border border-orange-300 rounded-lg p-3 text-center">
                                         <div class="text-sm font-medium text-gray-700">Total de Costos Fijos</div>
                                         <div id="total-fixed-amount" class="text-lg font-bold text-orange-800">Q 0.00</div>
-                                    </div>
-                                    
-                                    <!-- Divider -->
-                                    <div class="flex justify-center mb-4">
-                                        <div class="w-4/5 h-px bg-orange-300"></div>
-                                    </div>
-                                    
-                                    <!-- Honorarios Configuration -->
-                                    <div class="space-y-3">
-                                        <h5 class="text-md font-medium text-gray-700 text-center">⌚ Configuración de Honorarios</h5>
-                                        <p class="text-sm text-gray-600 italic text-center">¿Cuánto cobra el dueño de la empresa?</p>
-                                        
-                                        <!-- Honorarios Fields - Vertical Layout -->
-                                        <div class="space-y-3">
-                                            <div>
-                                                <label class="block text-xs font-medium text-gray-700 mb-1">Horas diarias</label>
-                                                <input type="number" id="daily-hours" onchange="calculateHonorarios()" oninput="calculateHonorarios()" class="w-full px-3 py-2 text-sm bg-orange-50 border border-orange-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-300" placeholder="8" min="0" step="0.5">
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-medium text-gray-700 mb-1">Cobro por hora</label>
-                                                <div class="relative">
-                                                    <div id="hourly-rate-currency" class="absolute inset-y-0 left-0 flex items-center px-2 text-xs text-gray-500">Q</div>
-                                                    <input type="number" id="hourly-rate" onchange="calculateHonorarios()" oninput="calculateHonorarios()" class="w-full px-3 py-2 pl-8 text-sm bg-orange-50 border border-orange-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-300" placeholder="50" min="0" step="0.01">
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -695,6 +715,7 @@
                                                 <th class="px-3 py-2 text-left text-sm font-medium text-gray-700 border-b border-blue-200">Nombre del producto</th>
                                                 <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Cantidad de unidades</th>
                                                 <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Costo unitario</th>
+                                                <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Color</th>
                                             </tr>
                                         </thead>
                                         <tbody id="products-table-body">
@@ -720,6 +741,7 @@
                                             <tr>
                                                 <th class="px-3 py-2 text-left text-sm font-medium text-gray-700 border-b border-blue-200">Nombre del servicio</th>
                                                 <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Costo del servicio</th>
+                                                <th class="px-3 py-2 text-center text-sm font-medium text-gray-700 border-b border-blue-200">Color</th>
                                             </tr>
                                         </thead>
                                         <tbody id="services-table-body">
@@ -1084,40 +1106,8 @@
                 </div>
                 <div class="flex flex-col space-y-4">
                     <div class="w-full">
-                        <iframe class="w-full aspect-video rounded-lg" src="https://www.youtube.com/embed/--hRkglyZrQ?si=umSEABnjFo0J1ivH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=MPFkXql45_v8hq60&amp;list=PLxQ6zDUHYhvz5rKGRKwmBuJBAk1iLJMEE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tax Add/Edit Popup -->
-    <div id="popup-tax" class="fixed inset-0 z-50 hidden popup-overlay">
-        <div class="flex items-center justify-center min-h-full p-4">
-            <div id="tax-popup-content" class="popup-theme-estructura bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-                <div class="mb-6">
-                    <h3 id="tax-popup-title" class="text-xl font-bold text-gray-800 text-center">🧾 Configuración del impuesto</h3>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Nombre del impuesto</label>
-                        <input type="text" id="tax-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300" placeholder="Ej: IVA">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Porcentaje del impuesto</label>
-                        <div class="relative">
-                            <input type="number" id="tax-percentage" class="w-full px-4 py-3 pr-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300" placeholder="12" min="0" max="100" step="0.01">
-                            <div class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">%</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex space-x-3 mt-6">
-                    <button onclick="closeTaxPopup()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-3 px-4 rounded-lg transition-all">
-                        Cancelar
-                    </button>
-                    <button id="tax-add-btn" onclick="addTax()" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-all">
-                        Agregar
-                    </button>
                 </div>
             </div>
         </div>
@@ -1206,14 +1196,17 @@
                 <!-- Main Content -->
                 <div class="space-y-6 mb-6">
                     <!-- Basic Project Info -->
-                    <div class="grid grid-cols-1 gap-4">
-                        <div>
+                    <div class="flex flex-col lg:flex-row gap-4">
+                        <div class="flex-1 min-w-0">
                             <label class="block text-sm font-medium text-gray-700 mb-2" id="project-name-label">Nombre del proyecto</label>
                             <input type="text" id="project-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Ej: Diseño web">
                         </div>
-                        <div id="hours-field" class="hidden">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Horas invertidas</label>
-                            <input type="number" id="project-hours" onchange="calculateProjectCosts()" oninput="calculateProjectCosts()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="40" min="0" step="0.5">
+                        <div class="flex-1 min-w-0">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Color para grafica de ventas</label>
+                            <div class="flex items-center gap-3">
+                                <input type="color" id="project-chart-color" onchange="saveCurrentProjectDraft()" oninput="saveCurrentProjectDraft()" class="w-14 h-10 p-1 border border-gray-300 rounded-lg bg-white cursor-pointer" value="#2563EB">
+                                <span id="project-chart-color-value" class="text-sm text-gray-600 font-medium">#2563EB</span>
+                            </div>
                         </div>
                     </div>
 
@@ -1222,12 +1215,34 @@
                         <!-- Equipment Card -->
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 flex flex-col">
                             <h4 class="text-lg font-medium text-gray-700 mb-4 text-center">🏗️ Equipo a utilizar</h4>
+                            <div class="bg-white border border-blue-200 rounded-lg p-3 mb-4">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Horas de producción</label>
+                                <input type="number" id="production-hours-limit" onchange="applyProductionLimits()" oninput="applyProductionLimits()" class="w-full px-3 py-2 text-sm border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ej: 12" min="0" step="0.1">
+                                <p class="text-[11px] text-gray-500 mt-1">Límite máximo de horas de uso del equipo para este proyecto.</p>
+                            </div>
                             <div id="equipment-checklist" class="space-y-2 flex-1 mb-4">
                                 <!-- Equipment items will be added here -->
                             </div>
                             <div class="bg-blue-200 border border-blue-300 rounded-lg p-3 text-center mt-auto">
                                 <div class="text-sm font-medium text-gray-700">Costo total por uso</div>
                                 <div id="equipment-total-cost" class="text-lg font-bold text-blue-800">Q 0.00</div>
+                            </div>
+                        </div>
+
+                        <!-- Raw Materials Card (for products only) -->
+                        <div id="raw-materials-card" class="bg-blue-50 border border-blue-200 rounded-lg p-4 hidden flex flex-col">
+                            <h4 class="text-lg font-medium text-gray-700 mb-4 text-center">🥕 Materia prima</h4>
+                            <div class="bg-white border border-blue-200 rounded-lg p-3 mb-4">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Unidades producidas</label>
+                                <input type="number" id="produced-units-limit" onchange="applyProductionLimits()" oninput="applyProductionLimits()" class="w-full px-3 py-2 text-sm border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Ej: 50" min="0" step="0.01">
+                                <p class="text-[11px] text-gray-500 mt-1">Límite máximo de materiales asignados para este producto.</p>
+                            </div>
+                            <div id="raw-materials-checklist" class="space-y-2 flex-1 mb-4">
+                                <!-- Raw materials items will be added here -->
+                            </div>
+                            <div class="bg-blue-200 border border-blue-300 rounded-lg p-3 text-center mt-auto">
+                                <div class="text-sm font-medium text-gray-700">Costo total de materia prima</div>
+                                <div id="raw-materials-total-cost" class="text-lg font-bold text-blue-800">Q 0.00</div>
                             </div>
                         </div>
 
@@ -1265,29 +1280,13 @@
                                 <div id="total-variable-costs" class="text-lg font-bold text-blue-800">Q 0.00</div>
                             </div>
                         </div>
-
-                        <!-- Raw Materials Card (for products only) -->
-                        <div id="raw-materials-card" class="bg-blue-50 border border-blue-200 rounded-lg p-4 hidden flex flex-col">
-                            <h4 class="text-lg font-medium text-gray-700 mb-4 text-center">🥕 Materia prima</h4>
-                            <div id="raw-materials-checklist" class="space-y-2 flex-1 mb-4">
-                                <!-- Raw materials items will be added here -->
-                            </div>
-                            <div class="bg-blue-200 border border-blue-300 rounded-lg p-3 text-center mt-auto">
-                                <div class="text-sm font-medium text-gray-700">Costo total de materia prima</div>
-                                <div id="raw-materials-total-cost" class="text-lg font-bold text-blue-800">Q 0.00</div>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Fixed Cost Per Hour and Equipment Hours -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Fixed Cost Per Project -->
+                    <div class="grid grid-cols-1 gap-4">
                         <div class="bg-blue-200 border border-blue-300 rounded-lg p-4 text-center">
                             <div class="text-sm font-medium text-gray-700">Costo fijo total del proyecto</div>
                             <div id="fixed-cost-per-hour" class="text-xl font-bold text-blue-800">Q 0.00</div>
-                        </div>
-                        <div class="bg-blue-200 border border-blue-300 rounded-lg p-4 text-center">
-                            <div class="text-sm font-medium text-gray-700">Total de horas</div>
-                            <div id="total-equipment-hours" class="text-xl font-bold text-blue-800">0 hrs</div>
                         </div>
                     </div>
 
@@ -1317,7 +1316,7 @@
                         <!-- Suggested Price -->
                         <div class="bg-blue-100 border border-blue-200 rounded-lg p-4 text-center">
                             <div class="text-3xl mb-2">💎</div>
-                            <div class="text-sm font-medium text-gray-700 mb-1">Precio sugerido</div>
+                            <div class="text-sm font-medium text-gray-700 mb-1">Precio de equilibrio</div>
                             <div id="suggested-price" class="text-lg font-bold text-blue-800">Q 0.00</div>
                         </div>
                     </div>
@@ -1351,6 +1350,11 @@
                                     <div class="pricing-custom-symbol absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">%</div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="mt-5 bg-amber-100 border border-amber-300 rounded-lg p-4 text-center">
+                            <div class="text-sm font-medium text-amber-900 mb-1">Precio final del producto</div>
+                            <div id="final-product-price" class="text-2xl font-bold text-amber-800">Q 0.00</div>
                         </div>
                     </div>
                 </div>
@@ -1470,7 +1474,6 @@
     <script>
         let currentSection = 'estructura';
         let taxes = [];
-        let editingTaxId = null;
         let fixedCosts = [];
         let editingFixedCostId = null;
         let investments = [];
@@ -1483,6 +1486,7 @@
         let currentProjectRawMaterials = [];
         let currentProjectEquipment = [];
         let currentProjectionPopupProjectId = null;
+        let honorariosEmployees = [];
         let samFilters = [];
         let somFilters = [];
         const projectionColors = ['#3B82F6', '#10B981', '#F59E0B'];
@@ -1496,10 +1500,12 @@
             investments: [],
             rawMaterials: [],
             projects: [],
+            projectDrafts: {
+                product: null,
+                service: null
+            },
             honorarios: {
-                dailyHours: '',
-                projectHours: '',
-                hourlyRate: ''
+                employees: []
             },
             quotation: {
                 title: '',
@@ -1530,11 +1536,11 @@
                 appData.investments = data.investments || [];
                 appData.rawMaterials = data.rawMaterials || [];
                 appData.projects = data.projects || [];
-                appData.honorarios = data.honorarios || {
-                    dailyHours: '',
-                    projectHours: '',
-                    hourlyRate: ''
+                appData.projectDrafts = data.projectDrafts || {
+                    product: null,
+                    service: null
                 };
+                appData.honorarios = data.honorarios || { employees: [] };
                 appData.quotation = data.quotation || {
                     title: '',
                     date: '',
@@ -1554,27 +1560,42 @@
                 taxes = appData.taxes; // Keep backward compatibility
                 fixedCosts = appData.fixedCosts;
                 investments = appData.investments;
+                normalizeInvestments();
                 rawMaterials = appData.rawMaterials;
                 projects = appData.projects;
+                normalizeProjectsColor();
+                honorariosEmployees = Array.isArray(appData.honorarios.employees) ? appData.honorarios.employees : [];
+
+                // Backward compatibility with previous single-owner honorarios fields
+                if (honorariosEmployees.length === 0) {
+                    const legacyDailyHours = parseFloat(appData.honorarios.dailyHours) || 0;
+                    const legacyHourlyRate = parseFloat(appData.honorarios.hourlyRate) || 0;
+                    if (legacyDailyHours > 0 || legacyHourlyRate > 0) {
+                        honorariosEmployees.push({
+                            id: generateId(),
+                            name: 'Dueño',
+                            dailyHours: legacyDailyHours,
+                            hourlyRate: legacyHourlyRate
+                        });
+                    }
+                }
+
                 samFilters = appData.projections.samFilters || [];
                 somFilters = appData.projections.somFilters || [];
                 
                 // Update UI elements
                 const currencySelect = document.getElementById('currency-select');
                 const businessYearsInput = document.getElementById('business-years');
-                const dailyHoursInput = document.getElementById('daily-hours');
-                const hourlyRateInput = document.getElementById('hourly-rate');
                 
                 currencySelect.value = appData.currency;
                 businessYearsInput.value = appData.businessYears;
-                dailyHoursInput.value = appData.honorarios.dailyHours;
-                hourlyRateInput.value = appData.honorarios.hourlyRate;
                 
                 renderTaxes();
                 renderFixedCosts();
                 renderInvestments();
                 renderRawMaterials();
                 renderProjects();
+                renderHonorariosTable();
                 updateCurrencySymbols();
                 calculateHonorarios();
                 loadQuotationData();
@@ -1586,6 +1607,7 @@
                 renderInvestments();
                 renderRawMaterials();
                 renderProjects();
+                renderHonorariosTable();
                 updateCurrencySymbols();
                 calculateHonorarios();
                 loadQuotationData();
@@ -1596,8 +1618,6 @@
         function saveAllData() {
             const currencySelect = document.getElementById('currency-select');
             const businessYearsInput = document.getElementById('business-years');
-            const dailyHoursInput = document.getElementById('daily-hours');
-            const hourlyRateInput = document.getElementById('hourly-rate');
             
             appData.currency = currencySelect.value;
             appData.businessYears = businessYearsInput.value;
@@ -1607,8 +1627,7 @@
             appData.rawMaterials = rawMaterials;
             appData.projects = projects;
             appData.honorarios = {
-                dailyHours: dailyHoursInput.value,
-                hourlyRate: hourlyRateInput.value
+                employees: honorariosEmployees
             };
             
             // Save quotation data
@@ -1685,11 +1704,9 @@
             
             // Update all currency symbols
             const fixedCostCurrency = document.getElementById('fixed-cost-currency');
-            const hourlyRateCurrency = document.getElementById('hourly-rate-currency');
             const editInvestmentValueCurrency = document.getElementById('edit-investment-value-currency');
             
             if (fixedCostCurrency) fixedCostCurrency.textContent = symbol;
-            if (hourlyRateCurrency) hourlyRateCurrency.textContent = symbol;
             if (editInvestmentValueCurrency) editInvestmentValueCurrency.textContent = symbol;
             
             // Re-render all lists to update currency symbols
@@ -1697,6 +1714,7 @@
             renderInvestments();
             renderRawMaterials();
             renderProjects();
+            renderHonorariosTable();
             renderQuoteTable();
             updateProjectionCalculations();
         }
@@ -1853,29 +1871,149 @@
         }
 
         // Honorarios calculation
-        function calculateHonorarios() {
-            const dailyHours = parseFloat(document.getElementById('daily-hours').value) || 0;
-            const hourlyRate = parseFloat(document.getElementById('hourly-rate').value) || 0;
+        function addHonorarioRow() {
+            const newEmployee = {
+                id: generateId(),
+                name: '',
+                dailyHours: 0,
+                hourlyRate: 0
+            };
 
+            honorariosEmployees.push(newEmployee);
+            renderHonorariosTable();
+            calculateHonorarios();
+
+            setTimeout(() => {
+                const newRow = document.querySelector(`tr[data-honorario-id="${newEmployee.id}"]`);
+                if (newRow) {
+                    const nameInput = newRow.querySelector('.honorario-name');
+                    if (nameInput) nameInput.focus();
+                }
+            }, 100);
+        }
+
+        function updateHonorarioFromRow(rowId, field, value) {
+            const employee = honorariosEmployees.find(emp => emp.id === rowId);
+            if (!employee) return;
+
+            if (field === 'name') {
+                employee.name = value.trim();
+            } else if (field === 'dailyHours') {
+                employee.dailyHours = Math.max(0, parseFloat(value) || 0);
+            } else if (field === 'hourlyRate') {
+                employee.hourlyRate = Math.max(0, parseFloat(value) || 0);
+            }
+
+            if (!employee.name && employee.dailyHours === 0 && employee.hourlyRate === 0) {
+                honorariosEmployees = honorariosEmployees.filter(emp => emp.id !== rowId);
+                renderHonorariosTable();
+            }
+
+            calculateHonorarios();
+        }
+
+        function renderHonorariosTable() {
+            const tbody = document.getElementById('honorarios-table-body');
+            if (!tbody) return;
+
+            const currencySymbol = getCurrencySymbol();
+            tbody.innerHTML = '';
+
+            honorariosEmployees.forEach((employee, index) => {
+                if (!employee.id) employee.id = generateId();
+
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-white' : 'bg-orange-25';
+                row.setAttribute('data-honorario-id', employee.id);
+
+                row.innerHTML = `
+                    <td class="px-3 py-2 border-b border-orange-100">
+                        <input type="text"
+                               class="honorario-name w-full px-2 py-1 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-left"
+                               value="${employee.name || ''}"
+                               placeholder="Nombre del empleado"
+                               onchange="updateHonorarioFromRow('${employee.id}', 'name', this.value)"
+                               onblur="updateHonorarioFromRow('${employee.id}', 'name', this.value)"
+                               oninput="updateHonorarioFromRow('${employee.id}', 'name', this.value)">
+                    </td>
+                    <td class="px-3 py-2 border-b border-orange-100 text-center">
+                        <input type="number"
+                               class="honorario-daily-hours w-full px-2 py-1 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-center"
+                               value="${employee.dailyHours || ''}"
+                               placeholder="0"
+                               min="0"
+                               step="0.5"
+                               onchange="updateHonorarioFromRow('${employee.id}', 'dailyHours', this.value)"
+                               onblur="updateHonorarioFromRow('${employee.id}', 'dailyHours', this.value)"
+                               oninput="updateHonorarioFromRow('${employee.id}', 'dailyHours', this.value)">
+                    </td>
+                    <td class="px-3 py-2 border-b border-orange-100 text-center">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center px-1 text-xs text-gray-500">${currencySymbol}</div>
+                            <input type="number"
+                                   class="honorario-hourly-rate w-full px-2 py-1 pl-6 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-center"
+                                   value="${employee.hourlyRate || ''}"
+                                   placeholder="0"
+                                   min="0"
+                                   step="0.01"
+                                   onchange="updateHonorarioFromRow('${employee.id}', 'hourlyRate', this.value)"
+                                   onblur="updateHonorarioFromRow('${employee.id}', 'hourlyRate', this.value)"
+                                   oninput="updateHonorarioFromRow('${employee.id}', 'hourlyRate', this.value)">
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function getHonorariosSummary() {
+            const monthlyDays = 22;
+
+            const validEmployees = honorariosEmployees.filter(emp => {
+                const dailyHours = parseFloat(emp.dailyHours) || 0;
+                const hourlyRate = parseFloat(emp.hourlyRate) || 0;
+                return dailyHours > 0 && hourlyRate > 0;
+            });
+
+            const totalMonthlyHours = validEmployees.reduce((sum, emp) => {
+                const dailyHours = parseFloat(emp.dailyHours) || 0;
+                return sum + (dailyHours * monthlyDays);
+            }, 0);
+
+            const totalMonthlyHonorarios = validEmployees.reduce((sum, emp) => {
+                const dailyHours = parseFloat(emp.dailyHours) || 0;
+                const hourlyRate = parseFloat(emp.hourlyRate) || 0;
+                return sum + (hourlyRate * dailyHours * monthlyDays);
+            }, 0);
+
+            const effectiveHourlyRate = totalMonthlyHours > 0 ? (totalMonthlyHonorarios / totalMonthlyHours) : 0;
+
+            return {
+                validEmployees,
+                totalMonthlyHours,
+                totalMonthlyHonorarios,
+                effectiveHourlyRate
+            };
+        }
+
+        function calculateHonorarios() {
             // Remove existing honorarios from fixedCosts
             fixedCosts = fixedCosts.filter(fc => !fc.isHonorarios);
 
-            // Calculate and add honorarios if both fields are filled
-            if (dailyHours > 0 && hourlyRate > 0) {
-                // Assuming 22 working days per month as default
-                const monthlyDays = 22;
-                const monthlyHours = dailyHours * monthlyDays;
-                const monthlyHonorarios = hourlyRate * monthlyHours;
+            const { validEmployees } = getHonorariosSummary();
 
-                const honorariosFixedCost = {
-                    id: 'honorarios-auto',
-                    name: 'Honorarios',
+            validEmployees.forEach((employee, index) => {
+                const monthlyHonorarios = (parseFloat(employee.hourlyRate) || 0) * (parseFloat(employee.dailyHours) || 0) * 22;
+                const employeeName = employee.name && employee.name.trim() !== '' ? employee.name.trim() : `Empleado ${index + 1}`;
+
+                fixedCosts.push({
+                    id: `honorarios-auto-${employee.id}`,
+                    name: `Honorarios - ${employeeName}`,
                     amount: monthlyHonorarios,
                     isHonorarios: true
-                };
-
-                fixedCosts.push(honorariosFixedCost);
-            }
+                });
+            });
 
             renderFixedCosts();
             updateTotalRawMaterials(); // Update raw materials when hourly rate changes
@@ -1932,7 +2070,7 @@
             }
             
             // Calculate unit cost: ((Work Hours * Hourly Rate) + Cost) / Quantity
-            const hourlyRate = parseFloat(document.getElementById('hourly-rate').value) || 0;
+            const hourlyRate = getHonorariosSummary().effectiveHourlyRate;
             if (rawMaterial.quantity > 0) {
                 rawMaterial.unitCost = ((rawMaterial.workHours * hourlyRate) + rawMaterial.cost) / rawMaterial.quantity;
             } else {
@@ -2036,7 +2174,7 @@
 
         function updateTotalRawMaterials() {
             const totalCost = rawMaterials.reduce((sum, rawMaterial) => {
-                const hourlyRate = parseFloat(document.getElementById('hourly-rate').value) || 0;
+                const hourlyRate = getHonorariosSummary().effectiveHourlyRate;
                 return sum + ((rawMaterial.workHours * hourlyRate) + rawMaterial.cost);
             }, 0);
             
@@ -2111,71 +2249,54 @@
         }
 
         // Tax management functions
-        function openTaxPopup(taxId = null) {
-            editingTaxId = taxId;
-            const popup = document.getElementById('popup-tax');
-            const title = document.getElementById('tax-popup-title');
-            const addBtn = document.getElementById('tax-add-btn');
-            const nameInput = document.getElementById('tax-name');
-            const percentageInput = document.getElementById('tax-percentage');
-
-            if (taxId) {
-                // Editing existing tax
-                const tax = taxes.find(t => t.id === taxId);
-                title.textContent = '🧾 Edición del impuesto';
-                addBtn.textContent = 'Guardar';
-                nameInput.value = tax.name;
-                percentageInput.value = tax.percentage;
-            } else {
-                // Adding new tax
-                title.textContent = '🧾 Configuración del impuesto';
-                addBtn.textContent = 'Agregar';
-                nameInput.value = '';
-                percentageInput.value = '';
+        function addTaxRow() {
+            if (!Array.isArray(taxes)) {
+                taxes = [];
             }
 
-            popup.classList.remove('hidden');
+            const newTax = {
+                id: generateId(),
+                name: '',
+                percentage: 0
+            };
+
+            taxes.push(newTax);
+            renderTaxes();
+
+            // Focus on the name input of the new row
+            setTimeout(() => {
+                const newRow = document.querySelector(`tr[data-row-id="${newTax.id}"]`);
+                if (newRow) {
+                    const nameInput = newRow.querySelector('.tax-name');
+                    if (nameInput) nameInput.focus();
+                }
+            }, 100);
         }
 
-        function closeTaxPopup() {
-            const popup = document.getElementById('popup-tax');
-            popup.classList.add('hidden');
-            editingTaxId = null;
-        }
-
-        function addTax() {
-            const nameInput = document.getElementById('tax-name');
-            const percentageInput = document.getElementById('tax-percentage');
-            
-            const name = nameInput.value.trim();
-            const percentage = parseFloat(percentageInput.value);
-
-            // Validation
-            if (!name || isNaN(percentage) || percentage < 0) {
-                return; // Don't add if fields are empty or invalid
+        function updateTaxFromRow(rowId, field, value) {
+            if (!Array.isArray(taxes)) {
+                taxes = [];
             }
 
-            if (editingTaxId) {
-                // Update existing tax
-                const taxIndex = taxes.findIndex(t => t.id === editingTaxId);
-                taxes[taxIndex] = {
-                    ...taxes[taxIndex],
-                    name: name,
-                    percentage: percentage
-                };
-            } else {
-                // Add new tax
-                const newTax = {
-                    id: generateId(),
-                    name: name,
-                    percentage: percentage
-                };
-                taxes.push(newTax);
+            const tax = taxes.find(t => t.id === rowId);
+            if (!tax) return;
+
+            if (field === 'name') {
+                tax.name = value.trim();
+            } else if (field === 'percentage') {
+                tax.percentage = Math.max(0, parseFloat(value) || 0);
+            }
+
+            // Match investment table behavior: remove row if all fields are empty
+            if (!tax.name && tax.percentage === 0) {
+                taxes = taxes.filter(t => t.id !== rowId);
+                renderTaxes();
+                saveTaxes();
+                return;
             }
 
             saveTaxes();
-            renderTaxes();
-            closeTaxPopup();
+            updateTotalTaxes();
         }
 
         function deleteTax(taxId) {
@@ -2185,27 +2306,54 @@
         }
 
         function renderTaxes() {
-            const container = document.getElementById('impuestos-container');
-            container.innerHTML = '';
+            const tbody = document.getElementById('taxes-table-body');
+            if (!tbody) return;
 
-            taxes.forEach(tax => {
-                const taxElement = document.createElement('div');
-                taxElement.className = 'bg-orange-50 border border-orange-200 rounded-lg p-3 flex justify-between items-center';
-                taxElement.innerHTML = `
-                    <div>
-                        <div class="font-medium text-gray-800">${tax.name}</div>
-                        <div class="text-sm text-gray-600">${tax.percentage}%</div>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="openTaxPopup('${tax.id}')" class="text-orange-600 hover:text-orange-800 text-lg transition-all">
-                            ✏️
-                        </button>
-                        <button onclick="deleteTax('${tax.id}')" class="text-red-600 hover:text-red-800 text-lg transition-all">
-                            🗑️
-                        </button>
-                    </div>
+            if (!Array.isArray(taxes)) {
+                taxes = [];
+            }
+
+            tbody.innerHTML = '';
+
+            taxes.forEach((tax, index) => {
+                if (!tax.id) {
+                    tax.id = generateId();
+                }
+
+                if (typeof tax.percentage !== 'number') {
+                    tax.percentage = parseFloat(tax.percentage) || 0;
+                }
+
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-white' : 'bg-orange-25';
+                row.setAttribute('data-row-id', tax.id);
+                row.innerHTML = `
+                    <td class="px-3 py-2 border-b border-orange-100">
+                        <input type="text"
+                               class="tax-name w-full px-2 py-1 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-left"
+                               value="${tax.name || ''}"
+                               placeholder="Nombre del impuesto"
+                               onchange="updateTaxFromRow('${tax.id}', 'name', this.value)"
+                               onblur="updateTaxFromRow('${tax.id}', 'name', this.value)"
+                               oninput="updateTaxFromRow('${tax.id}', 'name', this.value)">
+                    </td>
+                    <td class="px-3 py-2 border-b border-orange-100 text-center">
+                        <div class="relative">
+                            <input type="number"
+                                   class="tax-percentage w-full px-2 py-1 pr-7 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-center"
+                                   value="${tax.percentage || ''}"
+                                   placeholder="0"
+                                   min="0"
+                                   max="100"
+                                   step="0.01"
+                                   onchange="updateTaxFromRow('${tax.id}', 'percentage', this.value)"
+                                   onblur="updateTaxFromRow('${tax.id}', 'percentage', this.value)"
+                                   oninput="updateTaxFromRow('${tax.id}', 'percentage', this.value)">
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 text-xs text-gray-500">%</div>
+                        </div>
+                    </td>
                 `;
-                container.appendChild(taxElement);
+                tbody.appendChild(row);
             });
 
             updateTotalTaxes();
@@ -2218,6 +2366,19 @@
         }
 
         // Investment calculation functions
+        function normalizeInvestment(investment) {
+            const value = parseFloat(investment.value) || 0;
+            const lifespan = parseFloat(investment.lifespan) || 0;
+
+            investment.value = value;
+            investment.lifespan = lifespan;
+            investment.costPerHour = value > 0 && lifespan > 0 ? (value / lifespan / 365 / 8) : 0;
+        }
+
+        function normalizeInvestments() {
+            investments.forEach(normalizeInvestment);
+        }
+
         function calculateRowCostPerHour(rowId) {
             const row = document.querySelector(`tr[data-row-id="${rowId}"]`);
             if (!row) return;
@@ -2310,6 +2471,9 @@
             } else {
                 investment.costPerHour = 0;
             }
+
+            // Keep table cell in sync while typing, without re-rendering the whole table.
+            calculateRowCostPerHour(rowId);
             
             // Force immediate update of total investments
             setTimeout(() => {
@@ -2391,9 +2555,20 @@
             const tbody = document.getElementById('investments-table-body');
             tbody.innerHTML = '';
 
+            normalizeInvestments();
             const currencySymbol = getCurrencySymbol();
             
             investments.forEach((investment, index) => {
+                const investmentValue = parseFloat(investment.value) || 0;
+                const investmentLifespan = parseFloat(investment.lifespan) || 0;
+                const costPerHour = investmentValue > 0 && investmentLifespan > 0
+                    ? (investmentValue / investmentLifespan / 365 / 8)
+                    : 0;
+
+                investment.value = investmentValue;
+                investment.lifespan = investmentLifespan;
+                investment.costPerHour = costPerHour;
+
                 const row = document.createElement('tr');
                 row.className = index % 2 === 0 ? 'bg-white' : 'bg-orange-25';
                 row.setAttribute('data-row-id', investment.id);
@@ -2423,18 +2598,21 @@
                         </div>
                     </td>
                     <td class="px-3 py-2 border-b border-orange-100 text-center">
-                        <input type="number" 
-                               class="investment-lifespan w-full px-2 py-1 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-center" 
-                               value="${investment.lifespan || ''}" 
-                               placeholder="0"
-                               min="0" 
-                               step="0.1"
-                               onchange="updateInvestmentFromRow('${investment.id}', 'lifespan', this.value)"
-                               onblur="updateInvestmentFromRow('${investment.id}', 'lifespan', this.value)"
-                               oninput="updateInvestmentFromRow('${investment.id}', 'lifespan', this.value)">
+                        <div class="relative">
+                            <input type="number" 
+                                   class="investment-lifespan w-full px-2 py-1 pr-12 text-sm bg-transparent border-0 focus:outline-none focus:bg-white focus:border focus:border-orange-300 focus:rounded text-center" 
+                                   value="${investment.lifespan || ''}" 
+                                   placeholder="0"
+                                   min="0" 
+                                   step="0.1"
+                                   onchange="updateInvestmentFromRow('${investment.id}', 'lifespan', this.value)"
+                                   onblur="updateInvestmentFromRow('${investment.id}', 'lifespan', this.value)"
+                                   oninput="updateInvestmentFromRow('${investment.id}', 'lifespan', this.value)">
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 text-xs text-gray-500 pointer-events-none">años</div>
+                        </div>
                     </td>
                     <td class="px-3 py-2 border-b border-orange-100 text-center">
-                        <div class="cost-per-hour-display text-sm font-medium text-gray-700">${currencySymbol} ${investment.costPerHour.toFixed(4)}</div>
+                        <div class="cost-per-hour-display text-sm font-medium text-gray-700">${currencySymbol} ${costPerHour.toFixed(4)}</div>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -2444,7 +2622,7 @@
         }
 
         function updateTotalInvestments() {
-            const totalValue = investments.reduce((sum, investment) => sum + investment.value, 0);
+            const totalValue = investments.reduce((sum, investment) => sum + (parseFloat(investment.value) || 0), 0);
             const totalElement = document.getElementById('total-investment-amount');
             const currencySymbol = getCurrencySymbol();
             if (totalElement) {
@@ -2468,6 +2646,135 @@
         function setDescriptionContent(content) {
             const editor = document.getElementById('project-description');
             editor.innerHTML = content || '';
+        }
+
+        function getProjectDraft(projectType) {
+            const drafts = appData.projectDrafts || {};
+            return drafts[projectType] || null;
+        }
+
+        function getDefaultProjectColor(projectType) {
+            return projectType === 'product' ? '#2563EB' : '#0EA5A5';
+        }
+
+        function normalizeHexColor(color, fallback = '#2563EB') {
+            if (typeof color !== 'string') return fallback;
+            const trimmed = color.trim();
+            if (/^#[0-9a-fA-F]{6}$/.test(trimmed)) {
+                return trimmed.toUpperCase();
+            }
+            if (/^#[0-9a-fA-F]{3}$/.test(trimmed)) {
+                const r = trimmed[1];
+                const g = trimmed[2];
+                const b = trimmed[3];
+                return `#${r}${r}${g}${g}${b}${b}`.toUpperCase();
+            }
+            return fallback;
+        }
+
+        function blendColor(hexColor, targetColor, factor) {
+            const source = normalizeHexColor(hexColor, '#2563EB');
+            const target = normalizeHexColor(targetColor, '#FFFFFF');
+            const ratio = Math.max(0, Math.min(1, factor));
+
+            const sr = parseInt(source.slice(1, 3), 16);
+            const sg = parseInt(source.slice(3, 5), 16);
+            const sb = parseInt(source.slice(5, 7), 16);
+
+            const tr = parseInt(target.slice(1, 3), 16);
+            const tg = parseInt(target.slice(3, 5), 16);
+            const tb = parseInt(target.slice(5, 7), 16);
+
+            const rr = Math.round(sr + (tr - sr) * ratio);
+            const rg = Math.round(sg + (tg - sg) * ratio);
+            const rb = Math.round(sb + (tb - sb) * ratio);
+
+            const toHex = (value) => value.toString(16).padStart(2, '0').toUpperCase();
+            return `#${toHex(rr)}${toHex(rg)}${toHex(rb)}`;
+        }
+
+        function getProjectColor(project) {
+            const fallback = getDefaultProjectColor(project?.type || 'service');
+            return normalizeHexColor(project?.chartColor, fallback);
+        }
+
+        function getProjectScenarioColors(project) {
+            const base = getProjectColor(project);
+            return [
+                blendColor(base, '#FFFFFF', 0.35),
+                base,
+                blendColor(base, '#000000', 0.35)
+            ];
+        }
+
+        function updateProjectColorPreview(color) {
+            const preview = document.getElementById('project-chart-color-value');
+            if (preview) {
+                preview.textContent = normalizeHexColor(color, '#2563EB');
+            }
+        }
+
+        function normalizeProjectsColor() {
+            projects = (projects || []).map(project => ({
+                ...project,
+                chartColor: normalizeHexColor(project.chartColor, getDefaultProjectColor(project.type || 'service'))
+            }));
+        }
+
+        function clearProjectDraft(projectType) {
+            appData.projectDrafts = appData.projectDrafts || { product: null, service: null };
+            appData.projectDrafts[projectType] = null;
+            saveAllData();
+        }
+
+        function saveCurrentProjectDraft() {
+            if (!isProjectPopupOpen() || editingProjectId) {
+                return;
+            }
+
+            const nameInput = document.getElementById('project-name');
+            const productionHoursLimitInput = document.getElementById('production-hours-limit');
+            const producedUnitsLimitInput = document.getElementById('produced-units-limit');
+            const editor = document.getElementById('project-description');
+            const chartColorInput = document.getElementById('project-chart-color');
+
+            if (!nameInput || !productionHoursLimitInput || !producedUnitsLimitInput || !editor || !chartColorInput) {
+                return;
+            }
+
+            let description = getDescriptionContent();
+            const placeholder = editor.getAttribute('data-placeholder');
+            if (description === placeholder) {
+                description = '';
+            }
+
+            const draft = {
+                name: nameInput.value || '',
+                hours: currentProjectType === 'service' ? (productionHoursLimitInput.value || '') : '',
+                productionHoursLimit: productionHoursLimitInput.value || '',
+                producedUnitsLimit: producedUnitsLimitInput.value || '',
+                chartColor: normalizeHexColor(chartColorInput.value, getDefaultProjectColor(currentProjectType)),
+                description,
+                variableCosts: [...currentProjectVariableCosts],
+                rawMaterials: [...currentProjectRawMaterials],
+                equipment: [...currentProjectEquipment]
+            };
+
+            const defaultColor = getDefaultProjectColor(currentProjectType);
+
+            const hasContent = draft.name.trim() !== ''
+                || draft.hours !== ''
+                || draft.productionHoursLimit !== ''
+                || draft.producedUnitsLimit !== ''
+                || draft.chartColor !== defaultColor
+                || draft.description.trim() !== ''
+                || draft.variableCosts.length > 0
+                || draft.rawMaterials.length > 0
+                || draft.equipment.length > 0;
+
+            appData.projectDrafts = appData.projectDrafts || { product: null, service: null };
+            appData.projectDrafts[currentProjectType] = hasContent ? draft : null;
+            saveAllData();
         }
 
         function isProjectPopupOpen() {
@@ -2498,6 +2805,17 @@
             }
         }
 
+        function getProjectSequenceByType(projectType, projectId = null) {
+            const projectsOfType = projects.filter(p => p.type === projectType);
+
+            if (projectId) {
+                const indexByType = projectsOfType.findIndex(p => p.id === projectId);
+                return indexByType >= 0 ? indexByType + 1 : projectsOfType.length + 1;
+            }
+
+            return projectsOfType.length + 1;
+        }
+
         // Show placeholder when editor is empty
         function updateDescriptionPlaceholder() {
             const editor = document.getElementById('project-description');
@@ -2513,6 +2831,25 @@
         // Handle focus and blur events for placeholder
         document.addEventListener('DOMContentLoaded', function() {
             const editor = document.getElementById('project-description');
+            const projectNameInput = document.getElementById('project-name');
+            const productionHoursLimitInput = document.getElementById('production-hours-limit');
+            const producedUnitsLimitInput = document.getElementById('produced-units-limit');
+            const projectColorInput = document.getElementById('project-chart-color');
+
+            [projectNameInput, productionHoursLimitInput, producedUnitsLimitInput, projectColorInput].forEach(input => {
+                if (input) {
+                    input.addEventListener('input', saveCurrentProjectDraft);
+                    input.addEventListener('change', saveCurrentProjectDraft);
+                }
+            });
+
+            if (projectColorInput) {
+                projectColorInput.addEventListener('input', function() {
+                    updateProjectColorPreview(this.value);
+                });
+                updateProjectColorPreview(projectColorInput.value);
+            }
+
             if (editor) {
                 editor.addEventListener('focus', function() {
                     if (this.textContent === this.getAttribute('data-placeholder')) {
@@ -2527,7 +2864,10 @@
                     } else {
                         this.style.color = '#000';
                     }
+                    saveCurrentProjectDraft();
                 });
+
+                editor.addEventListener('input', saveCurrentProjectDraft);
 
                 // Initialize placeholder
                 updateDescriptionPlaceholder();
@@ -2557,24 +2897,21 @@
             const title = document.getElementById('project-popup-title');
             const actionBtn = document.getElementById('project-action-btn');
             const nameInput = document.getElementById('project-name');
-            const hoursInput = document.getElementById('project-hours');
+            const productionHoursLimitInput = document.getElementById('production-hours-limit');
+            const producedUnitsLimitInput = document.getElementById('produced-units-limit');
             const rawMaterialsCard = document.getElementById('raw-materials-card');
-            const hoursField = document.getElementById('hours-field');
             const nameLabel = document.getElementById('project-name-label');
+            const chartColorInput = document.getElementById('project-chart-color');
 
             // Show/hide fields based on project type
             const projectCardsContainer = document.getElementById('project-cards-container');
             if (currentProjectType === 'product') {
                 rawMaterialsCard.classList.remove('hidden');
-                hoursField.classList.add('hidden');
                 nameLabel.textContent = 'Nombre del producto';
-                // Set hours to 0 for products since they don't use hours
-                hoursInput.value = '0';
                 // Change to 3 columns for products
                 projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-3 gap-6';
             } else {
                 rawMaterialsCard.classList.add('hidden');
-                hoursField.classList.remove('hidden');
                 nameLabel.textContent = 'Nombre del servicio';
                 // Keep 2 columns for services
                 projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-2 gap-6';
@@ -2583,28 +2920,53 @@
             if (editingProjectId) {
                 // Editing existing project
                 const project = projects.find(p => p.id === editingProjectId);
-                title.textContent = `${project.type === 'product' ? 'Producto' : 'Servicio'} ${projects.indexOf(project) + 1}`;
+                const sequence = getProjectSequenceByType(project.type || 'service', editingProjectId);
+                title.textContent = `${project.type === 'product' ? 'Producto' : 'Servicio'} ${sequence}`;
                 actionBtn.textContent = 'Guardar';
                 nameInput.value = project.name;
-                hoursInput.value = project.hours;
+                productionHoursLimitInput.value = project.productionHoursLimit || project.hours || '';
+                producedUnitsLimitInput.value = project.producedUnitsLimit || '';
+                chartColorInput.value = getProjectColor(project);
+                updateProjectColorPreview(chartColorInput.value);
                 setDescriptionContent(project.description);
                 currentProjectVariableCosts = [...project.variableCosts];
                 currentProjectRawMaterials = [...(project.rawMaterials || [])];
                 currentProjectEquipment = [...(project.equipment || [])];
             } else {
                 // Adding new project
-                const projectNumber = projects.length + 1;
+                const draft = getProjectDraft(currentProjectType);
+                const projectNumber = getProjectSequenceByType(currentProjectType);
                 title.textContent = `${currentProjectType === 'product' ? 'Producto' : 'Servicio'} ${projectNumber}`;
                 actionBtn.textContent = 'Agregar';
-                nameInput.value = '';
-                hoursInput.value = currentProjectType === 'product' ? '0' : '';
-                setDescriptionContent('');
-                updateDescriptionPlaceholder();
-                currentProjectVariableCosts = [];
-                currentProjectRawMaterials = [];
-                currentProjectEquipment = [];
+
+                if (draft) {
+                    nameInput.value = draft.name || '';
+                    productionHoursLimitInput.value = draft.productionHoursLimit || '';
+                    producedUnitsLimitInput.value = draft.producedUnitsLimit || '';
+                    chartColorInput.value = normalizeHexColor(draft.chartColor, getDefaultProjectColor(currentProjectType));
+                    updateProjectColorPreview(chartColorInput.value);
+                    setDescriptionContent(draft.description || '');
+                    if (!draft.description) {
+                        updateDescriptionPlaceholder();
+                    }
+                    currentProjectVariableCosts = [...(draft.variableCosts || [])];
+                    currentProjectRawMaterials = [...(draft.rawMaterials || [])];
+                    currentProjectEquipment = [...(draft.equipment || [])];
+                } else {
+                    nameInput.value = '';
+                    productionHoursLimitInput.value = '';
+                    producedUnitsLimitInput.value = '';
+                    chartColorInput.value = getDefaultProjectColor(currentProjectType);
+                    updateProjectColorPreview(chartColorInput.value);
+                    setDescriptionContent('');
+                    updateDescriptionPlaceholder();
+                    currentProjectVariableCosts = [];
+                    currentProjectRawMaterials = [];
+                    currentProjectEquipment = [];
+                }
             }
 
+            applyProductionLimits();
             renderEquipmentChecklist();
             renderRawMaterialsChecklist();
             renderVariableCosts();
@@ -2646,11 +3008,85 @@
             return fixedCostPerHour;
         }
 
+        function getProductionHoursLimit() {
+            const limitInput = document.getElementById('production-hours-limit');
+            const limitValue = parseFloat(limitInput ? limitInput.value : '') || 0;
+
+            if (limitValue > 0) {
+                return limitValue;
+            }
+
+            return 0;
+        }
+
+        function getProducedUnitsLimit() {
+            const unitsInput = document.getElementById('produced-units-limit');
+            return parseFloat(unitsInput ? unitsInput.value : '') || 0;
+        }
+
+        function getAllowedRawMaterialQuantity(rawMaterial) {
+            const producedUnitsLimit = getProducedUnitsLimit();
+            if (currentProjectType === 'product') {
+                if (producedUnitsLimit <= 0) {
+                    return 0;
+                }
+                return Math.min(rawMaterial.quantity, producedUnitsLimit);
+            }
+            return rawMaterial.quantity;
+        }
+
+        function applyProductionLimits() {
+            const productionHoursLimit = getProductionHoursLimit();
+
+            if (productionHoursLimit >= 0) {
+                let accumulatedHours = 0;
+                const adjustedEquipment = [];
+
+                currentProjectEquipment.forEach(projectEquipment => {
+                    const safeHours = Math.max(0, parseFloat(projectEquipment.hours) || 0);
+                    const remaining = Math.max(0, productionHoursLimit - accumulatedHours);
+                    const allowedHours = Math.min(safeHours, remaining);
+
+                    if (allowedHours > 0) {
+                        adjustedEquipment.push({
+                            ...projectEquipment,
+                            hours: allowedHours
+                        });
+                        accumulatedHours += allowedHours;
+                    }
+                });
+
+                currentProjectEquipment = adjustedEquipment;
+            }
+
+            currentProjectRawMaterials = currentProjectRawMaterials
+                .map(projectRawMaterial => {
+                    const rawMaterial = rawMaterials.find(rm => rm.id === projectRawMaterial.id);
+                    if (!rawMaterial) return null;
+
+                    const maxAllowed = getAllowedRawMaterialQuantity(rawMaterial);
+                    const safeQuantity = Math.max(0, parseFloat(projectRawMaterial.quantity) || 0);
+                    const validQuantity = Math.min(safeQuantity, maxAllowed);
+
+                    if (validQuantity <= 0) return null;
+                    return {
+                        ...projectRawMaterial,
+                        quantity: validQuantity
+                    };
+                })
+                .filter(Boolean);
+
+            renderEquipmentChecklist();
+            renderRawMaterialsChecklist();
+            calculateProjectCosts();
+        }
+
         function renderEquipmentChecklist() {
             const container = document.getElementById('equipment-checklist');
             container.innerHTML = '';
             
             const currencySymbol = getCurrencySymbol();
+            const productionHoursLimit = getProductionHoursLimit();
             
             investments.forEach(investment => {
                 if (investment.name && investment.costPerHour > 0) {
@@ -2678,6 +3114,7 @@
                                        data-hours-input="${investment.id}"
                                        value="${projectEquipment.hours || ''}"
                                        min="0"
+                                        max="${productionHoursLimit > 0 ? productionHoursLimit : 0}"
                                        step="0.1"
                                        placeholder="0"
                                        onchange="updateEquipmentHours('${investment.id}', this.value)"
@@ -2714,6 +3151,8 @@
                         id: rawMaterial.id,
                         quantity: 0
                     };
+
+                    const maxAllowed = getAllowedRawMaterialQuantity(rawMaterial);
                     
                     rawMaterialItem.innerHTML = `
                         <div class="flex items-center mb-2">
@@ -2730,7 +3169,7 @@
                                 <input type="number" 
                                        data-quantity-input="${rawMaterial.id}"
                                        value="${projectRawMaterial.quantity || ''}"
-                                       max="${rawMaterial.quantity}"
+                                        max="${maxAllowed}"
                                        min="0"
                                        step="0.01"
                                        placeholder="0"
@@ -2741,6 +3180,7 @@
                             </div>
                             <div class="flex justify-between text-xs text-gray-600">
                                 <div>Disponible: ${rawMaterial.quantity} ${rawMaterial.unit}</div>
+                                <div>Limite: ${maxAllowed} ${rawMaterial.unit}</div>
                                 <div class="font-bold">Subtotal: <span data-raw-material-subtotal="${rawMaterial.id}">${currencySymbol} ${(rawMaterial.unitCost * projectRawMaterial.quantity).toFixed(2)}</span></div>
                             </div>
                         </div>
@@ -2774,30 +3214,42 @@
             const investment = investments.find(inv => inv.id === equipmentId);
             
             if (!investment) return;
+
+            const productionHoursLimit = getProductionHoursLimit();
+            const otherEquipmentHours = currentProjectEquipment
+                .filter(pe => pe.id !== equipmentId)
+                .reduce((sum, pe) => sum + (parseFloat(pe.hours) || 0), 0);
+            const maxForThisEquipment = Math.max(0, productionHoursLimit - otherEquipmentHours);
+            const validHours = Math.max(0, Math.min(hours, maxForThisEquipment));
+
+            const hoursInput = document.querySelector(`input[data-hours-input="${equipmentId}"]`);
+            if (hoursInput && validHours !== hours) {
+                hoursInput.value = validHours > 0 ? validHours : '';
+            }
             
             // Update or add to current project equipment
             const existingIndex = currentProjectEquipment.findIndex(pe => pe.id === equipmentId);
             if (existingIndex >= 0) {
-                if (hours > 0) {
-                    currentProjectEquipment[existingIndex].hours = hours;
+                if (validHours > 0) {
+                    currentProjectEquipment[existingIndex].hours = validHours;
                 } else {
                     currentProjectEquipment.splice(existingIndex, 1);
                 }
-            } else if (hours > 0) {
+            } else if (validHours > 0) {
                 currentProjectEquipment.push({
                     id: equipmentId,
-                    hours: hours
+                    hours: validHours
                 });
             }
             
             // Update checkbox state
             const checkbox = document.querySelector(`input[data-equipment-id="${equipmentId}"]`);
-            checkbox.checked = hours > 0;
+            checkbox.checked = validHours > 0;
             
             // Update subtotal display
             const subtotalElement = document.querySelector(`span[data-subtotal="${equipmentId}"]`);
             const currencySymbol = getCurrencySymbol();
-            const subtotal = investment.costPerHour * hours;
+            const subtotal = investment.costPerHour * validHours;
             subtotalElement.textContent = `${currencySymbol} ${subtotal.toFixed(2)}`;
             
             calculateEquipmentTotalCost();
@@ -2806,23 +3258,27 @@
 
         function calculateEquipmentTotalCost() {
             let totalCost = 0;
-            let totalHours = 0;
+
+            const checkedEquipmentIds = new Set(
+                Array.from(document.querySelectorAll('#equipment-checklist input[data-equipment-id]:checked'))
+                    .map(input => input.getAttribute('data-equipment-id'))
+            );
             
             currentProjectEquipment.forEach(projectEquipment => {
+                if (checkedEquipmentIds.size > 0 && !checkedEquipmentIds.has(projectEquipment.id)) {
+                    return;
+                }
+
                 const investment = investments.find(inv => inv.id === projectEquipment.id);
                 if (investment) {
-                    totalCost += investment.costPerHour * projectEquipment.hours;
-                    totalHours += projectEquipment.hours;
+                    const subtotal = parseFloat((investment.costPerHour * projectEquipment.hours).toFixed(2));
+                    totalCost += subtotal;
                 }
             });
             
             const totalElement = document.getElementById('equipment-total-cost');
-            const totalHoursElement = document.getElementById('total-equipment-hours');
             const currencySymbol = getCurrencySymbol();
             totalElement.textContent = `${currencySymbol} ${totalCost.toFixed(2)}`;
-            if (totalHoursElement) {
-                totalHoursElement.textContent = `${totalHours.toFixed(1)} hrs`;
-            }
             
             return totalCost;
         }
@@ -2851,7 +3307,7 @@
             if (!rawMaterial) return;
             
             // Validate quantity doesn't exceed available
-            const maxQuantity = rawMaterial.quantity;
+            const maxQuantity = getAllowedRawMaterialQuantity(rawMaterial);
             const validQuantity = Math.min(quantity, maxQuantity);
             
             // Update the input if it was corrected
@@ -2994,16 +3450,19 @@
 
         function calculateProjectCosts() {
             const currencySymbol = getCurrencySymbol();
-            const projectHours = parseFloat(document.getElementById('project-hours').value) || 0;
+            const producedUnits = currentProjectType === 'product' ? getProducedUnitsLimit() : 0;
             
             // Calculate components
             const fixedCostTotal = calculateFixedCostPerHour(); // This now returns the total fixed cost for the project
             const equipmentTotalCost = calculateEquipmentTotalCost();
             const totalVariableCosts = currentProjectVariableCosts.reduce((sum, vc) => sum + vc.amount, 0);
             const totalRawMaterialsCost = calculateRawMaterialsTotalCost();
+
+            const batchProjectCost = fixedCostTotal + equipmentTotalCost + totalVariableCosts + totalRawMaterialsCost;
+            const unitDivisor = currentProjectType === 'product' && producedUnits > 0 ? producedUnits : 1;
             
-            // Calculate total project cost (fixed cost is now total, not per hour)
-            const totalProjectCost = fixedCostTotal + equipmentTotalCost + totalVariableCosts + totalRawMaterialsCost;
+            // For products, show unit cost based on produced units; services keep total per project.
+            const totalProjectCost = batchProjectCost / unitDivisor;
             
             // Calculate safety margin (30%)
             const safetyMargin = totalProjectCost * 0.30;
@@ -3012,8 +3471,9 @@
             const totalTaxPercentage = taxes.reduce((sum, tax) => sum + tax.percentage, 0) / 100;
             const taxesToPay = (totalProjectCost + safetyMargin) * totalTaxPercentage;
             
-            // Calculate suggested price
+            // Calculate equilibrium price
             const suggestedPrice = totalProjectCost + safetyMargin + taxesToPay;
+            const finalProductPrice = suggestedPrice * (1 + (currentPricingPercentage / 100));
             
             // Update UI
             document.getElementById('total-variable-costs').textContent = `${currencySymbol} ${totalVariableCosts.toFixed(2)}`;
@@ -3022,24 +3482,49 @@
             document.getElementById('taxes-to-pay').textContent = `${currencySymbol} ${taxesToPay.toFixed(2)}`;
             document.getElementById('suggested-price').textContent = `${currencySymbol} ${suggestedPrice.toFixed(2)}`;
             document.getElementById('tax-percentage-display').textContent = `${(totalTaxPercentage * 100).toFixed(1)}%`;
+            const finalProductPriceElement = document.getElementById('final-product-price');
+            if (finalProductPriceElement) {
+                finalProductPriceElement.textContent = `${currencySymbol} ${finalProductPrice.toFixed(2)}`;
+            }
+
+            saveCurrentProjectDraft();
         }
 
         function saveProject() {
             const nameInput = document.getElementById('project-name');
-            const hoursInput = document.getElementById('project-hours');
+            const productionHoursLimitInput = document.getElementById('production-hours-limit');
+            const producedUnitsLimitInput = document.getElementById('produced-units-limit');
+            const chartColorInput = document.getElementById('project-chart-color');
             
             const name = nameInput.value.trim();
-            const hours = parseFloat(hoursInput.value) || 0;
+            const productionHoursLimit = parseFloat(productionHoursLimitInput.value) || 0;
+            const producedUnitsLimit = parseFloat(producedUnitsLimitInput.value) || 0;
+            const chartColor = normalizeHexColor(chartColorInput.value, getDefaultProjectColor(currentProjectType));
             const description = getDescriptionContent();
+            const hours = currentProjectType === 'service' ? productionHoursLimit : 0;
 
             // Validation
             if (!name) {
+                alert('Ingresa un nombre para continuar.');
                 return; // Don't save if name is empty
             }
 
-            if (currentProjectType === 'service' && hours <= 0) {
+            if (currentProjectType === 'service' && productionHoursLimit <= 0) {
+                alert('Para guardar un servicio, las horas de producción deben ser mayores a 0.');
                 return; // Service requires invested hours
             }
+
+            if (currentProjectType === 'product' && productionHoursLimit <= 0) {
+                alert('Para guardar un producto, las horas de produccion deben ser mayores a 0.');
+                return; // Product requires production hours limit
+            }
+
+            if (currentProjectType === 'product' && producedUnitsLimit <= 0) {
+                alert('Para guardar un producto, las unidades producidas deben ser mayores a 0.');
+                return; // Product requires produced units limit
+            }
+
+            applyProductionLimits();
 
             // Get selected equipment
             const selectedEquipment = [];
@@ -3054,7 +3539,9 @@
             const equipmentTotalCost = calculateEquipmentTotalCost();
             const totalVariableCosts = currentProjectVariableCosts.reduce((sum, vc) => sum + vc.amount, 0);
             const totalRawMaterialsCost = calculateRawMaterialsTotalCost();
-            const totalProjectCost = fixedCostTotal + equipmentTotalCost + totalVariableCosts + totalRawMaterialsCost;
+            const batchProjectCost = fixedCostTotal + equipmentTotalCost + totalVariableCosts + totalRawMaterialsCost;
+            const unitDivisor = currentProjectType === 'product' && producedUnitsLimit > 0 ? producedUnitsLimit : 1;
+            const totalProjectCost = batchProjectCost / unitDivisor;
             const safetyMargin = totalProjectCost * 0.30;
             const totalTaxPercentage = taxes.reduce((sum, tax) => sum + tax.percentage, 0) / 100;
             const taxesToPay = (totalProjectCost + safetyMargin) * totalTaxPercentage;
@@ -3068,6 +3555,9 @@
                     name: name,
                     type: currentProjectType,
                     hours: hours,
+                    productionHoursLimit: productionHoursLimit,
+                    producedUnitsLimit: producedUnitsLimit,
+                    chartColor: chartColor,
                     description: description,
                     selectedEquipment: selectedEquipment,
                     equipment: [...currentProjectEquipment],
@@ -3078,6 +3568,7 @@
                         equipmentTotalCost,
                         totalVariableCosts,
                         totalRawMaterialsCost,
+                        batchProjectCost,
                         totalProjectCost,
                         safetyMargin,
                         taxesToPay,
@@ -3091,6 +3582,9 @@
                     name: name,
                     type: currentProjectType,
                     hours: hours,
+                    productionHoursLimit: productionHoursLimit,
+                    producedUnitsLimit: producedUnitsLimit,
+                    chartColor: chartColor,
                     description: description,
                     selectedEquipment: selectedEquipment,
                     equipment: [...currentProjectEquipment],
@@ -3101,6 +3595,7 @@
                         equipmentTotalCost,
                         totalVariableCosts,
                         totalRawMaterialsCost,
+                        batchProjectCost,
                         totalProjectCost,
                         safetyMargin,
                         taxesToPay,
@@ -3110,6 +3605,7 @@
                 projects.push(newProject);
             }
 
+            clearProjectDraft(currentProjectType);
             saveAllData();
             renderProjects();
             closeProjectPopup();
@@ -3144,17 +3640,26 @@
                 const emptyRow = document.createElement('tr');
                 emptyRow.className = 'bg-white';
                 emptyRow.innerHTML = `
-                    <td colspan="3" class="px-3 py-4 text-center text-sm text-gray-500 border-b border-blue-100">Sin productos registrados</td>
+                    <td colspan="4" class="px-3 py-4 text-center text-sm text-gray-500 border-b border-blue-100">Sin productos registrados</td>
                 `;
                 productsTableBody.appendChild(emptyRow);
             } else {
                 products.forEach((product, index) => {
+                    const chartColor = getProjectColor(product);
                     const row = document.createElement('tr');
-                    row.className = index % 2 === 0 ? 'bg-white' : 'bg-blue-25';
+                    row.className = index % 2 === 0 ? 'bg-white hover:bg-blue-50 cursor-pointer' : 'bg-blue-25 hover:bg-blue-50 cursor-pointer';
+                    row.setAttribute('title', 'Haz clic para editar este producto');
+                    row.onclick = () => openProjectPopup(product.id);
                     row.innerHTML = `
                         <td class="px-3 py-2 text-sm text-gray-700 border-b border-blue-100">${product.name}</td>
                         <td class="px-3 py-2 text-sm text-center text-gray-700 border-b border-blue-100">${product.quantity}</td>
                         <td class="px-3 py-2 text-sm text-center font-medium text-gray-800 border-b border-blue-100">${currencySymbol} ${product.cost.toFixed(2)}</td>
+                        <td class="px-3 py-2 text-sm text-center text-gray-700 border-b border-blue-100">
+                            <div class="inline-flex items-center gap-2">
+                                <span class="inline-block w-4 h-4 rounded-full border border-gray-300" style="background-color: ${chartColor};"></span>
+                                <span class="text-xs font-medium">${chartColor}</span>
+                            </div>
+                        </td>
                     `;
                     productsTableBody.appendChild(row);
                 });
@@ -3164,16 +3669,25 @@
                 const emptyRow = document.createElement('tr');
                 emptyRow.className = 'bg-white';
                 emptyRow.innerHTML = `
-                    <td colspan="2" class="px-3 py-4 text-center text-sm text-gray-500 border-b border-blue-100">Sin servicios registrados</td>
+                    <td colspan="3" class="px-3 py-4 text-center text-sm text-gray-500 border-b border-blue-100">Sin servicios registrados</td>
                 `;
                 servicesTableBody.appendChild(emptyRow);
             } else {
                 services.forEach((service, index) => {
+                    const chartColor = getProjectColor(service);
                     const row = document.createElement('tr');
-                    row.className = index % 2 === 0 ? 'bg-white' : 'bg-blue-25';
+                    row.className = index % 2 === 0 ? 'bg-white hover:bg-blue-50 cursor-pointer' : 'bg-blue-25 hover:bg-blue-50 cursor-pointer';
+                    row.setAttribute('title', 'Haz clic para editar este servicio');
+                    row.onclick = () => openProjectPopup(service.id);
                     row.innerHTML = `
                         <td class="px-3 py-2 text-sm text-gray-700 border-b border-blue-100">${service.name}</td>
                         <td class="px-3 py-2 text-sm text-center font-medium text-gray-800 border-b border-blue-100">${currencySymbol} ${service.cost.toFixed(2)}</td>
+                        <td class="px-3 py-2 text-sm text-center text-gray-700 border-b border-blue-100">
+                            <div class="inline-flex items-center gap-2">
+                                <span class="inline-block w-4 h-4 rounded-full border border-gray-300" style="background-color: ${chartColor};"></span>
+                                <span class="text-xs font-medium">${chartColor}</span>
+                            </div>
+                        </td>
                     `;
                     servicesTableBody.appendChild(row);
                 });
@@ -3219,9 +3733,7 @@
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('popup-overlay')) {
                 e.target.classList.add('hidden');
-                if (e.target.id === 'popup-tax') {
-                    editingTaxId = null;
-                } else if (e.target.id === 'popup-fixed-cost') {
+                if (e.target.id === 'popup-fixed-cost') {
                     editingFixedCostId = null;
                 } else if (e.target.id === 'popup-investment') {
                     editingInvestmentId = null;
@@ -3340,6 +3852,9 @@
             updatePricingStrategyButtons();
             renderQuoteTable();
             updateProjectionCalculations();
+            if (isProjectPopupOpen()) {
+                calculateProjectCosts();
+            }
             saveAllData();
         }
 
@@ -4036,13 +4551,12 @@
 
             const renderProjectionCard = (project, index) => {
                 const projectId = project.id;
-                const projectTypeLabel = project.type === 'product' ? 'Producto' : 'Servicio';
                 const price = getProjectPrice(project);
                 const cost = project.calculations?.totalProjectCost || 0;
 
                 return `
                     <div class="w-full md:w-[calc(50%-0.5rem)] xl:w-[calc(33.333%-0.67rem)] bg-white border border-indigo-200 rounded-lg p-3" data-projection-project-id="${projectId}">
-                        <div class="mb-2 text-sm font-semibold text-indigo-800">${project.name} (${projectTypeLabel})</div>
+                        <div class="mb-2 text-sm font-semibold text-indigo-800">${project.name}</div>
                         <div class="text-xs text-gray-600 mb-3">Precio: ${getCurrencySymbol()} ${price.toFixed(2)} | Costo base: ${getCurrencySymbol()} ${cost.toFixed(2)} | Periodo: ${totalYears} ano${totalYears > 1 ? 's' : ''}</div>
                         <div class="rounded-lg border border-indigo-200 bg-white p-2 cursor-pointer" onclick="openProjectionInputsPopup('${projectId}')" title="Haz clic para editar los valores mensuales">
                             <canvas id="product-projection-chart-${projectId}" width="760" height="240" class="w-full rounded"></canvas>
@@ -4213,6 +4727,7 @@
             const baseUnits = getProjectBaseUnits(project, index);
             const scenarios = ['optimist', 'realist', 'pessimist'];
             const labels = ['Optimista', 'Realista', 'Pesimista'];
+            const projectScenarioColors = getProjectScenarioColors(project);
             const totalYears = getBusinessYears();
             const totalMonths = totalYears * 12;
 
@@ -4227,8 +4742,9 @@
 
             const maxValue = Math.max(1, ...series.flat());
             const padding = 34;
+            const bottomPadding = 48;
             const chartWidth = canvas.width - (padding * 2);
-            const chartHeight = canvas.height - (padding * 2);
+            const chartHeight = canvas.height - (padding + bottomPadding);
 
             ctx.strokeStyle = '#D1D5DB';
             ctx.lineWidth = 1;
@@ -4239,7 +4755,7 @@
             ctx.stroke();
 
             series.forEach((values, seriesIndex) => {
-                ctx.strokeStyle = projectionColors[seriesIndex];
+                ctx.strokeStyle = projectScenarioColors[seriesIndex];
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 values.forEach((value, valueIndex) => {
@@ -4250,12 +4766,23 @@
                 });
                 ctx.stroke();
 
-                ctx.fillStyle = projectionColors[seriesIndex];
+                ctx.fillStyle = projectScenarioColors[seriesIndex];
                 ctx.fillRect(padding + (seriesIndex * 100), 8, 10, 10);
                 ctx.fillStyle = '#374151';
                 ctx.font = '11px sans-serif';
                 ctx.fillText(labels[seriesIndex], padding + (seriesIndex * 100) + 14, 17);
             });
+
+            // Year markers on X axis, same behavior as the main scenario chart.
+            ctx.fillStyle = '#6B7280';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            for (let year = 1; year <= totalYears; year++) {
+                const monthIndex = (year - 1) * 12;
+                const x = padding + (monthIndex / Math.max(totalMonths - 1, 1)) * chartWidth;
+                ctx.fillText(`Ano ${year}`, x, canvas.height - 12);
+            }
+            ctx.textAlign = 'left';
         }
 
         function openProjectionInputsPopup(projectId) {
@@ -4287,18 +4814,31 @@
 
             const tablesByYear = Array.from({ length: totalYears }, (_, yearIndex) => {
                 const year = yearIndex + 1;
-                const rows = Array.from({ length: 12 }, (_, monthIndex) => {
+                const monthHeaders = Array.from({ length: 12 }, (_, monthIndex) => {
                     const month = monthIndex + 1;
-                    const optimistic = getProjectionValue(project.id, 'optimist', year, month, getDefaultProjectionUnits(baseUnits, 'optimist'));
-                    const realist = getProjectionValue(project.id, 'realist', year, month, getDefaultProjectionUnits(baseUnits, 'realist'));
-                    const pessimist = getProjectionValue(project.id, 'pessimist', year, month, getDefaultProjectionUnits(baseUnits, 'pessimist'));
+                    return `<th class="px-2 py-1 border border-gray-200 text-center">${month}</th>`;
+                }).join('');
+
+                const scenarioRows = [
+                    { key: 'optimist', label: 'Optimista' },
+                    { key: 'realist', label: 'Realista' },
+                    { key: 'pessimist', label: 'Pesimista' }
+                ].map((scenario) => {
+                    const inputCells = Array.from({ length: 12 }, (_, monthIndex) => {
+                        const month = monthIndex + 1;
+                        const fallback = getDefaultProjectionUnits(baseUnits, scenario.key);
+                        const value = getProjectionValue(project.id, scenario.key, year, month, fallback);
+                        return `
+                            <td class="px-2 py-1 border border-gray-200">
+                                <input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, scenario.key, year, month)}" type="number" min="0" value="${value}" oninput="updateProjectionPopupValue('${project.id}', '${scenario.key}', ${year}, ${month}, this.value)">
+                            </td>
+                        `;
+                    }).join('');
 
                     return `
                         <tr>
-                            <td class="px-2 py-1 text-xs border border-gray-200">${month}</td>
-                            <td class="px-2 py-1 border border-gray-200"><input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, 'optimist', year, month)}" type="number" min="0" value="${optimistic}" oninput="updateProjectionPopupValue('${project.id}', 'optimist', ${year}, ${month}, this.value)"></td>
-                            <td class="px-2 py-1 border border-gray-200"><input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, 'realist', year, month)}" type="number" min="0" value="${realist}" oninput="updateProjectionPopupValue('${project.id}', 'realist', ${year}, ${month}, this.value)"></td>
-                            <td class="px-2 py-1 border border-gray-200"><input class="projection-input w-full text-xs p-1 border rounded" data-key="${getProjectionValueKey(project.id, 'pessimist', year, month)}" type="number" min="0" value="${pessimist}" oninput="updateProjectionPopupValue('${project.id}', 'pessimist', ${year}, ${month}, this.value)"></td>
+                            <td class="px-2 py-1 text-xs border border-gray-200 font-semibold bg-gray-50">${scenario.label}</td>
+                            ${inputCells}
                         </tr>
                     `;
                 }).join('');
@@ -4307,17 +4847,15 @@
                     <div class="mb-5">
                         <div class="text-sm font-semibold text-indigo-700 mb-2">Ano ${year}</div>
                         <div class="overflow-x-auto">
-                            <table class="min-w-[520px] w-full text-xs">
+                            <table class="min-w-[980px] w-full text-xs">
                                 <thead>
                                     <tr class="bg-indigo-50">
-                                        <th class="px-2 py-1 border border-gray-200">Mes</th>
-                                        <th class="px-2 py-1 border border-gray-200">Optimista</th>
-                                        <th class="px-2 py-1 border border-gray-200">Realista</th>
-                                        <th class="px-2 py-1 border border-gray-200">Pesimista</th>
+                                        <th class="px-2 py-1 border border-gray-200">Escenario</th>
+                                        ${monthHeaders}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${rows}
+                                    ${scenarioRows}
                                 </tbody>
                             </table>
                         </div>
@@ -4414,7 +4952,82 @@
 
             const title = 'Proyecciones Financieras';
             const printWindow = window.open('', '_blank');
-            const content = section.innerHTML;
+            if (!printWindow) return;
+
+            const h3List = Array.from(section.querySelectorAll('h3'));
+            const getBlockByTitle = (keyword) => {
+                const heading = h3List.find((h3) => h3.textContent.toLowerCase().includes(keyword));
+                return heading ? heading.closest('.mb-8') : null;
+            };
+
+            const toPrintableHTML = (node) => {
+                const originalCanvases = Array.from(node.querySelectorAll('canvas'));
+                const clone = node.cloneNode(true);
+
+                clone.querySelectorAll('button').forEach((btn) => btn.remove());
+
+                clone.querySelectorAll('input').forEach((input) => {
+                    const value = input.type === 'checkbox'
+                        ? (input.checked ? 'Si' : 'No')
+                        : (input.value || '0');
+                    const span = document.createElement('span');
+                    span.className = 'print-value';
+                    span.textContent = value;
+                    input.replaceWith(span);
+                });
+
+                clone.querySelectorAll('select').forEach((select) => {
+                    const option = select.options[select.selectedIndex];
+                    const span = document.createElement('span');
+                    span.className = 'print-value';
+                    span.textContent = option ? option.textContent : '';
+                    select.replaceWith(span);
+                });
+
+                clone.querySelectorAll('textarea').forEach((textarea) => {
+                    const p = document.createElement('p');
+                    p.className = 'print-value';
+                    p.textContent = textarea.value || '-';
+                    textarea.replaceWith(p);
+                });
+
+                const clonedCanvases = Array.from(clone.querySelectorAll('canvas'));
+                clonedCanvases.forEach((canvas, index) => {
+                    const sourceCanvas = originalCanvases[index];
+                    const img = document.createElement('img');
+                    img.src = sourceCanvas ? sourceCanvas.toDataURL('image/png') : '';
+                    img.alt = 'Grafica';
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.borderRadius = '10px';
+                    canvas.replaceWith(img);
+                });
+
+                return clone.innerHTML;
+            };
+
+            const orderedBlocks = [
+                { keyword: 'estimacion de mercado', className: 'w-full' },
+                { keyword: 'indicadores financieros', className: 'w-half' },
+                { keyword: 'analisis de rentabilidad', className: 'w-half' },
+                { keyword: 'grafica de escenarios', className: 'w-full chart-card' },
+                { keyword: 'proyeccion mensual', className: 'w-full monthly-card' }
+            ];
+
+            const printableCards = orderedBlocks
+                .map((item) => {
+                    const block = getBlockByTitle(item.keyword);
+                    if (!block) return '';
+                    return `<section class="print-card ${item.className}">${toPrintableHTML(block)}</section>`;
+                })
+                .filter(Boolean)
+                .join('');
+
+            if (!printableCards) return;
+
+            const customStyles = Array.from(document.querySelectorAll('style'))
+                .map((styleTag) => styleTag.outerHTML)
+                .join('\n');
 
             printWindow.document.write(`
                 <!DOCTYPE html>
@@ -4422,16 +5035,124 @@
                 <head>
                     <meta charset="UTF-8">
                     <title>${title}</title>
+                    <script src="https://cdn.tailwindcss.com"><\/script>
+                    ${customStyles}
                     <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; color: #1f2937; }
-                        h1 { margin-bottom: 20px; }
-                        table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-                        th, td { border: 1px solid #d1d5db; padding: 6px; font-size: 12px; }
+                        @page {
+                            size: letter;
+                            margin: 0.5in;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            color: #1f2937;
+                            background: #ffffff;
+                            margin: 0;
+                        }
+                        .print-header {
+                            margin-bottom: 16px;
+                            border-bottom: 2px solid #c6ccec;
+                            padding-bottom: 8px;
+                        }
+                        .print-header h1 {
+                            margin: 0;
+                            font-size: 22px;
+                            color: #3f4a96;
+                        }
+                        .print-grid {
+                            display: grid;
+                            grid-template-columns: repeat(12, minmax(0, 1fr));
+                            gap: 10px;
+                            align-items: start;
+                            width: 100%;
+                        }
+                        .print-card {
+                            box-sizing: border-box;
+                            border: 1px solid #d9dce7;
+                            border-radius: 12px;
+                            padding: 14px;
+                            background: #ffffff;
+                            break-inside: avoid;
+                            page-break-inside: avoid;
+                        }
+                        .print-card.w-full {
+                            grid-column: 1 / -1;
+                        }
+                        .print-card.w-half {
+                            grid-column: span 6;
+                        }
+                        .print-card h3 {
+                            margin: 0 0 10px;
+                            font-size: 16px;
+                        }
+                        .print-card h4,
+                        .print-card h5 {
+                            margin-top: 0;
+                            font-size: 14px;
+                        }
+                        .print-value {
+                            display: inline-block;
+                            font-weight: 600;
+                            color: #111827;
+                            padding: 2px 0;
+                            font-size: 12px;
+                        }
+                        .print-card table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 8px;
+                        }
+                        .print-card th,
+                        .print-card td {
+                            border: 1px solid #d1d5db;
+                            padding: 6px;
+                            font-size: 11px;
+                            vertical-align: top;
+                        }
+                        .print-card img {
+                            width: 100%;
+                            height: auto;
+                            display: block;
+                            max-height: 9in;
+                            object-fit: contain;
+                            border: 1px solid #e5e7eb;
+                            background: #ffffff;
+                        }
+                        .print-card canvas {
+                            width: 100% !important;
+                            height: auto !important;
+                        }
+                        .print-card .text-xs {
+                            font-size: 11px !important;
+                        }
+                        .print-card .text-sm {
+                            font-size: 12px !important;
+                        }
+                        .print-card .text-lg {
+                            font-size: 16px !important;
+                        }
+                        .print-card.chart-card img {
+                            max-height: 5.8in;
+                        }
+                        .print-card.monthly-card img {
+                            max-height: 3in;
+                        }
+                        .print-card .hidden {
+                            display: none !important;
+                        }
+                        @media print {
+                            .print-card.w-half {
+                                grid-column: span 6;
+                            }
+                        }
                     </style>
                 </head>
                 <body>
-                    <h1>${title}</h1>
-                    ${content}
+                    <header class="print-header">
+                        <h1>${title}</h1>
+                    </header>
+                    <main class="print-grid">
+                        ${printableCards}
+                    </main>
                 </body>
                 </html>
             `);
