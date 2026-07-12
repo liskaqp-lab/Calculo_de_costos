@@ -1196,17 +1196,10 @@
                 <!-- Main Content -->
                 <div class="space-y-6 mb-6">
                     <!-- Basic Project Info -->
-                    <div class="flex flex-col lg:flex-row gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex-1 min-w-0">
                             <label class="block text-sm font-medium text-gray-700 mb-2" id="project-name-label">Nombre del proyecto</label>
                             <input type="text" id="project-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Ej: Diseño web">
-                        </div>
-                        <div id="service-duration-field" class="hidden flex-1 min-w-0">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Duración del servicio</label>
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="number" id="service-duration-months" onchange="saveCurrentProjectDraft()" oninput="saveCurrentProjectDraft()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Meses" min="0" step="1">
-                                <input type="number" id="service-duration-days" onchange="saveCurrentProjectDraft()" oninput="saveCurrentProjectDraft()" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300" placeholder="Días" min="0" step="1">
-                            </div>
                         </div>
                         <div class="flex-1 min-w-0">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Color para grafica de ventas</label>
@@ -1214,6 +1207,10 @@
                                 <input type="color" id="project-chart-color" onchange="saveCurrentProjectDraft()" oninput="saveCurrentProjectDraft()" class="w-14 h-10 p-1 border border-gray-300 rounded-lg bg-white cursor-pointer" value="#2563EB">
                                 <span id="project-chart-color-value" class="text-sm text-gray-600 font-medium">#2563EB</span>
                             </div>
+                        </div>
+                        <div id="service-duration-field" class="hidden">
+                            <input type="hidden" id="service-duration-months" value="">
+                            <input type="hidden" id="service-duration-days" value="">
                         </div>
                     </div>
 
@@ -2925,13 +2922,17 @@
             const projectCardsContainer = document.getElementById('project-cards-container');
             if (currentProjectType === 'product') {
                 rawMaterialsCard.classList.remove('hidden');
-                serviceDurationField.classList.add('hidden');
+                if (serviceDurationField) {
+                    serviceDurationField.classList.add('hidden');
+                }
                 nameLabel.textContent = 'Nombre del producto';
                 // Change to 3 columns for products
                 projectCardsContainer.className = 'grid grid-cols-1 lg:grid-cols-3 gap-6';
             } else {
                 rawMaterialsCard.classList.add('hidden');
-                serviceDurationField.classList.remove('hidden');
+                if (serviceDurationField) {
+                    serviceDurationField.classList.add('hidden');
+                }
                 nameLabel.textContent = 'Nombre del servicio';
                 // Keep 2 columns for services
                 projectCardsContainer.className = 'flex flex-col lg:flex-row gap-6';
