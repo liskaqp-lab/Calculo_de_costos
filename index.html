@@ -4069,38 +4069,36 @@
 
                 if (project.type === 'product') {
                     total += subtotal;
-                    const rowClass = productRowIndex % 2 === 0 ? 'bg-white' : 'bg-lime-25';
                     productRowIndex++;
                     productRows += `
-                        <tr class="${rowClass}">
-                            <td class="px-4 py-3 border-b border-lime-100">${project.name}</td>
-                            <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">${quantity}</td>
-                            <td class="px-4 py-3 border-b border-lime-100 text-center font-medium">${currencySymbol} ${unitPrice.toFixed(2)}</td>
-                            <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">${currencySymbol} ${subtotal.toFixed(2)}</td>
+                        <tr>
+                            <td class="px-4 py-3 border-b border-gray-200">${project.name}</td>
+                            <td class="px-4 py-3 border-b border-gray-200 text-center font-medium">${quantity}</td>
+                            <td class="px-4 py-3 border-b border-gray-200 text-center font-medium">${currencySymbol} ${unitPrice.toFixed(2)}</td>
+                            <td class="px-4 py-3 border-b border-gray-200 text-center font-bold">${currencySymbol} ${subtotal.toFixed(2)}</td>
                         </tr>
                     `;
                 } else {
                     total += unitPrice;
-                    const rowClass = serviceRowIndex % 2 === 0 ? 'bg-white' : 'bg-lime-25';
                     serviceRowIndex++;
                     serviceRows += `
-                        <tr class="${rowClass}">
-                            <td class="px-4 py-3 border-b border-lime-100">${project.name}</td>
-                            <td class="px-4 py-3 border-b border-lime-100 text-center font-bold">${currencySymbol} ${unitPrice.toFixed(2)}</td>
+                        <tr>
+                            <td class="px-4 py-3 border-b border-gray-200">${project.name}</td>
+                            <td class="px-4 py-3 border-b border-gray-200 text-center font-bold">${currencySymbol} ${unitPrice.toFixed(2)}</td>
                         </tr>
                     `;
                 }
             });
             
             const productTableHTML = productRowIndex > 0 ? `
-                <h3 style="margin-top: 20px; color: #365314;">📦 Productos</h3>
+                <h3 style="margin-top: 20px; color: #1c1e1b;">📦 Productos</h3>
                 <table class="min-w-full w-full">
-                    <thead class="bg-lime-100">
+                    <thead class="bg-gray-100">
                         <tr>
-                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Producto</th>
-                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Cantidad</th>
-                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Precio Unitario</th>
-                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Subtotal</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-gray-200">Producto</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-gray-200">Cantidad</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-gray-200">Precio Unitario</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-gray-200">Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -4110,12 +4108,12 @@
             ` : '';
 
             const serviceTableHTML = serviceRowIndex > 0 ? `
-                <h3 style="margin-top: 20px; color: #365314;">🛠️ Servicios</h3>
+                <h3 style="margin-top: 20px; color: #1c1e1b;">🛠️ Servicios</h3>
                 <table class="min-w-full w-full">
-                    <thead class="bg-lime-100">
+                    <thead class="bg-gray-100">
                         <tr>
-                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-lime-200">Servicio</th>
-                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-lime-200">Costo del servicio</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b border-gray-200">Servicio</th>
+                            <th class="px-4 py-3 text-center text-sm font-medium text-gray-700 border-b border-gray-200">Costo del servicio</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -4125,7 +4123,7 @@
             ` : '';
 
             const totalHTML = (productRowIndex > 0 || serviceRowIndex > 0) ? `
-                <div style="margin-top: 20px; text-align: right; font-size: 18px; font-weight: 700; color: #365314;">
+                <div style="margin-top: 20px; text-align: right; font-size: 18px; font-weight: 700; color: #1c1e1b;">
                     Total: ${currencySymbol} ${total.toFixed(2)}
                 </div>
             ` : '';
@@ -4154,7 +4152,7 @@
                             margin: 0;
                             padding: 20px;
                             line-height: 1.6;
-                            color: #333;
+                            color: #1c1e1b;
                             background: white;
                         }
                         
@@ -4162,11 +4160,11 @@
                             text-align: center;
                             margin-bottom: 40px;
                             padding-bottom: 20px;
-                            border-bottom: 3px solid #84cc16;
+                            border-bottom: 3px solid #4b4f4b;
                         }
                         
                         h1 { 
-                            color: #365314;
+                            color: #1c1e1b;
                             margin: 0 0 15px 0;
                             font-size: 28px;
                             font-weight: 700;
@@ -4180,20 +4178,20 @@
                             align-items: center;
                             margin-bottom: 30px;
                             padding: 15px;
-                            background: linear-gradient(135deg, #f7fee7 0%, #ecfccb 100%);
+                            background: linear-gradient(135deg, #f3f3f3 0%, #e3e3e3 100%);
                             border-radius: 8px;
-                            border-left: 4px solid #84cc16;
+                            border-left: 4px solid #4b4f4b;
                         }
                         
                         .date { 
                             font-weight: 600;
-                            color: #365314;
+                            color: #1c1e1b;
                             font-size: 16px;
                         }
                         
                         .validity { 
                             font-weight: 500;
-                            color: #65a30d;
+                            color: #4b4f4b;
                             font-size: 14px;
                         }
                         
@@ -4202,13 +4200,13 @@
                             padding: 20px; 
                             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
                             border-radius: 8px;
-                            border-left: 4px solid #64748b;
+                            border-left: 4px solid #4b4f4b;
                             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                         }
                         
                         .comments h3 {
                             margin: 0 0 10px 0;
-                            color: #475569;
+                            color: #1c1e1b;
                             font-size: 16px;
                             font-weight: 600;
                         }
@@ -4223,7 +4221,7 @@
                         }
                         
                         th { 
-                            background: #84cc16;
+                            background: #1c1e1b;
                             color: white;
                             font-weight: 600;
                             padding: 15px 12px;
@@ -4245,11 +4243,11 @@
                         }
                         
                         tbody tr:nth-child(even) {
-                            background-color: #f9fafb;
+                            background-color: #f3f3f3;
                         }
                         
                         tbody tr:hover {
-                            background-color: #f3f4f6;
+                            background-color: #e7e7e7;
                         }
                         
                         .text-center { 
@@ -4261,11 +4259,11 @@
                         }
                         
                         tfoot td { 
-                            background: #84cc16;
+                            background: #1c1e1b;
                             font-weight: 700;
                             font-size: 16px;
                             color: white;
-                            border-top: 2px solid #65a30d;
+                            border-top: 2px solid #4b4f4b;
                             padding: 15px 12px;
                         }
                         
